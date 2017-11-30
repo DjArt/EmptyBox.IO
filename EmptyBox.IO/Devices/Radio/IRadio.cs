@@ -7,7 +7,7 @@ namespace EmptyBox.IO.Devices.Radio
 {
     public interface IRadio : IDevice
     {
-        Task<RadioStatus> GetRadioStatus();
-        Task<bool> SetRadioStatus(RadioStatus state);
+        RadioStatus RadioStatus { get; }
+        Task<AccessStatus> SetRadioStatus(RadioStatus state);
     }
 }

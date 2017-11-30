@@ -7,6 +7,7 @@ namespace EmptyBox.IO.Devices
     public enum ConnectionStatus
     {
         Connected,
-        Disconnected
+        Disconnected,
+        Unknow
     }
 }

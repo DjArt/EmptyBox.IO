@@ -7,6 +7,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
 {
     public interface IBluetoothDevice : IRemovableDevice
     {
+        string Name { get; }
         BluetoothLinkType DeviceType { get; }
     }
 }

@@ -8,9 +8,9 @@
     <ProjectGuid>{9F9B17D1-FC71-462A-AEA4-3A259A67973A}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>WarBox.IO</RootNamespace>
+    <RootNamespace>EmptyBox.IO</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>WarBox.IO.iOS</AssemblyName>
+    <AssemblyName>EmptyBox.IO.iOS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

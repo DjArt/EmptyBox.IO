@@ -6,9 +6,9 @@ namespace EmptyBox.IO.Devices.Radio
 {
     public enum RadioStatus
     {
-        TurnedOn,
-        TurnedOff,
+        On,
+        Off,
         Disabled,
-        NotSupported
+        Unknown
     }
 }

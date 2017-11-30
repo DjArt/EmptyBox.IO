@@ -1,0 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace EmptyBox.IO.Network.Bluetooth
+{
+    public struct BluetoothServiceID
+    {
+        public uint ShortID;
+    }
+}

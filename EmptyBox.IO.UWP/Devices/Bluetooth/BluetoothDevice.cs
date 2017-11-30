@@ -9,17 +9,23 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices;
 using Windows.Media.Capture;
+using EmptyBox.IO.Interoperability;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
     public class BluetoothDevice : IBluetoothDevice
     {
         public BluetoothLinkType DeviceType { get; protected set; }
-        public event DeviceConnectionStatusHandler ConnectionStatus;
+        public event DeviceConnectionStatusHandler ConnectionStatusEvent;
 
-        public Task<DeviceStatus> GetDeviceStatus()
+        private Windows.Devices.Bluetooth.BluetoothDevice _Device;
+        public Windows.Devices.Bluetooth.BluetoothDevice Device => _Device;
+        public string Name => _Device.Name;
+        public ConnectionStatus ConnectionStatus => _Device.ConnectionStatus.ToConnectionStatus();
+
+        public BluetoothDevice(Windows.Devices.Bluetooth.BluetoothDevice device)
         {
-            throw new NotImplementedException();
+            _Device = device;
         }
     }
 }

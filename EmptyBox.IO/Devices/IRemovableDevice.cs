@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices
 {
-    public delegate void DeviceConnectionStatusHandler(IRemovableDevice device, DeviceStatus status);
+    public delegate void DeviceConnectionStatusHandler(IRemovableDevice device, ConnectionStatus status);
     public interface IRemovableDevice : IDevice
     {
-        event DeviceConnectionStatusHandler ConnectionStatus;
+        event DeviceConnectionStatusHandler ConnectionStatusEvent;
+        ConnectionStatus ConnectionStatus { get; }
     }
 }

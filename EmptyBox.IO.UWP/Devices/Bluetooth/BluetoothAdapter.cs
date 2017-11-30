@@ -9,43 +9,66 @@ using Windows.Devices;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Enumeration;
 using Windows.Networking.Sockets;
+using EmptyBox.IO.Interoperability;
+using EmptyBox.IO.Network.Bluetooth;
+using Windows.Devices.Bluetooth.Rfcomm;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
     public class BluetoothAdapter : IBluetoothAdapter
     {
-        protected Windows.Devices.Bluetooth.BluetoothAdapter _Adapter;
-        protected Windows.Devices.Radios.Radio _Radio;
+        public static async Task<BluetoothAdapter> GetDefaultBluetoothAdapter()
+        {
+            return new BluetoothAdapter(await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync());
+        }
+
+        public Windows.Devices.Bluetooth.BluetoothAdapter Adapter => _Adapter;
+        public Windows.Devices.Radios.Radio Radio => _Radio;
+        private Windows.Devices.Bluetooth.BluetoothAdapter _Adapter;
+        private Windows.Devices.Radios.Radio _Radio;
+
+        public RadioStatus RadioStatus => _Radio.State.ToRadioStatus();
 
         public BluetoothAdapter(Windows.Devices.Bluetooth.BluetoothAdapter adapter)
         {
             _Adapter = adapter;
-            Initialization();
+            Task init = new Task(Initialization);
+            init.Start();
+            init.Wait();
         }
 
-        protected async void Initialization()
+        private async void Initialization()
         {
             _Radio = await _Adapter.GetRadioAsync();
         }
 
-        public Task<List<IBluetoothDevice>> FindDevices()
+        public async Task<IEnumerable<IBluetoothDevice>> FindDevices()
         {
-            return null;
+            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelector());
+            List<IBluetoothDevice> result = new List<IBluetoothDevice>();
+            foreach (DeviceInformation device in devices)
+            {
+                var tmp0 = await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(device.Id);
+                result.Add(new BluetoothDevice(tmp0));
+            }
+            return result;
         }
 
-        public Task<DeviceStatus> GetDeviceStatus()
+        public async Task<IEnumerable<IBluetoothService>> FindServices(BluetoothServiceID id)
         {
-            throw new NotImplementedException();
+            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(RfcommDeviceService.GetDeviceSelector(id.ToRfcommServiceID()));
+            List<IBluetoothService> result = new List<IBluetoothService>();
+            foreach (DeviceInformation device in devices)
+            {
+                var tmp0 = await RfcommDeviceService.FromIdAsync(device.Id);
+                result.Add(new BluetoothService(tmp0));
+            }
+            return result;
         }
 
-        public Task<RadioStatus> GetRadioStatus()
+        public async Task<AccessStatus> SetRadioStatus(RadioStatus state)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> SetRadioStatus(RadioStatus state)
-        {
-            throw new NotImplementedException();
+            return (await _Radio.SetStateAsync(state.ToRadioState())).ToAccessStatus();
         }
     }
 }

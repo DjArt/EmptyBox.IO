@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices
 {
-    public interface IDevice
+    public enum AccessStatus
     {
-
+        Allowed,
+        DeniedBySystem,
+        DeniedByUser,
+        Unknown
     }
 }
