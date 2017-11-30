@@ -58,9 +58,9 @@
     <Folder Include="Network\IP\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WarBox.IO\WarBox.IO.csproj">
-      <Project>{de0cea0b-a732-4806-ae74-050e34876311}</Project>
-      <Name>WarBox.IO</Name>
+    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">
+      <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
+      <Name>EmptyBox.IO</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

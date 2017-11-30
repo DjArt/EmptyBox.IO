@@ -22,7 +22,7 @@
     <PackageReference Include="Tizen.NET.Sdk" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WarBox.IO\WarBox.IO.csproj" />
+    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj" />
   </ItemGroup>
 
 </Project>

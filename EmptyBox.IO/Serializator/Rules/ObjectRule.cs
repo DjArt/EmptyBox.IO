@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using EmptyBox.Utils;
+using EmptyBox.Extensions;
 
 namespace EmptyBox.IO.Serializator.Rules
 {

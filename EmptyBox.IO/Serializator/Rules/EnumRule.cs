@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using System.Runtime.CompilerServices;
-using EmptyBox.Utils;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
