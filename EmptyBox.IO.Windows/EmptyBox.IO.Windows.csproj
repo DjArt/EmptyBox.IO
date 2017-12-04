@@ -43,7 +43,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Access\" />
+    <Folder Include="Devices\" />
+    <Folder Include="Interoperability\" />
     <Folder Include="Network\IP\" />
+    <Folder Include="Storage\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">

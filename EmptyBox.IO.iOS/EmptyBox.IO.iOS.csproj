@@ -37,7 +37,12 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Access\" />
+    <Folder Include="Devices\" />
+    <Folder Include="Interoperability\" />
+    <Folder Include="Network\" />
     <Folder Include="Resources\" />
+    <Folder Include="Storage\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

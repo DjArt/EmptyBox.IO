@@ -1,4 +1,5 @@
 ﻿using EmptyBox.IO.Devices.Bluetooth;
+using EmptyBox.IO.Network.MAC;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,10 +11,10 @@ namespace EmptyBox.IO.Network.Bluetooth
         IAddress IAccessPoint.Address => Address;
         IPort IAccessPoint.Port => Port;
 
-        public BluetoothAddress Address { get; set; }
+        public MACAddress Address { get; set; }
         public BluetoothPort Port { get; set; }
 
-        public BluetoothAccessPoint(BluetoothAddress address, BluetoothPort port)
+        public BluetoothAccessPoint(MACAddress address, BluetoothPort port)
         {
             Address = address;
             Port = port;

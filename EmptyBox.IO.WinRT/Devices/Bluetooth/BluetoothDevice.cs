@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using EmptyBox.IO.Network.Bluetooth;
 using Windows.Devices.Enumeration;
+using EmptyBox.IO.Network.MAC;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
     public class BluetoothDevice : IBluetoothDevice
     {
         public string Name => throw new NotImplementedException();
-        public BluetoothAddress Address => throw new NotImplementedException();
+        public MACAddress Address => throw new NotImplementedException();
 
         public BluetoothLinkType DeviceType => throw new NotImplementedException();
 

@@ -50,6 +50,19 @@
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">
+      <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
+      <Name>EmptyBox.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Access\" />
+    <Folder Include="Devices\" />
+    <Folder Include="Interoperability\" />
+    <Folder Include="Network\" />
+    <Folder Include="Storage\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

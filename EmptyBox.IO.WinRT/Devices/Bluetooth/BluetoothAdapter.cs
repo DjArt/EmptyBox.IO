@@ -12,6 +12,7 @@ using EmptyBox.IO.Interoperability;
 using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Network.Bluetooth;
 using Windows.Networking;
+using EmptyBox.IO.Network.MAC;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -50,7 +51,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
                 RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
                 if (rds != null)
                 {
-                    result.Add(new BluetoothAccessPoint(new BluetoothAddress(), rds.ServiceId.ToBluetoothPort()));
+                    result.Add(new BluetoothAccessPoint(new MACAddress(), rds.ServiceId.ToBluetoothPort()));
                 }
             }
             return result;

@@ -28,5 +28,12 @@
   <ItemGroup>
     <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Access\" />
+    <Folder Include="Devices\" />
+    <Folder Include="Interoperability\" />
+    <Folder Include="Network\" />
+    <Folder Include="Storage\" />
+  </ItemGroup>
 
 </Project>

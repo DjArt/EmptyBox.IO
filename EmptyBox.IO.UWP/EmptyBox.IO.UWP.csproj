@@ -118,7 +118,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Access\" />
     <Folder Include="Network\Bluetooth\" />
+    <Folder Include="Storage\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">
