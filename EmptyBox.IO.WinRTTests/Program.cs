@@ -12,7 +12,7 @@ namespace EmptyBox.IO.WinRTTests
     {
         static void Main(string[] args)
         {
-
+            Console.ReadKey();
         }
     }
 }

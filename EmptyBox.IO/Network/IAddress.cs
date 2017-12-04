@@ -6,8 +6,8 @@ using System.Text;
 
 namespace EmptyBox.IO.Network
 {
-    public interface ILinkLevelAddress
+    public interface IAddress
     {
-        byte[] Address { get; set; }
+
     }
 }

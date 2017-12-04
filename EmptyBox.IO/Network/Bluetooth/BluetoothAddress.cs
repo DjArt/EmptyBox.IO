@@ -4,82 +4,61 @@ using System.Text;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    class BluetoothAddress : ILinkLevelAddress
+    public struct BluetoothAddress : IAddress
     {
-        public Guid? Port { get; set; }
-        public const byte Length = 4;
+        private const byte LENGTH = 6;
+        private const string FORMAT = "X2";
+
+        public static BluetoothAddress Parse(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool TryParse(string value, out BluetoothAddress address)
+        {
+            throw new NotImplementedException();
+        }
+
         public byte[] Address
         {
             get => _Address;
             set
             {
-                if (value.Length == Length)
+                if (value.Length == LENGTH)
                 {
-                    _Address = new byte[Length];
-                    Array.Copy(value, _Address, Length);
+                    _Address = new byte[value.Length];
+                    Array.Copy(value, _Address, value.Length);
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException(string.Format("Длина IPv4-адреса должна быть равна {0} байтам!", Length));
+                    throw new ArgumentOutOfRangeException(string.Format("Длина Bluetooth-адреса должна быть равна {0} байтам.", LENGTH));
                 }
             }
         }
         private byte[] _Address;
 
-        public IPv4Address(params byte[] value)
+        public BluetoothAddress(params byte[] value)
         {
-            if (value.Length == Length)
+            if (value.Length == LENGTH)
             {
-                _Address = new byte[Length];
-                Array.Copy(value, _Address, Length);
-                Port = null;
+                _Address = new byte[value.Length];
+                Array.Copy(value, _Address, value.Length);
             }
             else
             {
-                throw new ArgumentOutOfRangeException(string.Format("Длина IPv4-адреса должна быть равна {0} байтам!", Length));
+                throw new ArgumentOutOfRangeException(string.Format("Длина IP-адреса должна быть равна {0} байтам.", LENGTH));
             }
-        }
-
-        public IPv4Address(ushort port, params byte[] value)
-        {
-            if (value.Length == Length)
-            {
-                _Address = new byte[Length];
-                Array.Copy(value, _Address, Length);
-                Port = port;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(string.Format("Длина IPv4-адреса должна быть равна {0} байтам!", Length));
-            }
-        }
-
-        public IPAddress ToIPAddress()
-        {
-            return new IPAddress(_Address);
         }
 
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();
-            result.Append(Address[0]);
-            result.Append('.');
-            result.Append(Address[1]);
-            result.Append('.');
-            result.Append(Address[2]);
-            result.Append('.');
-            result.Append(Address[3]);
-            if (Port.HasValue)
+            for (int i0 = 0; i0 < _Address.Length; i0++)
             {
-                result.Append(':');
-                result.Append(Port);
+                result.Append(Address[0].ToString(FORMAT));
+                if (i0 + 1 < _Address.Length) result.Append('.');
             }
             return result.ToString();
-        }
-
-        public IPEndPoint ToEndPoint()
-        {
-            return new IPEndPoint(ToIPAddress(), Port.Value);
         }
     }
 }

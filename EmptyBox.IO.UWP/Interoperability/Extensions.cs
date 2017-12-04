@@ -136,14 +136,14 @@ namespace EmptyBox.IO.Interoperability
             }
         }
 
-        public static RfcommServiceId ToRfcommServiceID(this BluetoothServiceID id)
+        public static RfcommServiceId ToRfcommServiceID(this BluetoothPort id)
         {
             return RfcommServiceId.FromShortId(id.ShortID);
         }
 
-        public static BluetoothServiceID ToBluetoothServiceID(this RfcommServiceId id)
+        public static BluetoothPort ToBluetoothServiceID(this RfcommServiceId id)
         {
-            return new BluetoothServiceID() { ShortID = id.AsShortId() };
+            return new BluetoothPort() { ShortID = id.AsShortId() };
         }
     }
 }

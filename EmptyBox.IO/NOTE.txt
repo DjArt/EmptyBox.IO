@@ -1,1 +1,0 @@
-﻿System.ValueTulpe Nuget packet needed only in NET.Standard 1.6-, remove it after upgrade

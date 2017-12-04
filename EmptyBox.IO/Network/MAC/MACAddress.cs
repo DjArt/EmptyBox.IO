@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EmptyBox.IO.Network.MAC
 {
-    public struct MACAddress : ILinkLevelAddress
+    public struct MACAddress : IAddress
     {
         public const byte Length = 6;
         public byte[] Address

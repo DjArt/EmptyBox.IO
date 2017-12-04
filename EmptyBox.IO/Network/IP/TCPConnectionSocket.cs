@@ -5,54 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using System.IO;
+using EmptyBox.IO.Interoperability;
 
 namespace EmptyBox.IO.Network.IP
 {
     public class TCPConnectionSocket : IConnectionSocket
     {
-        protected ILinkLevelAddress _RemoteHost;
-        protected ILinkLevelAddress _LocalHost;
+        IAccessPoint IConnectionSocket.LocalHost => LocalHost;
+        IAccessPoint IConnectionSocket.RemoteHost => RemoteHost;
+
+        public IPAccessPoint LocalHost { get; private set; }
+        public IPAccessPoint RemoteHost { get; private set; }
 
         public Socket Socket { get; protected set; }
-        public ILinkLevelAddress LocalHost
-        {
-            get => _LocalHost;
-            set
-            {
-                if (!IsActive)
-                {
-                    _LocalHost = value;
-                }
-            }
-        }
-        public ILinkLevelAddress RemoteHost
-        {
-            get => _RemoteHost;
-            set
-            {
-                if (!IsActive)
-                {
-                    _RemoteHost = value;
-                }
-            }
-        }
-        public int ReadBufferLength => Socket.ReceiveBufferSize;
-        public int WriteBufferLength => Socket.SendBufferSize;
         public bool IsActive { get; protected set; }
         public event ConnectionInterruptHandler ConnectionInterrupt;
-        public event MessageReceiveHandler MessageReceived;
+        public event ConnectionSocketMessageReceiveHandler MessageReceived;
 
-        internal TCPConnectionSocket(Socket socket, IIPAddress remotehost, IIPAddress localhost)
+        internal TCPConnectionSocket(Socket socket, IPAccessPoint remotehost, IPAccessPoint localhost)
         {
             Socket = socket;
-            _RemoteHost = remotehost;
-            _LocalHost = localhost;
+            RemoteHost = remotehost;
+            LocalHost = localhost;
             IsActive = false;
         }
 
-        public TCPConnectionSocket(IIPAddress remotehost)
+        public TCPConnectionSocket(IPAccessPoint remotehost)
         {
-            _RemoteHost = remotehost;
+            RemoteHost = remotehost;
             IsActive = false;
             Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         }
@@ -60,18 +41,17 @@ namespace EmptyBox.IO.Network.IP
         protected async void ReceiveLoop()
         {
             await Task.Yield();
-            byte[] buffer = new byte[ReadBufferLength];
-            int count = -1;
+            byte[] buffer = new byte[4096];
             while (IsActive)
             {
                 try
                 {
-                    count = Socket.Receive(buffer);
+                    int count = Socket.Receive(buffer);
                     if (count > 0)
                     {
                         byte[] newbuffer = new byte[count];
                         Array.Copy(buffer, newbuffer, count);
-                        MessageReceived?.Invoke(this, _RemoteHost, newbuffer);
+                        MessageReceived?.Invoke(this, newbuffer);
                     }
                 }
                 catch (Exception ex)
@@ -89,48 +69,79 @@ namespace EmptyBox.IO.Network.IP
             }
         }
 
-        public async Task<bool> Close()
+        public async Task<SocketOperationStatus> Close()
         {
             await Task.Yield();
-            ConnectionInterrupt?.Invoke(this);
-            IsActive = false;
-            Socket.Shutdown(SocketShutdown.Both);
-            return true;
-        }
-
-        public async Task<bool> Open()
-        {
-            await Task.Yield();
-            if (!Socket.Connected)
+            if (IsActive)
             {
-                Socket.Connect((_RemoteHost as IIPAddress).ToEndPoint());
-            }
-            if (Socket.Connected)
-            {
-                IsActive = true;
-                ReceiveLoop();
-                return true;
-            }
-            return false;
-        }
-
-        public async Task<bool> Send(byte[] data)
-        {
-            await Task.Yield();
-            int count = Socket.Send(data);
-            if (count == data.Length)
-            {
-                return true;
+                try
+                {
+                    ConnectionInterrupt?.Invoke(this);
+                    IsActive = false;
+                    Socket.Dispose();
+                    return SocketOperationStatus.Success;
+                }
+                catch(Exception ex)
+                {
+                    return SocketOperationStatus.UnknownError;
+                }
             }
             else
             {
-                return false;
+                return SocketOperationStatus.ConnectionIsAlreadyClosed;
             }
         }
 
-        public async Task<bool> Send(ILinkLevelAddress host, byte[] data)
+        public async Task<SocketOperationStatus> Open()
         {
-            throw new NotImplementedException();
+            await Task.Yield();
+            if (!IsActive)
+            {
+                try
+                {
+                    Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+                    Socket.Connect(RemoteHost.ToIPEndPoint());
+                    IsActive = true;
+                    ReceiveLoop();
+                    return SocketOperationStatus.Success;
+                }
+                catch (Exception ex)
+                {
+                    return SocketOperationStatus.UnknownError;
+                }
+            }
+            else
+            {
+                return SocketOperationStatus.ConnectionIsAlreadyOpen;
+            }
+        }
+
+        public async Task<SocketOperationStatus> Send(byte[] data)
+        {
+            await Task.Yield();
+            if (IsActive)
+            {
+                try
+                {
+                    int count = Socket.Send(data);
+                    if (count == data.Length)
+                    {
+                        return SocketOperationStatus.Success;
+                    }
+                    else
+                    {
+                        return SocketOperationStatus.UnknownError;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return SocketOperationStatus.UnknownError;
+                }
+            }
+            else
+            {
+                return SocketOperationStatus.ConnectionIsClosed;
+            }
         }
     }
 }

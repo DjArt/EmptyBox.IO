@@ -10,6 +10,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
     public interface IBluetoothAdapter : IRadio
     {
         Task<IEnumerable<IBluetoothDevice>> FindDevices();
-        Task<IEnumerable<IBluetoothService>> FindServices(BluetoothServiceID id);
+        Task<IEnumerable<BluetoothAccessPoint>> FindServices(BluetoothPort id);
     }
 }

@@ -1,0 +1,121 @@
+﻿using EmptyBox.IO.Devices.Bluetooth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Windows.Devices.Bluetooth.Rfcomm;
+using Windows.Networking.Sockets;
+using Windows.Storage.Streams;
+
+namespace EmptyBox.IO.Network.Bluetooth
+{
+    public class BluetoothConnectionSocket : IConnectionSocket
+    {
+        IAccessPoint IConnectionSocket.LocalHost => LocalHost;
+        IAccessPoint IConnectionSocket.RemoteHost => RemoteHost;
+
+        private DataReader _Reader;
+        private DataWriter _Writer;
+
+        public BluetoothAccessPoint LocalHost { get; private set; }
+        public BluetoothAccessPoint RemoteHost { get; private set; }
+
+        public StreamSocket Socket { get; protected set; }
+        public bool IsActive { get; protected set; }
+        public event ConnectionInterruptHandler ConnectionInterrupt;
+        public event ConnectionSocketMessageReceiveHandler MessageReceived;
+
+        public BluetoothConnectionSocket(BluetoothAccessPoint remotehost)
+        {
+            RemoteHost = remotehost;
+            IsActive = false;
+            Socket = new StreamSocket();
+        }
+
+        protected async void ReceiveLoop()
+        {
+            await Task.Yield();
+            while (IsActive)
+            {
+                try
+                {
+                    int count = _Reader.ReadInt32();
+                    if (count > 0)
+                    {
+                        byte[] buffer = new byte[count];
+                        _Reader.ReadBytes(buffer);
+                        MessageReceived?.Invoke(this, buffer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult == -2147467259)
+                    {
+                        await Close();
+                    }
+                    //FOR DEBUG
+                    else
+                    {
+                        throw ex;
+                    }
+                }
+            }
+        }
+
+        public async Task<SocketOperationStatus> Close()
+        {
+            await Task.Yield();
+            IsActive = false;
+            Socket.Dispose();
+            ConnectionInterrupt?.Invoke(this);
+            return SocketOperationStatus.Success;
+        }
+
+        public async Task<SocketOperationStatus> Open()
+        {
+            await Task.Yield();
+            if (!IsActive)
+            {
+                try
+                {
+                    await Socket.ConnectAsync(null, null);
+                    _Reader = new DataReader(Socket.InputStream);
+                    _Writer = new DataWriter(Socket.OutputStream);
+                    return SocketOperationStatus.Success;
+                }
+                catch (Exception ex)
+                {
+                    switch (SocketError.GetStatus(ex.HResult))
+                    {
+                        default:
+                            return SocketOperationStatus.UnknownError;
+                    }
+                }
+            }
+            return SocketOperationStatus.UnknownError;
+        }
+
+        public async Task<SocketOperationStatus> Send(byte[] data)
+        {
+            await Task.Yield();
+            try
+            {
+                _Writer.WriteInt32(data.Length);
+                _Writer.WriteBytes(data);
+                if (await _Writer.FlushAsync())
+                {
+                    return SocketOperationStatus.Success;
+                }
+                else
+                {
+                    return SocketOperationStatus.UnknownError;
+                }
+            }
+            catch (Exception ex)
+            {
+                return SocketOperationStatus.UnknownError;
+            }
+        }
+    }
+}

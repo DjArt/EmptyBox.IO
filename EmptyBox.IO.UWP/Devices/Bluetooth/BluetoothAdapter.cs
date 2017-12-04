@@ -54,7 +54,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return result;
         }
 
-        public async Task<IEnumerable<IBluetoothService>> FindServices(BluetoothServiceID id)
+        public async Task<IEnumerable<IBluetoothService>> FindServices(BluetoothPort id)
         {
             DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(RfcommDeviceService.GetDeviceSelector(id.ToRfcommServiceID()));
             List<IBluetoothService> result = new List<IBluetoothService>();

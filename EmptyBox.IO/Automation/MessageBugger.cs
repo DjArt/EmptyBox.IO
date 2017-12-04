@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using EmptyBox.ScriptRuntime.Automation;
-using EmptyBox.Extensions;
+using EmptyBox.ScriptRuntime.Extensions;
 
 namespace EmptyBox.IO.Automation
 {

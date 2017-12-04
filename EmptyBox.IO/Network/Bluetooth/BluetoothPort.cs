@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public struct BluetoothServiceID
+    public struct BluetoothPort : IPort
     {
         public uint ShortID;
     }

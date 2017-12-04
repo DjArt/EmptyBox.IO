@@ -4,58 +4,71 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using EmptyBox.IO.Interoperability;
+using System.Net;
 
 namespace EmptyBox.IO.Network.IP
 {
     public class TCPConnectionSocketHandler : IConnectionSocketHandler
     {
-        protected ILinkLevelAddress _LocalHost;
-        public ILinkLevelAddress LocalHost
-        {
-            get => _LocalHost;
-            set
-            {
-                if (!IsActive)
-                {
-                    _LocalHost = value;
-                }
-            }
-        }
+        IAccessPoint IConnectionSocketHandler.LocalHost => LocalHost;
+
+        public IPAccessPoint LocalHost { get; private set; }
         public bool IsActive { get; protected set; }
         public event ConnectionReceivedDelegate ConnectionSocketReceived;
         public Socket Socket { get; protected set; }
 
-        public TCPConnectionSocketHandler(IIPAddress localhost)
+        public TCPConnectionSocketHandler(IPAccessPoint localhost)
         {
-            _LocalHost = localhost;
+            LocalHost = localhost;
             IsActive = false;
             Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            Socket.Bind(localhost.ToEndPoint());
+            Socket.Bind(localhost.ToIPEndPoint());
         }
 
-        public async Task<bool> Start()
+        public async Task<SocketOperationStatus> Start()
         {
             await Task.Yield();
-            IsActive = true;
-            try
+            if (!IsActive)
             {
-                Socket.Listen(512);
-                ReceiveLoop();
-                return true;
+                try
+                {
+                    Socket.Listen(512);
+                    IsActive = true;
+                    ReceiveLoop();
+                    return SocketOperationStatus.Success;
+                }
+                catch (Exception ex)
+                {
+                    return SocketOperationStatus.UnknownError;
+                }
             }
-            catch
+            else
             {
-                IsActive = false;
-                return false;
+                return SocketOperationStatus.ListenerIsAlreadyStarted;
             }
         }
 
-        public async Task<bool> Stop()
+        public async Task<SocketOperationStatus> Stop()
         {
             await Task.Yield();
-            Socket.Listen(0);
-            IsActive = false;
-            return false;
+            if (IsActive)
+            {
+                try
+                {
+                    Socket.Listen(0);
+                    IsActive = false;
+                    return SocketOperationStatus.Success;
+                }
+                catch (Exception ex)
+                {
+                    return SocketOperationStatus.UnknownError;
+                }
+            }
+            else
+            {
+                return SocketOperationStatus.ListenerIsAlreadyClosed;
+            }
         }
 
         protected async void ReceiveLoop()
@@ -66,7 +79,7 @@ namespace EmptyBox.IO.Network.IP
                 try
                 {
                     Socket received = Socket.Accept();
-                    TCPConnectionSocket tcpsocket = new TCPConnectionSocket(received, new IPv4Address(), new IPv4Address());
+                    TCPConnectionSocket tcpsocket = new TCPConnectionSocket(received, (received.RemoteEndPoint as IPEndPoint).ToIPAccessPoint(), LocalHost);
                     await tcpsocket.Open();
                     ConnectionSocketReceived?.Invoke(this, tcpsocket);
                 }

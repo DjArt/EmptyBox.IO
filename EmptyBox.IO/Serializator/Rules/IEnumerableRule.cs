@@ -16,11 +16,11 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public SuitabilityDegree CheckSuitability(Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             {
                 return SuitabilityDegree.Equal;
             }
-            else if (type.GetTypeInfo().ImplementedInterfaces.Any(x => x.IsGenericType &&  x.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+            else if (type.GetTypeInfo().ImplementedInterfaces.Any(x => x.IsConstructedGenericType &&  x.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
             {
                 return SuitabilityDegree.Assignable;
             }
@@ -34,13 +34,13 @@ namespace EmptyBox.IO.Serializator.Rules
         {
             bool result = false;
             Type ienumtype;
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             {
                 ienumtype = type;
             }
             else
             {
-                ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+                ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
             }
             Type generictype = ienumtype.GenericTypeArguments[0];
             value = null;
@@ -49,7 +49,9 @@ namespace EmptyBox.IO.Serializator.Rules
                 result = BinarySerializer.Deserialize(reader, out int length);
                 if (result)
                 {
-                    dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetConstructor(new Type[0]).Invoke(new object[0]);
+                    //Backported from NET.Standard 1.6+
+                    //dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetConstructor(new Type[0]).Invoke(new object[0]);
+                    dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
                     for (int i0 = 0; i0 < length; i0++)
                     {
                         result &= BinarySerializer.Deserialize(reader, generictype, out dynamic val0);
@@ -57,7 +59,9 @@ namespace EmptyBox.IO.Serializator.Rules
                     }
                     if (result)
                     {
-                        ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(generictype) });
+                        //Backported from NET.Standard 1.6+
+                        //ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(generictype) });
+                        ConstructorInfo constructor = type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => x.GetParameters().Count() == 1 && x.GetParameters()[0].ParameterType == typeof(IEnumerable<>).MakeGenericType(generictype));
                         if (constructor != null)
                         {
                             value = constructor.Invoke(new object[] { tmp });

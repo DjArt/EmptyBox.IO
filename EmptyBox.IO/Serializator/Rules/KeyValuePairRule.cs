@@ -11,7 +11,7 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public SuitabilityDegree CheckSuitability(Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
+            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
             {
                 return SuitabilityDegree.Equal;
             }

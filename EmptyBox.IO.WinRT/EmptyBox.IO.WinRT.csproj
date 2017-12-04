@@ -50,10 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Devices\Bluetooth\BluetoothAdapter.cs" />
+    <Compile Include="Devices\Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Devices\Camera\Camera.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
-    <Compile Include="Network\Bluetooth\BluetoothService.cs" />
-    <Compile Include="Network\Bluetooth\RfcommConnetionSocket.cs" />
+    <Compile Include="Network\Bluetooth\BluetoothConnectionSocket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

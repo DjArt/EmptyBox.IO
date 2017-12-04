@@ -8,10 +8,10 @@ namespace EmptyBox.IO.Network
     public delegate void ConnectionReceivedDelegate(IConnectionSocketHandler handler, IConnectionSocket socket);
     public interface IConnectionSocketHandler
     {
-        ILinkLevelAddress LocalHost { get; set; }
+        IAccessPoint LocalHost { get; }
         bool IsActive { get; }
         event ConnectionReceivedDelegate ConnectionSocketReceived;
-        Task<bool> Start();
-        Task<bool> Stop();
+        Task<SocketOperationStatus> Start();
+        Task<SocketOperationStatus> Stop();
     }
 }

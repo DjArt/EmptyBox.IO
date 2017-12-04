@@ -16,11 +16,11 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public SuitabilityDegree CheckSuitability(Type type)
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
             {
                 return SuitabilityDegree.Equal;
             }
-            else if (type.GetTypeInfo().ImplementedInterfaces.Any(x => x.IsGenericType &&  x.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
+            else if (type.GetTypeInfo().ImplementedInterfaces.Any(x => x.IsConstructedGenericType &&  x.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
             {
                 return SuitabilityDegree.Assignable;
             }
@@ -34,13 +34,13 @@ namespace EmptyBox.IO.Serializator.Rules
         {
             bool result = false;
             Type idicttype;
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
+            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IDictionary<,>))
             {
                 idicttype = type;
             }
             else
             {
-                idicttype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>));
+                idicttype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IDictionary<,>));
             }
             Type generictype0 = idicttype.GenericTypeArguments[0];
             Type generictype1 = idicttype.GenericTypeArguments[1];
@@ -50,7 +50,9 @@ namespace EmptyBox.IO.Serializator.Rules
                 result = BinarySerializer.Deserialize(reader, out int length);
                 if (result)
                 {
-                    dynamic tmp = typeof(Dictionary<,>).MakeGenericType(generictype0, generictype1).GetConstructor(new Type[0]).Invoke(new object[0]);
+                    //Backported from NET.Standard 1.6+
+                    //dynamic tmp = typeof(Dictionary<,>).MakeGenericType(generictype0, generictype1).GetConstructor(new Type[0]).Invoke(new object[0]);
+                    dynamic tmp = typeof(Dictionary<,>).MakeGenericType(generictype0, generictype1).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
                     for (int i0 = 0; i0 < length; i0++)
                     {
                         result &= BinarySerializer.Deserialize(reader, generictype0, out dynamic val0);
@@ -59,7 +61,9 @@ namespace EmptyBox.IO.Serializator.Rules
                     }
                     if (result)
                     {
-                        ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(new Type[] { typeof(IDictionary<,>).MakeGenericType(generictype0, generictype1) });
+                        //Backported from NET.Standard 1.6+
+                        //ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(new Type[] { typeof(IDictionary<,>).MakeGenericType(generictype0, generictype1) });
+                        ConstructorInfo constructor = type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => x.GetParameters().Count() == 1 && x.GetParameters()[0].ParameterType == typeof(IDictionary<,>).MakeGenericType(generictype0, generictype1));
                         if (constructor != null)
                         {
                             value = constructor.Invoke(new object[] { tmp });
