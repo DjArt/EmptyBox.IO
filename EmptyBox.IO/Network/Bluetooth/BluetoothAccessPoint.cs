@@ -19,5 +19,16 @@ namespace EmptyBox.IO.Network.Bluetooth
             Address = address;
             Port = port;
         }
+
+        public override string ToString()
+        {
+            StringBuilder result = new StringBuilder();
+            result.Append("(");
+            result.Append(Address);
+            result.Append(")");
+            result.Append(":");
+            result.Append(Port);
+            return result.ToString();
+        }
     }
 }

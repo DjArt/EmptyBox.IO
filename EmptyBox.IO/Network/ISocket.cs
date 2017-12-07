@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
-    public delegate void SocketMessageReceiveHandler(ISocket connection, IAddress host, byte[] message);
     /// <summary>
     /// Представляет методы для работы с протоколом, не требующим установку соединения.
     /// </summary>

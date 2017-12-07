@@ -12,7 +12,16 @@ namespace EmptyBox.IO.WinRTTests
     {
         static void Main(string[] args)
         {
+            TY();
             Console.ReadKey();
+        }
+
+        static async void TY()
+        {
+            BluetoothAdapter bt = await BluetoothAdapter.GetDefaultBluetoothAdapter();
+            await bt.StartListener(new BluetoothPort(0x4444), new byte[0]);
+            IEnumerable<BluetoothAccessPoint> services = await bt.FindServices(new BluetoothPort(0x4444));
+            services.All(x => { Console.WriteLine(x); return true; });
         }
     }
 }

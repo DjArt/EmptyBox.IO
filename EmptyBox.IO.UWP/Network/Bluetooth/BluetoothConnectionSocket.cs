@@ -18,8 +18,6 @@ namespace EmptyBox.IO.Network.Bluetooth
 
         private DataReader _Reader;
         private DataWriter _Writer;
-        private Task _ReceiveLoopTask;
-        private bool _InternalConstructor;
 
         public BluetoothAccessPoint LocalHost { get; private set; }
         public BluetoothAccessPoint RemoteHost { get; private set; }
@@ -29,24 +27,14 @@ namespace EmptyBox.IO.Network.Bluetooth
         public event ConnectionInterruptHandler ConnectionInterrupt;
         public event ConnectionSocketMessageReceiveHandler MessageReceived;
 
-        internal BluetoothConnectionSocket(StreamSocket socket, BluetoothAccessPoint localhost, BluetoothAccessPoint remotehost)
-        {
-            Socket = socket;
-            LocalHost = localhost;
-            RemoteHost = remotehost;
-            IsActive = false;
-            _InternalConstructor = true;
-        }
-
         public BluetoothConnectionSocket(BluetoothAccessPoint remotehost)
         {
-            Socket = new StreamSocket();
             RemoteHost = remotehost;
             IsActive = false;
-            _InternalConstructor = false;
+            Socket = new StreamSocket();
         }
 
-        private async void ReceiveLoop()
+        protected async void ReceiveLoop()
         {
             await Task.Yield();
             while (IsActive)
@@ -79,26 +67,10 @@ namespace EmptyBox.IO.Network.Bluetooth
         public async Task<SocketOperationStatus> Close()
         {
             await Task.Yield();
-            if (IsActive)
-            {
-                try
-                {
-                    ConnectionInterrupt?.Invoke(this);
-                    IsActive = false;
-                    _ReceiveLoopTask.Wait(100);
-                    Socket.Dispose();
-                    _InternalConstructor = false;
-                    return SocketOperationStatus.Success;
-                }
-                catch (Exception ex)
-                {
-                    return SocketOperationStatus.UnknownError;
-                }
-            }
-            else
-            {
-                return SocketOperationStatus.ConnectionIsAlreadyClosed;
-            }
+            IsActive = false;
+            Socket.Dispose();
+            ConnectionInterrupt?.Invoke(this);
+            return SocketOperationStatus.Success;
         }
 
         public async Task<SocketOperationStatus> Open()
@@ -108,15 +80,9 @@ namespace EmptyBox.IO.Network.Bluetooth
             {
                 try
                 {
-                    if (!_InternalConstructor)
-                    {
-                        Socket = new StreamSocket();
-                        await Socket.ConnectAsync(RemoteHost.Address.ToHostName(), RemoteHost.Port.ToRfcommServiceID().AsString());
-                    }
+                    await Socket.ConnectAsync(RemoteHost.Address.ToHostName(), null);
                     _Reader = new DataReader(Socket.InputStream);
                     _Writer = new DataWriter(Socket.OutputStream);
-                    _ReceiveLoopTask = Task.Run((Action)ReceiveLoop);
-                    _ReceiveLoopTask.Start();
                     return SocketOperationStatus.Success;
                 }
                 catch (Exception ex)

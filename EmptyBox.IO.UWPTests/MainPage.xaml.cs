@@ -17,18 +17,22 @@ using EmptyBox.IO.Devices.Radio;
 using System.Threading.Tasks;
 using EmptyBox.IO.Network.Bluetooth;
 
-// Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
-
 namespace EmptyBox.IO.UWPTests
 {
-    /// <summary>
-    /// Пустая страница, которую можно использовать саму по себе или для перехода внутри фрейма.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
         {
             this.InitializeComponent();
+            TY();
+        }
+
+        async void TY()
+        {
+            BluetoothAdapter bt = await BluetoothAdapter.GetDefaultBluetoothAdapter();
+            await bt.StartListener(new BluetoothPort(0x4444), new byte[0]);
+            IEnumerable<BluetoothAccessPoint> services = await bt.FindServices(new BluetoothPort(0x4444));
+            services.All(x => { list.Items.Add(x); return true; });
         }
     }
 }

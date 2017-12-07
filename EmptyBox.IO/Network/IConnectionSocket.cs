@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
-    public delegate void ConnectionSocketMessageReceiveHandler(IConnectionSocket connection, byte[] message);
-    //Добавить причину отключения
-    public delegate void ConnectionInterruptHandler(IConnectionSocket connection);
     /// <summary>
     /// Представляет методы для работы с протоколом, требующим установку соединения.
     /// </summary>

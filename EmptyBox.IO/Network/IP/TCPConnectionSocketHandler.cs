@@ -71,7 +71,7 @@ namespace EmptyBox.IO.Network.IP
             }
         }
 
-        protected async void ReceiveLoop()
+        private async void ReceiveLoop()
         {
             await Task.Yield();
             while (IsActive)

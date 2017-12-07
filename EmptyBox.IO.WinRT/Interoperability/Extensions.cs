@@ -9,6 +9,8 @@ using EmptyBox.IO.Devices.Radio;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Network.Bluetooth;
+using Windows.Networking;
+using EmptyBox.IO.Network.MAC;
 
 namespace EmptyBox.IO.Interoperability
 {
@@ -48,12 +50,44 @@ namespace EmptyBox.IO.Interoperability
 
         public static RfcommServiceId ToRfcommServiceID(this BluetoothPort id)
         {
-            return RfcommServiceId.FromShortId(id.ShortID);
+            return RfcommServiceId.FromUuid(id.ID);
         }
 
         public static BluetoothPort ToBluetoothPort(this RfcommServiceId id)
         {
-            return new BluetoothPort() { ShortID = id.AsShortId() };
+            return new BluetoothPort(id.Uuid);
+        }
+
+        public static HostName ToHostName(this MACAddress address)
+        {
+            return new HostName(address.ToString());
+        }
+
+        public static MACAddress ToMACAddress(this HostName address)
+        {
+            bool done = MACAddress.TryParse(address.CanonicalName, out MACAddress result);
+            if (done)
+            {
+                return result;
+            }
+            else
+            {
+                return new MACAddress();
+            }
+        }
+
+        public static async Task<string> ToServiceIDString(this BluetoothAccessPoint accesspoint)
+        {
+            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(RfcommDeviceService.GetDeviceSelector(accesspoint.Port.ToRfcommServiceID()));
+            foreach (DeviceInformation device in devices)
+            {
+                RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
+                if (rds != null && rds.ConnectionHostName.ToMACAddress().Equals(accesspoint.Address))
+                {
+                    return rds.ConnectionServiceName;
+                }
+            }
+            return string.Empty;
         }
     }
 }

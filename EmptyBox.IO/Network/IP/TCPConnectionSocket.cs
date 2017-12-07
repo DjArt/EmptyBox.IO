@@ -15,6 +15,8 @@ namespace EmptyBox.IO.Network.IP
         IAccessPoint IConnectionSocket.LocalHost => LocalHost;
         IAccessPoint IConnectionSocket.RemoteHost => RemoteHost;
 
+        private Task _ReceiveLoopTask;
+
         public IPAccessPoint LocalHost { get; private set; }
         public IPAccessPoint RemoteHost { get; private set; }
 
@@ -38,7 +40,7 @@ namespace EmptyBox.IO.Network.IP
             Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         }
 
-        protected async void ReceiveLoop()
+        private async void ReceiveLoop()
         {
             await Task.Yield();
             byte[] buffer = new byte[4096];
@@ -78,6 +80,7 @@ namespace EmptyBox.IO.Network.IP
                 {
                     ConnectionInterrupt?.Invoke(this);
                     IsActive = false;
+                    _ReceiveLoopTask.Wait(100);
                     Socket.Dispose();
                     return SocketOperationStatus.Success;
                 }
@@ -102,7 +105,8 @@ namespace EmptyBox.IO.Network.IP
                     Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
                     Socket.Connect(RemoteHost.ToIPEndPoint());
                     IsActive = true;
-                    ReceiveLoop();
+                    _ReceiveLoopTask = Task.Run((Action)ReceiveLoop);
+                    _ReceiveLoopTask.Start();
                     return SocketOperationStatus.Success;
                 }
                 catch (Exception ex)
