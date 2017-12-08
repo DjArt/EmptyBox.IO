@@ -18,10 +18,11 @@
   <ItemGroup>
     <Folder Include="Access\" />
     <Folder Include="Network\VPN\" />
+    <Folder Include="Network\Wi-Fi\Direct\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.1" />
+    <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.2" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
   </ItemGroup>
 
