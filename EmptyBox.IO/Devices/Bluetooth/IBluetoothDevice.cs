@@ -13,6 +13,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         string Name { get; }
         MACAddress Address { get; }
         BluetoothLinkType DeviceType { get; }
-        Task<IDictionary<BluetoothAccessPoint, byte[]>> GetSDPRecords();
+        BluetoothDeviceClass DeviceClass { get; }
+        Task<IEnumerable<BluetoothAccessPoint>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached);
     }
 }

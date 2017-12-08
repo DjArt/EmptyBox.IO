@@ -12,6 +12,7 @@ using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Network.Bluetooth;
 using EmptyBox.IO.Network.MAC;
 using Windows.Networking;
+using EmptyBox.IO.Devices.Bluetooth;
 
 namespace EmptyBox.IO.Interoperability
 {
@@ -178,6 +179,30 @@ namespace EmptyBox.IO.Interoperability
                 }
             }
             return string.Empty;
+        }
+
+        public static BluetoothCacheMode ToBluetoothCacheMode(this BluetoothSDPCacheMode mode)
+        {
+            switch (mode)
+            {
+                default:
+                case BluetoothSDPCacheMode.Cached:
+                    return BluetoothCacheMode.Cached;
+                case BluetoothSDPCacheMode.Uncached:
+                    return BluetoothCacheMode.Uncached;
+            }
+        }
+
+        public static BluetoothSDPCacheMode ToBluetoothSDPCacheMode(this BluetoothCacheMode mode)
+        {
+            switch (mode)
+            {
+                default:
+                case BluetoothCacheMode.Cached:
+                    return BluetoothSDPCacheMode.Cached;
+                case BluetoothCacheMode.Uncached:
+                    return BluetoothSDPCacheMode.Uncached;
+            }
         }
     }
 }

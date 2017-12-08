@@ -16,6 +16,8 @@ using EmptyBox.IO.Devices.Bluetooth;
 using EmptyBox.IO.Devices.Radio;
 using System.Threading.Tasks;
 using EmptyBox.IO.Network.Bluetooth;
+using EmptyBox.IO.Network.MAC;
+using Windows.UI.Core;
 
 namespace EmptyBox.IO.UWPTests
 {
@@ -30,9 +32,22 @@ namespace EmptyBox.IO.UWPTests
         async void TY()
         {
             BluetoothAdapter bt = await BluetoothAdapter.GetDefaultBluetoothAdapter();
-            await bt.StartListener(new BluetoothPort(0x4444), new byte[0]);
-            IEnumerable<BluetoothAccessPoint> services = await bt.FindServices(new BluetoothPort(0x4444));
-            services.All(x => { list.Items.Add(x); return true; });
+            BluetoothConnectionSocketHandler listener = new BluetoothConnectionSocketHandler(new BluetoothAccessPoint(new MACAddress(), new BluetoothPort(0x4444)));
+            await listener.Start();
+            var x = await bt.FindDevices();
+            foreach (var j0 in x)
+            {
+                var i = await j0.GetServices();
+                foreach (var j1 in i)
+                {
+                    Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => list.Items.Add(j1));
+                }
+            }
+        }
+
+        private void Bt_ServiceAdded(IBluetoothAdapter connection, BluetoothAccessPoint device)
+        {
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => list.Items.Add(device));
         }
     }
 }

@@ -110,6 +110,7 @@
     <Compile Include="Devices\Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnectionSocket.cs" />
+    <Compile Include="Network\Bluetooth\BluetoothConnectionSocketHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\WarBox.IO.UWP.rd.xml" />
   </ItemGroup>

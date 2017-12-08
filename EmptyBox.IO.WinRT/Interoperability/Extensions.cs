@@ -81,10 +81,17 @@ namespace EmptyBox.IO.Interoperability
             DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(RfcommDeviceService.GetDeviceSelector(accesspoint.Port.ToRfcommServiceID()));
             foreach (DeviceInformation device in devices)
             {
-                RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
-                if (rds != null && rds.ConnectionHostName.ToMACAddress().Equals(accesspoint.Address))
+                try
                 {
-                    return rds.ConnectionServiceName;
+                    RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
+                    if (rds != null && rds.ConnectionHostName.ToMACAddress().Equals(accesspoint.Address))
+                    {
+                        return rds.ConnectionServiceName;
+                    }
+                }
+                catch
+                {
+
                 }
             }
             return string.Empty;

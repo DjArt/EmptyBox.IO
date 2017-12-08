@@ -106,7 +106,6 @@ namespace EmptyBox.IO.Network.IP
                     Socket.Connect(RemoteHost.ToIPEndPoint());
                     IsActive = true;
                     _ReceiveLoopTask = Task.Run((Action)ReceiveLoop);
-                    _ReceiveLoopTask.Start();
                     return SocketOperationStatus.Success;
                 }
                 catch (Exception ex)

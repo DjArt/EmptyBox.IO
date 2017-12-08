@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace EmptyBox.IO.Network.MAC
 {
@@ -37,6 +38,16 @@ namespace EmptyBox.IO.Network.MAC
             }
         }
 
+        public static bool operator ==(MACAddress a0, MACAddress a1)
+        {
+            return a0._Address.SequenceEqual(a1._Address);
+        }
+
+        public static bool operator !=(MACAddress a0, MACAddress a1)
+        {
+            return !(a0 == a1);
+        }
+
         public byte[] Address
         {
             get => _Address;
@@ -65,6 +76,25 @@ namespace EmptyBox.IO.Network.MAC
             else
             {
                 throw new ArgumentOutOfRangeException(string.Format("Длина MAC-адреса должна быть равна {0} байтам.", LENGTH));
+            }
+        }
+
+        public MACAddress(ulong address)
+        {
+            _Address = BitConverter.GetBytes(address);
+            Array.Resize(ref _Address, 6);
+            Array.Reverse(_Address);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is MACAddress mac)
+            {
+                return this == mac;
+            }
+            else
+            {
+                return false;
             }
         }
 

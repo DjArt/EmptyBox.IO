@@ -4,10 +4,9 @@ using System.Text;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
-    public enum BluetoothDeviceType
+    public enum BluetoothSDPCacheMode
     {
-        Desktop,
-        Tablet,
-        Phone
+        Cached,
+        Uncached
     }
 }

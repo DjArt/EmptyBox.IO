@@ -17,26 +17,25 @@ namespace EmptyBox.IO.Devices.Bluetooth
 {
     public class BluetoothDevice : IBluetoothDevice
     {
+        public string Name => Device.Name;
         public BluetoothLinkType DeviceType { get; protected set; }
         public event DeviceConnectionStatusHandler ConnectionStatusEvent;
-
-        private Windows.Devices.Bluetooth.BluetoothDevice _Device;
-        public Windows.Devices.Bluetooth.BluetoothDevice Device => _Device;
-        public string Name => _Device.Name;
-        public ConnectionStatus ConnectionStatus => _Device.ConnectionStatus.ToConnectionStatus();
-
-        public MACAddress Address => throw new NotImplementedException();
-
+        public Windows.Devices.Bluetooth.BluetoothDevice Device { get; private set; }
+        public ConnectionStatus ConnectionStatus => Device.ConnectionStatus.ToConnectionStatus();
+        public MACAddress Address { get; private set; }
         public DevicePairStatus PairStatus => throw new NotImplementedException();
+        public BluetoothDeviceClass DeviceClass => throw new NotImplementedException();
 
         public BluetoothDevice(Windows.Devices.Bluetooth.BluetoothDevice device)
         {
-            _Device = device;
+            Device = device;
+            Address = new MACAddress(Device.BluetoothAddress);
         }
 
-        public Task<IDictionary<BluetoothAccessPoint, byte[]>> GetSDPRecords()
+        public async Task<IEnumerable<BluetoothAccessPoint>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
         {
-            throw new NotImplementedException();
+            RfcommDeviceServicesResult services = await Device.GetRfcommServicesAsync(cacheMode.ToBluetoothCacheMode());
+            return services.Services.Select(x => new BluetoothAccessPoint(Address, x.ServiceId.ToBluetoothPort()));
         }
     }
 }

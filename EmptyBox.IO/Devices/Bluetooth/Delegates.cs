@@ -2,6 +2,6 @@
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
-    public delegate void BluetoothDeviceFindedHandler(IBluetoothAdapter connection, IBluetoothDevice device);
-    public delegate void BluetoothServiceFindedHandler(IBluetoothAdapter connection, BluetoothAccessPoint device);
+    public delegate void BluetoothDeviceWatcher(IBluetoothAdapter connection, IBluetoothDevice device);
+    public delegate void BluetoothServiceWatcher(IBluetoothAdapter connection, BluetoothAccessPoint device);
 }

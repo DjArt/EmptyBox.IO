@@ -111,16 +111,24 @@ namespace EmptyBox.IO.Network.Bluetooth
                     if (!_InternalConstructor)
                     {
                         Socket = new StreamSocket();
-                        await Socket.ConnectAsync(RemoteHost.Address.ToHostName(), RemoteHost.Port.ToRfcommServiceID().AsString());
+                        string port = await RemoteHost.ToServiceIDString();
+                        if (port != String.Empty)
+                        {
+                            await Socket.ConnectAsync(RemoteHost.Address.ToHostName(), port);
+                        }
+                        else
+                        {
+                            return SocketOperationStatus.ConnectionIsAlreadyClosed;
+                        }
                     }
                     _Reader = new DataReader(Socket.InputStream);
                     _Writer = new DataWriter(Socket.OutputStream);
                     _ReceiveLoopTask = Task.Run((Action)ReceiveLoop);
-                    _ReceiveLoopTask.Start();
                     return SocketOperationStatus.Success;
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex);
                     switch (SocketError.GetStatus(ex.HResult))
                     {
                         default:

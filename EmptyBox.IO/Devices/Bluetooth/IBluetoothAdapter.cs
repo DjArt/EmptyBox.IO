@@ -13,13 +13,11 @@ namespace EmptyBox.IO.Devices.Bluetooth
         bool DeviceWatcherIsActive { get; }
         bool ServiceWatcherIsActive { get; }
         IReadOnlyDictionary<BluetoothPort, byte[]> ActiveListeners { get; }
-        event BluetoothDeviceFindedHandler DeviceFinded;
-        event BluetoothServiceFindedHandler ServiceFinded;
+        event BluetoothDeviceWatcher DeviceAdded;
+        event BluetoothDeviceWatcher DeviceRemoved;
+        event BluetoothDeviceWatcher DeviceUpdated;
         Task<IEnumerable<IBluetoothDevice>> FindDevices();
-        Task<IEnumerable<BluetoothAccessPoint>> FindServices(BluetoothPort id);
         Task<bool> StartDeviceWatcher();
         Task<bool> StopDeviceWatcher();
-        Task<bool> StartServiceWatcher();
-        Task<bool> StopServiceWatcher();
     }
 }
