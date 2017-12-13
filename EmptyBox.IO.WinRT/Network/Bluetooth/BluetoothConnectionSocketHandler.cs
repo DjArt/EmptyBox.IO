@@ -21,6 +21,7 @@ namespace EmptyBox.IO.Network.Bluetooth
         public bool IsActive { get; protected set; }
         public event ConnectionReceivedDelegate ConnectionSocketReceived;
 
+        [StandardRealization]
         public BluetoothConnectionSocketHandler(BluetoothAccessPoint localhost)
         {
             LocalHost = localhost;

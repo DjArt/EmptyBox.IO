@@ -13,6 +13,8 @@ namespace EmptyBox.IO.Network.IP
     {
         IAccessPoint IConnectionSocketHandler.LocalHost => LocalHost;
 
+        private Task _ReceiveLoop;
+
         public IPAccessPoint LocalHost { get; private set; }
         public bool IsActive { get; protected set; }
         public event ConnectionReceivedDelegate ConnectionSocketReceived;
@@ -35,7 +37,7 @@ namespace EmptyBox.IO.Network.IP
                 {
                     Socket.Listen(512);
                     IsActive = true;
-                    ReceiveLoop();
+                    _ReceiveLoop = Task.Run((Action)ReceiveLoop);
                     return SocketOperationStatus.Success;
                 }
                 catch (Exception ex)

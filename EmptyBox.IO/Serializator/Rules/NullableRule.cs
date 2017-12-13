@@ -24,7 +24,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool Deserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
             bool result = BinarySerializer.Deserialize(reader, out ObjectFlags property);
             if (result)
@@ -36,7 +36,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         value = null;
                         break;
                     case ObjectFlags.None:
-                        result &= BinarySerializer.Deserialize(reader, type.GetTypeInfo().GenericTypeArguments[0], out dynamic _value);
+                        result &= BinarySerializer.TryDeserialize(reader, type.GetTypeInfo().GenericTypeArguments[0], out dynamic _value);
                         if (result)
                         {
                             value = _value;
@@ -55,28 +55,28 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool GetLength(dynamic value, out int length)
+        public bool TryGetLength(dynamic value, out uint length)
         {
-            bool result = BinarySerializer.GetLength(ObjectFlags.None, out length);
+            bool result = BinarySerializer.TryGetLength(ObjectFlags.None, out length);
             if (value != null)
             {
-                result &= BinarySerializer.GetLength(value, out int _length);
+                result &= BinarySerializer.TryGetLength(value, out uint _length);
                 length += _length;
             }
             return result;
         }
 
-        public bool Serialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value)
         {
             if (value != null)
             {
-                bool result = BinarySerializer.Serialize(writer, ObjectFlags.None);
-                result &= BinarySerializer.Serialize(writer, value);
+                bool result = BinarySerializer.TrySerialize(writer, ObjectFlags.None);
+                result &= BinarySerializer.TrySerialize(writer, value);
                 return result;
             }
             else
             {
-                return BinarySerializer.Serialize(writer, ObjectFlags.IsNull);
+                return BinarySerializer.TrySerialize(writer, ObjectFlags.IsNull);
             }
         }
     }

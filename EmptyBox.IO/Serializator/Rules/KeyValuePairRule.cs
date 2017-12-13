@@ -21,7 +21,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool Deserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
             bool result = false;
             Type generictype0 = type.GenericTypeArguments[0];
@@ -29,8 +29,8 @@ namespace EmptyBox.IO.Serializator.Rules
             value = null;
             try
             {
-                result = BinarySerializer.Deserialize(reader, generictype0, out dynamic val0);
-                result &= BinarySerializer.Deserialize(reader, generictype1, out dynamic val1);
+                result = BinarySerializer.TryDeserialize(reader, generictype0, out dynamic val0);
+                result &= BinarySerializer.TryDeserialize(reader, generictype1, out dynamic val1);
                 if (result)
                 {
                     value = Activator.CreateInstance(type, new object[] { val0, val1 });
@@ -43,14 +43,14 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool GetLength(dynamic value, out int length)
+        public bool TryGetLength(dynamic value, out uint length)
         {
             bool result = false;
             length = 0;
             try
             {
-                result = BinarySerializer.GetLength(value.Key, out length);
-                result &= BinarySerializer.GetLength(value.Value, out int _length);
+                result = BinarySerializer.TryGetLength(value.Key, out length);
+                result &= BinarySerializer.TryGetLength(value.Value, out uint _length);
                 length += _length;
             }
             catch
@@ -60,13 +60,13 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool Serialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value)
         {
             bool result = false;
             try
             {
-                result = BinarySerializer.Serialize(writer, value.Key);
-                result &= BinarySerializer.Serialize(writer, value.Value);
+                result = BinarySerializer.TrySerialize(writer, value.Key);
+                result &= BinarySerializer.TrySerialize(writer, value.Value);
             }
             catch
             {

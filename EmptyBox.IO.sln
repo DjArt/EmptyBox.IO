@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyBox.IO", "EmptyBox.IO\EmptyBox.IO.csproj", "{3A006777-4668-4011-B6DB-EB1303F62C90}"
 EndProject
@@ -15,11 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.UWP", "EmptyBox
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.Windows", "EmptyBox.IO.Windows\EmptyBox.IO.Windows.csproj", "{BB1CF045-C147-4CC6-B850-D290E8201C0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.WinRT", "EmptyBox.IO.WinRT\EmptyBox.IO.WinRT.csproj", "{B0E89C81-E716-4AE4-B42A-80D2A2E6000C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.WRT", "EmptyBox.IO.WinRT\EmptyBox.IO.WRT.csproj", "{B0E89C81-E716-4AE4-B42A-80D2A2E6000C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.UWPTests", "EmptyBox.IO.UWPTests\EmptyBox.IO.UWPTests.csproj", "{E9D9F5C3-5AE6-4801-BC1F-735A4A012A1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.WinRTTests", "EmptyBox.IO.WinRTTests\EmptyBox.IO.WinRTTests.csproj", "{5C317F41-D3C2-4A9A-96F4-06F17C0080C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.WRTTests", "EmptyBox.IO.WinRTTests\EmptyBox.IO.WRTTests.csproj", "{5C317F41-D3C2-4A9A-96F4-06F17C0080C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

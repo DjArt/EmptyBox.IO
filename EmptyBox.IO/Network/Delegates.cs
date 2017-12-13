@@ -2,6 +2,6 @@
 {
     public delegate void ConnectionSocketMessageReceiveHandler(IConnectionSocket connection, byte[] message);
     public delegate void ConnectionReceivedDelegate(IConnectionSocketHandler handler, IConnectionSocket socket);
-    public delegate void SocketMessageReceiveHandler(ISocket connection, IAddress host, byte[] message);
+    public delegate void SocketMessageReceiveHandler(ISocket connection, IAccessPoint host, byte[] message);
     public delegate void ConnectionInterruptHandler(IConnectionSocket connection);
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmptyBox.IO.Interoperability;
 using Windows.Devices.Bluetooth.Rfcomm;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
@@ -38,6 +39,7 @@ namespace EmptyBox.IO.Network.Bluetooth
             _InternalConstructor = true;
         }
 
+        [StandardRealization]
         public BluetoothConnectionSocket(BluetoothAccessPoint remotehost)
         {
             Socket = new StreamSocket();

@@ -22,7 +22,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool Deserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
             bool result = false;
             Type _type = type.GetElementType();
@@ -56,7 +56,7 @@ namespace EmptyBox.IO.Serializator.Rules
                     value = Activator.CreateInstance(_type, new object[] { length });
                     for (int i0 = 0; i0 < length; i0++)
                     {
-                        result &= BinarySerializer.Deserialize(reader, _type, out value[i0]);
+                        result &= BinarySerializer.TryDeserialize(reader, _type, out value[i0]);
                     }
                 }
                 if (!result)
@@ -67,33 +67,33 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool GetLength(dynamic value, out int length)
+        public bool TryGetLength(dynamic value, out uint length)
         {
             Type type = value.GetType().GetElementType();
             bool result = false;
             if (type == typeof(byte))
             {
-                result = BinarySerializer.GetLength(0, out int _length);
+                result = BinarySerializer.TryGetLength(0, out uint _length);
                 length = value.Length + _length;
             }
             else if (type == typeof(char))
             {
                 string @string = new string(value);
-                result = BinarySerializer.GetLength(@string, out length);
+                result = BinarySerializer.TryGetLength(@string, out length);
             }
             else
             {
-                result = BinarySerializer.GetLength(value.Length, out length);
+                result = BinarySerializer.TryGetLength(value.Length, out length);
                 for (int i0 = 0; i0 < value.Length; i0++)
                 {
-                    result &= BinarySerializer.GetLength(value[i0], out int _length);
+                    result &= BinarySerializer.TryGetLength(value[i0], out uint _length);
                     length += _length;
                 }
             }
             return result;
         }
 
-        public bool Serialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value)
         {
             Type type = value.GetType().GetElementType();
             bool result = false;
@@ -113,14 +113,14 @@ namespace EmptyBox.IO.Serializator.Rules
             else if (type == typeof(char))
             {
                 string @string = new string(value);
-                result = BinarySerializer.Serialize(writer, @string);
+                result = BinarySerializer.TrySerialize(writer, @string);
             }
             else
             {
-                result = BinarySerializer.Serialize(writer, value.Length);
+                result = BinarySerializer.TrySerialize(writer, value.Length);
                 for (int i0 = 0; i0 < value.Length; i0++)
                 {
-                    result &= BinarySerializer.Serialize(writer, value[i0]);
+                    result &= BinarySerializer.TrySerialize(writer, value[i0]);
                 }
             }
             return result;

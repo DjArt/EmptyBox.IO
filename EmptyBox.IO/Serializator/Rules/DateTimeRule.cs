@@ -21,7 +21,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool Deserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
             bool result = BinarySerializer.Deserialize(reader, out long data);
             if (result)
@@ -35,14 +35,14 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool GetLength(dynamic variable, out int length)
+        public bool TryGetLength(dynamic variable, out uint length)
         {
-            return BinarySerializer.GetLength(DateTime.Now.ToBinary(), out length);
+            return BinarySerializer.TryGetLength(DateTime.Now.ToBinary(), out length);
         }
 
-        public bool Serialize(BinaryWriter writer, dynamic variable)
+        public bool TrySerialize(BinaryWriter writer, dynamic variable)
         {
-            return BinarySerializer.Serialize(writer, variable.ToBinary());
+            return TrySerialize(writer, variable.ToBinary());
         }
     }
 }

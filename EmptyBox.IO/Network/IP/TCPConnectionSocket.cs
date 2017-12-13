@@ -16,6 +16,7 @@ namespace EmptyBox.IO.Network.IP
         IAccessPoint IConnectionSocket.RemoteHost => RemoteHost;
 
         private Task _ReceiveLoopTask;
+        private bool _InternalConstructor;
 
         public IPAccessPoint LocalHost { get; private set; }
         public IPAccessPoint RemoteHost { get; private set; }
@@ -31,12 +32,14 @@ namespace EmptyBox.IO.Network.IP
             RemoteHost = remotehost;
             LocalHost = localhost;
             IsActive = false;
+            _InternalConstructor = true;
         }
 
         public TCPConnectionSocket(IPAccessPoint remotehost)
         {
             RemoteHost = remotehost;
             IsActive = false;
+            _InternalConstructor = false;
             Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         }
 
@@ -97,13 +100,16 @@ namespace EmptyBox.IO.Network.IP
 
         public async Task<SocketOperationStatus> Open()
         {
-            await Task.Yield();
+            //await Task.Yield();
             if (!IsActive)
             {
                 try
                 {
-                    Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-                    Socket.Connect(RemoteHost.ToIPEndPoint());
+                    if (!_InternalConstructor)
+                    {
+                        Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+                        Socket.Connect(RemoteHost.ToIPEndPoint());
+                    }
                     IsActive = true;
                     _ReceiveLoopTask = Task.Run((Action)ReceiveLoop);
                     return SocketOperationStatus.Success;

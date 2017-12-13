@@ -22,6 +22,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
     {
         private static BluetoothAdapter _DefaultAdapter = new BluetoothAdapter();
 
+        [StandardRealization]
         public static async Task<BluetoothAdapter> GetDefaultBluetoothAdapter() => _DefaultAdapter;
 
         async Task<IEnumerable<IBluetoothDevice>> IBluetoothAdapter.FindDevices() => (await FindDevices()).Select(x => (IBluetoothDevice)x);

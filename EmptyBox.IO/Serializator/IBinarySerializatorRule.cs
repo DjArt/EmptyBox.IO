@@ -9,8 +9,8 @@ namespace EmptyBox.IO.Serializator
     {
         BinarySerializer BinarySerializer { get; set; }
         SuitabilityDegree CheckSuitability(Type type);
-        bool Deserialize(BinaryReader reader, Type type, out dynamic value);
-        bool GetLength(dynamic value, out int length);
-        bool Serialize(BinaryWriter writer, dynamic value);
+        bool TryDeserialize(BinaryReader reader, Type type, out dynamic value);
+        bool TryGetLength(dynamic value, out uint length);
+        bool TrySerialize(BinaryWriter writer, dynamic value);
     }
 }

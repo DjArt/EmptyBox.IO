@@ -25,10 +25,10 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool Deserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
             Type enumtype = Enum.GetUnderlyingType(type);
-            bool result = BinarySerializer.Deserialize(reader, enumtype, out dynamic _value);
+            bool result = BinarySerializer.TryDeserialize(reader, enumtype, out dynamic _value);
             if (result)
             {
                 value = Enum.ToObject(type, _value);
@@ -40,16 +40,16 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool GetLength(dynamic value, out int length)
+        public bool TryGetLength(dynamic value, out uint length)
         {
             Type enumtype = Enum.GetUnderlyingType(value.GetType());
-            return BinarySerializer.GetLength(Convert.ChangeType(value, enumtype), out length);
+            return BinarySerializer.TryGetLength(Convert.ChangeType(value, enumtype), out length);
         }
 
-        public bool Serialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value)
         {
             Type enumtype = Enum.GetUnderlyingType(value.GetType());
-            return BinarySerializer.Serialize(writer, Convert.ChangeType(value, enumtype));
+            return BinarySerializer.TrySerialize(writer, Convert.ChangeType(value, enumtype));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Определяет текущий адрес для приёма и отправки сообщений.
         /// </summary>
-        IAddress LocalHost { get; }
+        IAccessPoint LocalHost { get; }
         /// <summary>
         /// Отправляет сообщение по указанному адресу.
         /// </summary>

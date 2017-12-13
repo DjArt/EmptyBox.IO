@@ -30,7 +30,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool Deserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
             bool result = false;
             Type idicttype;
@@ -55,8 +55,8 @@ namespace EmptyBox.IO.Serializator.Rules
                     dynamic tmp = typeof(Dictionary<,>).MakeGenericType(generictype0, generictype1).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
                     for (int i0 = 0; i0 < length; i0++)
                     {
-                        result &= BinarySerializer.Deserialize(reader, generictype0, out dynamic val0);
-                        result &= BinarySerializer.Deserialize(reader, generictype1, out dynamic val1);
+                        result &= BinarySerializer.TryDeserialize(reader, generictype0, out dynamic val0);
+                        result &= BinarySerializer.TryDeserialize(reader, generictype1, out dynamic val1);
                         tmp.Add(val0, val1);
                     }
                     if (result)
@@ -82,16 +82,16 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool GetLength(dynamic value, out int length)
+        public bool TryGetLength(dynamic value, out uint length)
         {
             bool result = false;
             try
             {
                 int count = Enumerable.Count(value);
-                result = BinarySerializer.GetLength(count, out length);
+                result = BinarySerializer.TryGetLength(count, out length);
                 for (int i0 = 0; i0 < count; i0++)
                 {
-                    result &= BinarySerializer.GetLength(Enumerable.ElementAt(value, i0), out int _length);
+                    result &= BinarySerializer.TryGetLength(Enumerable.ElementAt(value, i0), out uint _length);
                     length += _length;
                 }
             }
@@ -102,17 +102,17 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool Serialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value)
         {
             Type type = value.GetType().GetElementType();
             bool result = false;
             try
             {
                 int count = Enumerable.Count(value);
-                result = BinarySerializer.Serialize(writer, count);
+                result = BinarySerializer.TrySerialize(writer, count);
                 for (int i0 = 0; i0 < count; i0++)
                 {
-                    result &= BinarySerializer.Serialize(writer, Enumerable.ElementAt(value, i0));
+                    result &= BinarySerializer.TrySerialize(writer, Enumerable.ElementAt(value, i0));
                 }
             }
             catch
