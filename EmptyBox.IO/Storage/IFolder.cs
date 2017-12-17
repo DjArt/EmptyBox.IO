@@ -7,6 +7,6 @@ namespace EmptyBox.IO.Storage
 {
     public interface IFolder : IStorageItem
     {
-        Task<IEnumerable<IStorageItem>> Items { get; }
+        Task<IEnumerable<IStorageItem>> GetItems();
     }
 }

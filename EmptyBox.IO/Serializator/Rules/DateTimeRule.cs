@@ -23,7 +23,7 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
-            bool result = BinarySerializer.Deserialize(reader, out long data);
+            bool result = BinarySerializer.TryDeserialize(reader, out long data);
             if (result)
             {
                 value = DateTime.FromBinary(data);

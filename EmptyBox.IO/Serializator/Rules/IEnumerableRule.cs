@@ -3,10 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using EmptyBox.ScriptRuntime.Extensions;
-using System.Collections;
-using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
@@ -32,90 +28,114 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
-            bool result = false;
-            Type ienumtype;
-            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags flag);
+            if (result)
             {
-                ienumtype = type;
-            }
-            else
-            {
-                ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
-            }
-            Type generictype = ienumtype.GenericTypeArguments[0];
-            value = null;
-            try
-            {
-                result = BinarySerializer.Deserialize(reader, out int length);
-                if (result)
+                switch (flag)
                 {
-                    //Backported from NET.Standard 1.6+
-                    //dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetConstructor(new Type[0]).Invoke(new object[0]);
-                    dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
-                    for (int i0 = 0; i0 < length; i0++)
-                    {
-                        result &= BinarySerializer.TryDeserialize(reader, generictype, out dynamic val0);
-                        tmp.Add(val0);
-                    }
-                    if (result)
-                    {
-                        //Backported from NET.Standard 1.6+
-                        //ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(generictype) });
-                        ConstructorInfo constructor = type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => x.GetParameters().Count() == 1 && x.GetParameters()[0].ParameterType == typeof(IEnumerable<>).MakeGenericType(generictype));
-                        if (constructor != null)
+                    case ObjectFlags.None:
+                        Type ienumtype;
+                        if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                         {
-                            value = constructor.Invoke(new object[] { tmp });
+                            ienumtype = type;
                         }
                         else
                         {
-                            value = tmp;
+                            ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
                         }
-                    }
+                        Type generictype = ienumtype.GenericTypeArguments[0];
+                        value = null; result = BinarySerializer.TryDeserialize(reader, out int length);
+                        if (result)
+                        {
+                            //Backported from NET.Standard 1.6+
+                            //dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetConstructor(new Type[0]).Invoke(new object[0]);
+                            dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
+                            for (int i0 = 0; i0 < length; i0++)
+                            {
+                                result &= BinarySerializer.TryDeserialize(reader, generictype, out dynamic val0);
+                                tmp.Add(val0);
+                            }
+                            if (result)
+                            {
+                                //Backported from NET.Standard 1.6+
+                                //ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(generictype) });
+                                ConstructorInfo constructor = type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => x.GetParameters().Count() == 1 && x.GetParameters()[0].ParameterType == typeof(IEnumerable<>).MakeGenericType(generictype));
+                                if (constructor != null)
+                                {
+                                    value = constructor.Invoke(new object[] { tmp });
+                                }
+                                else
+                                {
+                                    value = tmp;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                    case ObjectFlags.IsNull:
+                        value = null;
+                        break;
                 }
             }
-            catch
+            else
             {
-
+                value = null;
             }
             return result;
         }
 
         public bool TryGetLength(dynamic value, out uint length)
         {
-            bool result = false;
-            try
+            ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
+            bool result = BinarySerializer.TryGetLength(flag, out length);
+            if (result)
             {
-                int count = Enumerable.Count(value);
-                result = BinarySerializer.TryGetLength(count, out length);
-                for (int i0 = 0; i0 < count; i0++)
+                switch (flag)
                 {
-                    result &= BinarySerializer.TryGetLength(Enumerable.ElementAt(value, i0), out uint _length);
-                    length += _length;
+                    case ObjectFlags.None:
+                        int count = Enumerable.Count(value);
+                        result = BinarySerializer.TryGetLength(count, out length);
+                        for (int i0 = 0; i0 < count; i0++)
+                        {
+                            result &= BinarySerializer.TryGetLength(Enumerable.ElementAt(value, i0), out uint _length);
+                            length += _length;
+                        }
+                        break;
+                    default:
+                    case ObjectFlags.IsNull:
+
+                        break;
                 }
-            }
-            catch
-            {
-                length = 0;
             }
             return result;
         }
 
         public bool TrySerialize(BinaryWriter writer, dynamic value)
         {
-            Type type = value.GetType().GetElementType();
-            bool result = false;
-            try
+            ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
+            bool result = BinarySerializer.TrySerialize(writer, flag);
+            if (result)
             {
-                int count = Enumerable.Count(value);
-                result = BinarySerializer.TrySerialize(writer, count);
-                for (int i0 = 0; i0 < count; i0++)
+                switch (flag)
                 {
-                    result &= BinarySerializer.TrySerialize(writer, Enumerable.ElementAt(value, i0));
+                    case ObjectFlags.None:
+                        Type type = value.GetType().GetElementType();
+                        int count = Enumerable.Count(value);
+                        result = BinarySerializer.TrySerialize(writer, count);
+                        for (int i0 = 0; i0 < count; i0++)
+                        {
+                            result &= BinarySerializer.TrySerialize(writer, Enumerable.ElementAt(value, i0));
+                        }
+                        break;
+                    default:
+                    case ObjectFlags.IsNull:
+                        value = null;
+                        break;
                 }
             }
-            catch
+            else
             {
-
+                value = null;
             }
             return result;
         }

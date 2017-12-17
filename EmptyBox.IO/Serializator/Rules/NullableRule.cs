@@ -13,7 +13,6 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public SuitabilityDegree CheckSuitability(Type type)
         {
-            //Кажется, можно сделать лучше
             if (type == null || Nullable.GetUnderlyingType(type) != null)
             {
                 return SuitabilityDegree.Equal;
@@ -26,7 +25,7 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
-            bool result = BinarySerializer.Deserialize(reader, out ObjectFlags property);
+            bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags property);
             if (result)
             {
                 switch (property)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using EmptyBox.ScriptRuntime.Extensions;
 
 namespace EmptyBox.IO.Serializator.Rules
@@ -19,66 +18,131 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
-            object obj = type.GenerateEmptyObject();
-            List<FieldInfo> value_fields = type.GetTypeInfo().DeclaredFields.ToList().FindAll(x => !x.IsStatic && x.IsPublic);
-            List<PropertyInfo> value_properties = type.GetTypeInfo().DeclaredProperties.ToList().FindAll(x => x.CanRead && x.CanWrite);
-            bool result = BinarySerializer.Deserialize(reader, out uint count);
-            foreach (FieldInfo fi in value_fields)
+            bool result = true;
+            ObjectFlags flag = ObjectFlags.None;
+            if (!type.GetTypeInfo().IsValueType)
             {
-                result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out dynamic field);
-                fi.SetValue(obj, field);
+                result &= BinarySerializer.TryDeserialize(reader, out flag);
             }
-            foreach (PropertyInfo pi in value_properties)
+            switch (flag)
             {
-                result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out dynamic field);
-                pi.SetValue(obj, field);
-            }
-            if (result)
-            {
-                value = obj;
-            }
-            else
-            {
-                value = null;
+                case ObjectFlags.None:
+                    object obj = type.GenerateEmptyObject();
+                    IEnumerable<FieldInfo> fields = type.GetTypeInfo().DeclaredFields.Where(x => !x.IsStatic && x.IsPublic);
+                    IEnumerable<PropertyInfo> properties = type.GetTypeInfo().DeclaredProperties.Where(x => x.CanRead && x.CanWrite);
+                    result &= BinarySerializer.TryDeserialize(reader, out uint count);
+                    if (count == fields.Count() + properties.Count())
+                    {
+                        foreach (FieldInfo fi in fields)
+                        {
+                            result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out dynamic field);
+                            fi.SetValue(obj, field);
+                        }
+                        foreach (PropertyInfo pi in properties)
+                        {
+                            result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out dynamic field);
+                            pi.SetValue(obj, field);
+                        }
+                        if (result)
+                        {
+                            value = obj;
+                        }
+                        else
+                        {
+                            value = null;
+                        }
+                    }
+                    else
+                    {
+                        value = null;
+                        result = false;
+                    }
+                    break;
+                default:
+                case ObjectFlags.IsNull:
+                    value = null;
+                    result = true;
+                    break;
             }
             return result;
         }
 
         public bool TryGetLength(dynamic value, out uint length)
         {
-            List<FieldInfo> value_fields;
-            List<PropertyInfo> value_properties;
-            value_fields = (value as object).GetType().GetTypeInfo().DeclaredFields.ToList().FindAll(x => !x.IsStatic && x.IsPublic);
-            value_properties = (value as object).GetType().GetTypeInfo().DeclaredProperties.ToList().FindAll(x => x.CanRead && x.CanWrite);
-            bool result = BinarySerializer.TryGetLength((uint)0, out length);
-            foreach (FieldInfo fi in value_fields)
+            bool result = true;
+            ObjectFlags flag = ObjectFlags.None;
+            TypeInfo typeInfo = value?.GetType();
+            length = 0;
+            if (typeInfo == null)
             {
-                result &= BinarySerializer.TryGetLength(fi.GetValue(value), out uint _length);
+                flag = ObjectFlags.IsNull;
+                result &= BinarySerializer.TryGetLength(flag, out uint _length);
                 length += _length;
             }
-            foreach (PropertyInfo pi in value_properties)
+            else if (!typeInfo.IsValueType)
             {
-                result &= BinarySerializer.TryGetLength(pi.GetValue(value), out uint _length);
+                result &= BinarySerializer.TryGetLength(flag, out uint _length);
                 length += _length;
+            }
+            switch (flag)
+            {
+                case ObjectFlags.None:
+                    IEnumerable<FieldInfo> fields = typeInfo.DeclaredFields.Where(x => !x.IsStatic && x.IsPublic);
+                    IEnumerable<PropertyInfo> properties = typeInfo.DeclaredProperties.Where(x => x.CanRead && x.CanWrite);
+                    uint count = (uint)(fields.Count() + properties.Count());
+                    result &= BinarySerializer.TryGetLength(count, out uint _length);
+                    length += _length;
+                    foreach (FieldInfo fi in fields)
+                    {
+                        result &= BinarySerializer.TryGetLength(fi.FieldType, fi.GetValue(value), out _length);
+                        length += _length;
+                    }
+                    foreach (PropertyInfo pi in properties)
+                    {
+                        result &= BinarySerializer.TryGetLength(pi.PropertyType, pi.GetValue(value), out _length);
+                        length += _length;
+                    }
+                    break;
+                default:
+                case ObjectFlags.IsNull:
+                    break;
             }
             return result;
         }
 
         public bool TrySerialize(BinaryWriter writer, dynamic value)
         {
-            List<FieldInfo> value_fields;
-            List<PropertyInfo> value_properties;
-            value_fields = (value as object).GetType().GetTypeInfo().DeclaredFields.ToList().FindAll(x => !x.IsStatic && x.IsPublic);
-            value_properties = (value as object).GetType().GetTypeInfo().DeclaredProperties.ToList().FindAll(x => x.CanRead && x.CanWrite);
-            uint count = (uint)(value_fields.Count + value_properties.Count);
-            bool result = BinarySerializer.TrySerialize(writer, count);
-            foreach (FieldInfo fi in value_fields)
+            bool result = true;
+            ObjectFlags flag = ObjectFlags.None;
+            TypeInfo typeInfo = value?.GetType();
+            if (typeInfo == null)
             {
-                result &= BinarySerializer.TrySerialize(writer, fi.GetValue(value));
+                flag = ObjectFlags.IsNull;
+                result &= BinarySerializer.TrySerialize(writer, flag);
             }
-            foreach (PropertyInfo pi in value_properties)
+            else if (!typeInfo.IsValueType)
             {
-                result &= BinarySerializer.TrySerialize(writer, pi.GetValue(value));
+                result &= BinarySerializer.TrySerialize(writer, flag);
+            }
+            switch (flag)
+            {
+                case ObjectFlags.None:
+                    IEnumerable<FieldInfo> fields = typeInfo.DeclaredFields.Where(x => !x.IsStatic && x.IsPublic);
+                    IEnumerable<PropertyInfo> properties = typeInfo.DeclaredProperties.Where(x => x.CanRead && x.CanWrite);
+                    uint count = (uint)(fields.Count() + properties.Count());
+                    result &= BinarySerializer.TrySerialize(writer, count);
+                    foreach (FieldInfo fi in fields)
+                    {
+                        result &= BinarySerializer.TrySerialize(writer, fi.FieldType, fi.GetValue(value));
+                    }
+                    foreach (PropertyInfo pi in properties)
+                    {
+                        result &= BinarySerializer.TrySerialize(writer, pi.PropertyType, pi.GetValue(value));
+                    }
+                    break;
+                default:
+                case ObjectFlags.IsNull:
+                    break;
             }
             return result;
         }

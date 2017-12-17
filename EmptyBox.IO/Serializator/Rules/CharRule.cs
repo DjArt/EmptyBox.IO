@@ -29,7 +29,7 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
         {
-            bool result = BinarySerializer.Deserialize(reader, out byte[] enc_char);
+            bool result = BinarySerializer.TryDeserialize(reader, out byte[] enc_char);
             if (result)
             {
                 value = Encoding.GetChars(enc_char)[0];
