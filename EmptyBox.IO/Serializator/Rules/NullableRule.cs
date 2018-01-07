@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Reflection;
-using System.Linq;
 
 namespace EmptyBox.IO.Serializator.Rules
 {

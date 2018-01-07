@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EmptyBox.IO.Network
+﻿namespace EmptyBox.IO.Network
 {
     public enum SocketOperationStatus
     {

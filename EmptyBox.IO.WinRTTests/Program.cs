@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using EmptyBox.IO.Devices.Bluetooth;
-using EmptyBox.IO.Network.Bluetooth;
-using EmptyBox.IO.Network.MAC;
-using EmptyBox.IO.Interoperability;
-using EmptyBox.IO.Network;
 using EmptyBox.IO.Serializator;
+using EmptyBox.IO.Devices.Bluetooth;
 
 namespace EmptyBox.IO.WRTTests
 {
@@ -16,8 +9,20 @@ namespace EmptyBox.IO.WRTTests
     {
         static void Main(string[] args)
         {
-            BinarySerializer bs = new BinarySerializer(Encoding.UTF32);
+            Test();
             Console.ReadKey();
+        }
+
+        static async void Test()
+        {
+            BluetoothAdapter a = await BluetoothAdapter.GetDefaultBluetoothAdapter();
+            a.DeviceProvider.DeviceAdded += DeviceProvider_DeviceAdded;
+            a.DeviceProvider.StartWatcher();
+        }
+
+        private static void DeviceProvider_DeviceAdded(object sender, IBluetoothDevice e)
+        {
+            Console.WriteLine(e.Name + " " + e.Address);
         }
     }
 }

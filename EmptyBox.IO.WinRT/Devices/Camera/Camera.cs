@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Media.Capture;
-using Windows.ApplicationModel;
-using Windows.System.Display;
-using Windows.Graphics.Display;
 
 namespace EmptyBox.IO.Devices.Camera
 {

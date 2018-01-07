@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using EmptyBox.IO.Devices;
-using Windows.Devices.Bluetooth;
-using EmptyBox.IO.Devices.Radio;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Network.Bluetooth;

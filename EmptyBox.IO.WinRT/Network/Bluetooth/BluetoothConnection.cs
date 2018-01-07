@@ -1,47 +1,47 @@
 ﻿using EmptyBox.IO.Devices.Bluetooth;
 using EmptyBox.IO.Interoperability;
+using EmptyBox.IO.Network.MAC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using EmptyBox.IO.Interoperability;
-using Windows.Devices.Bluetooth.Rfcomm;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public class BluetoothConnectionSocket : IConnectionSocket
+    public class BluetoothConnection : IBluetoothConnection
     {
-        IAccessPoint IConnectionSocket.LocalHost => LocalHost;
-        IAccessPoint IConnectionSocket.RemoteHost => RemoteHost;
+        IConnectionProvider IConnection.ConnectionProvider => ConnectionProvider;
+        IPort IConnection.Port => Port;
+        IAccessPoint IConnection.RemoteHost => RemoteHost;
+        IBluetoothAdapter IConnection<MACAddress, BluetoothPort, BluetoothAccessPoint, IBluetoothAdapter>.ConnectionProvider => ConnectionProvider;
 
         private DataReader _Reader;
         private DataWriter _Writer;
         private Task _ReceiveLoopTask;
         private bool _InternalConstructor;
+        private StreamSocket Socket;
 
-        public BluetoothAccessPoint LocalHost { get; private set; }
-        public BluetoothAccessPoint RemoteHost { get; private set; }
-
-        public StreamSocket Socket { get; protected set; }
-        public bool IsActive { get; protected set; }
         public event ConnectionInterruptHandler ConnectionInterrupt;
         public event ConnectionSocketMessageReceiveHandler MessageReceived;
 
-        internal BluetoothConnectionSocket(StreamSocket socket, BluetoothAccessPoint localhost, BluetoothAccessPoint remotehost)
+        public BluetoothAdapter ConnectionProvider { get; private set; }
+        public BluetoothPort Port { get; private set; }
+        public BluetoothAccessPoint RemoteHost { get; private set; }
+        public bool IsActive { get; protected set; }
+
+        internal BluetoothConnection(BluetoothAdapter adapter, BluetoothPort port, StreamSocket socket, BluetoothAccessPoint remotehost)
         {
+            ConnectionProvider = adapter;
+            Port = port;
             Socket = socket;
-            LocalHost = localhost;
             RemoteHost = remotehost;
             IsActive = false;
             _InternalConstructor = true;
         }
-
-        [StandardRealization]
-        public BluetoothConnectionSocket(BluetoothAccessPoint remotehost)
+        
+        public BluetoothConnection(BluetoothAdapter adapter, BluetoothAccessPoint remotehost)
         {
+            ConnectionProvider = adapter;
             Socket = new StreamSocket();
             RemoteHost = remotehost;
             IsActive = false;
@@ -116,7 +116,7 @@ namespace EmptyBox.IO.Network.Bluetooth
                         string port = await RemoteHost.ToServiceIDString();
                         if (port != String.Empty)
                         {
-                            await Socket.ConnectAsync(RemoteHost.Address.ToHostName(), port);
+                            Socket.ConnectAsync(RemoteHost.Address.ToHostName(), port).AsTask().Wait();
                         }
                         else
                         {

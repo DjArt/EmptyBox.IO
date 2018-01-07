@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Devices\Bluetooth\BluetoothAdapter.cs" />
+    <Compile Include="Interoperability\Extensions.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,8 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Access\" />
-    <Folder Include="Devices\" />
-    <Folder Include="Interoperability\" />
     <Folder Include="Network\" />
     <Folder Include="Storage\" />
   </ItemGroup>

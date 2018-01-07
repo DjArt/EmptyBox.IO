@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using EmptyBox.IO.Interoperability;
@@ -9,9 +6,9 @@ using System.Net;
 
 namespace EmptyBox.IO.Network.IP
 {
-    public class TCPConnectionSocketHandler : IConnectionSocketHandler
+    public class TCPConnectionSocketHandler : IConnectionListener
     {
-        IAccessPoint IConnectionSocketHandler.LocalHost => LocalHost;
+        IAccessPoint IConnectionListener.LocalHost => LocalHost;
 
         private Task _ReceiveLoop;
 

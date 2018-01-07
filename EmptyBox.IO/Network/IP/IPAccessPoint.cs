@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EmptyBox.IO.Network.IP
+﻿namespace EmptyBox.IO.Network.IP
 {
-    public struct IPAccessPoint : IAccessPoint
+    public struct IPAccessPoint : IAccessPoint<IPAddress, IPPort>
     {
         IAddress IAccessPoint.Address => Address;
         IPort IAccessPoint.Port => Port;

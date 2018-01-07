@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
     /// <summary>
     /// Представляет методы для работы с протоколом, требующим установку соединения.
     /// </summary>
-    public interface IConnectionSocket
+    public interface IConnection
     {
         /// <summary>
         /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
         event ConnectionSocketMessageReceiveHandler MessageReceived;
         /// <summary>
-        /// Определяет текущий адрес для приёма и отправки сообщений.
-        /// </summary>
-        IAccessPoint LocalHost { get; }
-        /// <summary>
         /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
         event ConnectionInterruptHandler ConnectionInterrupt;
+        /// <summary>
+        /// Интерфейс, на котором устанавливается соединение.
+        /// </summary>
+        IConnectionProvider ConnectionProvider { get; }
+        /// <summary>
+        /// Порт на локальной машине.
+        /// </summary>
+        IPort Port { get; }
         /// <summary>
         /// Адрес точки, с которой установлено соединение.
         /// </summary>
@@ -44,5 +45,21 @@ namespace EmptyBox.IO.Network
         Task<SocketOperationStatus> Close();
 
         bool IsActive { get; }
+    }
+
+    public interface IConnection<TAddress, TPort, TAccessPoint, TProvider> : IConnection where TAddress : IAddress where TPort : IPort where TAccessPoint : IAccessPoint<TAddress, TPort> where TProvider : IConnectionProvider<TAddress, TPort, TAccessPoint>
+    {
+        /// <summary>
+        /// Интерфейс, на котором устанавливается соединение.
+        /// </summary>
+        new TProvider ConnectionProvider { get; }
+        /// <summary>
+        /// Порт на локальной машине.
+        /// </summary>
+        new TPort Port { get; }
+        /// <summary>
+        /// Адрес точки, с которой установлено соединение.
+        /// </summary>
+        new TAccessPoint RemoteHost { get; }
     }
 }

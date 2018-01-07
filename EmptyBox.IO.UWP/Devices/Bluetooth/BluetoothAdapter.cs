@@ -1,29 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using EmptyBox.IO.Devices.Radio;
-using Windows.Devices.Radios;
-using Windows.Devices;
-using Windows.Devices.Bluetooth;
 using Windows.Devices.Enumeration;
-using Windows.Networking.Sockets;
 using EmptyBox.IO.Interoperability;
 using EmptyBox.IO.Network.Bluetooth;
-using Windows.Devices.Bluetooth.Rfcomm;
-using Windows.Storage.Streams;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
     public class BluetoothAdapter : IBluetoothAdapter
     {
-        public static async Task<BluetoothAdapter> GetDefaultBluetoothAdapter()
-        {
-            return new BluetoothAdapter(await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync());
-        }
-
-        IReadOnlyDictionary<BluetoothPort, byte[]> IBluetoothAdapter.ActiveListeners => _ActiveListeners;
+        [StandardRealization]
+        public static async Task<BluetoothAdapter> GetDefaultBluetoothAdapter() => new BluetoothAdapter(await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync());
 
         private Dictionary<BluetoothPort, byte[]> _ActiveListeners { get; set; }
         private Windows.Devices.Bluetooth.BluetoothAdapter _Adapter { get; set; }

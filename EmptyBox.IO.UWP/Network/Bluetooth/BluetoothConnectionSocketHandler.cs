@@ -1,18 +1,14 @@
 ﻿using EmptyBox.IO.Interoperability;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.Rfcomm;
 using Windows.Networking.Sockets;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public class BluetoothConnectionSocketHandler : IConnectionSocketHandler
+    public class BluetoothConnectionSocketHandler : IConnectionListener
     {
-        IAccessPoint IConnectionSocketHandler.LocalHost => LocalHost;
+        IAccessPoint IConnectionListener.LocalHost => LocalHost;
 
         private StreamSocketListener _ConnectionListener { get; set; }
         private RfcommServiceProvider _ServiceProvider { get; set; }

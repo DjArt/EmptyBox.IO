@@ -53,9 +53,10 @@
     <Compile Include="Devices\Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Devices\Bluetooth\Constants.cs" />
     <Compile Include="Devices\Camera\Camera.cs" />
+    <Compile Include="Devices\Enumeration\Bluetooth\BluetoothDeviceProvider.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
-    <Compile Include="Network\Bluetooth\BluetoothConnectionSocket.cs" />
-    <Compile Include="Network\Bluetooth\BluetoothConnectionSocketHandler.cs" />
+    <Compile Include="Network\Bluetooth\BluetoothConnection.cs" />
+    <Compile Include="Network\Bluetooth\BluetoothConnectionListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

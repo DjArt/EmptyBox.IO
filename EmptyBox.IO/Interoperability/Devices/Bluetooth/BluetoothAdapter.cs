@@ -1,9 +1,7 @@
 ﻿using EmptyBox.IO.Devices.Bluetooth;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Interoperability.Devices.Bluetooth

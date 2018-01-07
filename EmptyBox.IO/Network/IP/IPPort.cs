@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EmptyBox.IO.Network.IP
+﻿namespace EmptyBox.IO.Network.IP
 {
     public struct IPPort : IPort
     {

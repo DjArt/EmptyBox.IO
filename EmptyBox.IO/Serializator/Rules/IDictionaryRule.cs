@@ -3,10 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using EmptyBox.ScriptRuntime.Extensions;
-using System.Collections;
-using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Serializator.Rules
 {

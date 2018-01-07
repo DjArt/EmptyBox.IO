@@ -1,20 +1,15 @@
-﻿using EmptyBox.IO.Devices.Bluetooth;
-using EmptyBox.IO.Interoperability;
+﻿using EmptyBox.IO.Interoperability;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.Devices.Bluetooth.Rfcomm;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public class BluetoothConnectionSocket : IConnectionSocket
+    public class BluetoothConnectionSocket : IConnection
     {
-        IAccessPoint IConnectionSocket.LocalHost => LocalHost;
-        IAccessPoint IConnectionSocket.RemoteHost => RemoteHost;
+        IAccessPoint IConnection.LocalHost => LocalHost;
+        IAccessPoint IConnection.RemoteHost => RemoteHost;
 
         private DataReader _Reader;
         private DataWriter _Writer;

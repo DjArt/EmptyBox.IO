@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Net;
 using System.Net.Sockets;
-using System.IO;
 using EmptyBox.IO.Interoperability;
 
 namespace EmptyBox.IO.Network.IP
 {
-    public class TCPConnectionSocket : IConnectionSocket
+    public class TCPConnectionSocket : IConnection
     {
-        IAccessPoint IConnectionSocket.LocalHost => LocalHost;
-        IAccessPoint IConnectionSocket.RemoteHost => RemoteHost;
+        IAccessPoint IConnection.LocalHost => LocalHost;
+        IAccessPoint IConnection.RemoteHost => RemoteHost;
 
         private Task _ReceiveLoopTask;
         private bool _InternalConstructor;
