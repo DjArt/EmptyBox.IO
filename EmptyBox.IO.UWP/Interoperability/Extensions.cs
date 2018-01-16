@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using EmptyBox.IO.Devices;
+﻿using EmptyBox.IO.Devices;
 using Windows.Devices.Bluetooth;
 using EmptyBox.IO.Devices.Radio;
 using Windows.Devices.Radios;
@@ -10,6 +8,8 @@ using EmptyBox.IO.Network.Bluetooth;
 using EmptyBox.IO.Network.MAC;
 using Windows.Networking;
 using EmptyBox.IO.Devices.Bluetooth;
+using System.Threading.Tasks;
+using System;
 
 namespace EmptyBox.IO.Interoperability
 {

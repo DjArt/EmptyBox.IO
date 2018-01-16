@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.Devices.Bluetooth.Rfcomm;
+﻿using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Interoperability;
 using EmptyBox.IO.Network.Bluetooth;
 using EmptyBox.IO.Network.MAC;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {

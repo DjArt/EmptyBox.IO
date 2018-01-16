@@ -99,10 +99,17 @@ namespace EmptyBox.IO.Network.MAC
         public override string ToString()
         {
             StringBuilder result = new StringBuilder();
-            for (int i0 = 0; i0 < _Address.Length; i0++)
+            if (_Address != null)
             {
-                result.Append(Address[i0].ToString(FORMAT));
-                if (i0 + 1 < _Address.Length) result.Append(':');
+                for (int i0 = 0; i0 < _Address.Length; i0++)
+                {
+                    result.Append(Address[i0].ToString(FORMAT));
+                    if (i0 + 1 < _Address.Length) result.Append(':');
+                }
+            }
+            else
+            {
+                result.Append("Unspecified address");
             }
             return result.ToString();
         }

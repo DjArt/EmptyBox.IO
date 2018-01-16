@@ -1,0 +1,8 @@
+﻿<Application
+    x:Class="EmptyBox.IO.UWP.Test.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:EmptyBox.IO.UWP.Test"
+    RequestedTheme="Light">
+
+</Application>

@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Interoperability
 {
     internal static class InternalInterop
     {
+        internal static object GetTaskResult(Task obj)
+        {
+            return obj.GetType().GetRuntimeProperty("Result").GetValue(obj);
+        }
+
         internal static Assembly GetAssembly()
         {
             try
@@ -21,7 +27,7 @@ namespace EmptyBox.IO.Interoperability
                 }
                 try
                 {
-                    Assembly asm = Assembly.Load(new AssemblyName("EmptyBox.IO.WRT"));
+                    Assembly asm = Assembly.Load(new AssemblyName("EmptyBox.IO.WRTD81"));
                     return asm;
                 }
                 catch

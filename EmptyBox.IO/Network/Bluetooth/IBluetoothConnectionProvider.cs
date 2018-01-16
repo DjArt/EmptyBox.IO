@@ -1,7 +1,4 @@
 ﻿using EmptyBox.IO.Network.MAC;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
@@ -10,5 +7,6 @@ namespace EmptyBox.IO.Network.Bluetooth
         new MACAddress Address { get; }
         new IBluetoothConnection CreateConnection(BluetoothAccessPoint accessPoint);
         new IBluetoothConnectionListener CreateConnectionListener(BluetoothPort port);
+        IBluetoothConnectionProvider BluetoothProvider { get; }
     }
 }

@@ -12,10 +12,13 @@ namespace EmptyBox.IO.Network
         /// </summary>
         event SocketMessageReceiveHandler MessageReceived;
         /// <summary>
-        /// Определяет текущий адрес для приёма и отправки сообщений.
+        /// Интерфейс для приёма и отправки сообщений.
         /// </summary>
-        IAccessPoint LocalHost { get; }
+        IConnectionProvider ConnectionProvider { get; }
         /// <summary>
+        /// Порт на локальной машине.
+        /// </summary>
+        IPort Port { get; }
         /// Отправляет сообщение по указанному адресу.
         /// </summary>
         /// <param name="host">Адрес доставки.</param>
@@ -32,5 +35,17 @@ namespace EmptyBox.IO.Network
         /// </summary>
         /// <returns>Результат закрытия.</returns>
         Task<SocketOperationStatus> Close();
+    }
+
+    public interface ISocket<TAddress, TPort, TAccessPoint, TProvider> : ISocket where TAddress : IAddress where TPort : IPort where TAccessPoint : IAccessPoint<TAddress, TPort> where TProvider : ISocketProvider<TAddress, TPort, TAccessPoint>
+    {
+        /// <summary>
+        /// Интерфейс для приёма и отправки сообщений.
+        /// </summary>
+        new TProvider ConnectionProvider { get; }
+        /// <summary>
+        /// Порт на локальной машине.
+        /// </summary>
+        new TPort Port { get; }
     }
 }
