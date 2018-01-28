@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EmptyBox.IO.Network.Bluetooth;
 using Windows.Devices.Enumeration;
-using EmptyBox.IO.Network.MAC;
+using EmptyBox.IO.Network;
 using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Interoperability;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
-    public class BluetoothDevice : IBluetoothDevice
+    public sealed class BluetoothDevice : IBluetoothDevice
     {
         public string Name { get; private set; }
         public MACAddress Address { get; private set; }
-        public BluetoothLinkType DeviceType => throw new NotImplementedException();
         public DevicePairStatus PairStatus => DevicePairStatus.Paired;
         public ConnectionStatus ConnectionStatus => ConnectionStatus.Unknow;
         public BluetoothDeviceClass DeviceClass => throw new NotImplementedException();
@@ -37,11 +36,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
                     RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
                     if (rds != null)
                     {
-                        MACAddress address = rds.ConnectionHostName.ToMACAddress();
-                        if (Address == address)
-                        {
-                            result.Add(new BluetoothAccessPoint(Address, rds.ServiceId.ToBluetoothPort()));
-                        }
+                        result.Add(new BluetoothAccessPoint(this, rds.ServiceId.ToBluetoothPort()));
                     }
                 }
                 catch

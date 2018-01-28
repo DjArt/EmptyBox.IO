@@ -1,6 +1,6 @@
 ﻿namespace EmptyBox.IO.Network.IP
 {
-    public struct IPAccessPoint : IAccessPoint<IPAddress, IPPort>
+    public struct IPAccessPoint : IAccessPoint
     {
         IAddress IAccessPoint.Address => Address;
         IPort IAccessPoint.Port => Port;

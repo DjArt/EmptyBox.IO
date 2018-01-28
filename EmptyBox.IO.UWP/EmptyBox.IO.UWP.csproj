@@ -110,6 +110,8 @@
     <Compile Include="Devices\Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Devices\Bluetooth\BluetoothDeviceProvider.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
+    <Compile Include="Interoperability\Сompatibility.cs" />
+    <Compile Include="Network\AConnection.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnection.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnectionListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,7 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.0.1</Version>
+      <Version>6.0.6</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

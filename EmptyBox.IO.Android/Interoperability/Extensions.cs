@@ -1,4 +1,6 @@
 ﻿using EmptyBox.IO.Devices.Radio;
+using EmptyBox.IO.Network.Bluetooth;
+using Java.Util;
 
 namespace EmptyBox.IO.Interoperability
 {
@@ -30,6 +32,11 @@ namespace EmptyBox.IO.Interoperability
                 default:
                     return Android.Bluetooth.State.Off;
             }
+        }
+
+        public static UUID ToUUID(this BluetoothPort port)
+        {
+            return UUID.NameUUIDFromBytes(port);
         }
     }
 }

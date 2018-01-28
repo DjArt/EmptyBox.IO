@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using EmptyBox.IO.Network.Bluetooth;
-using EmptyBox.IO.Network.MAC;
+using EmptyBox.IO.Network;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -21,7 +21,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
         public Android.Bluetooth.BluetoothDevice InternalDevice { get; private set; }
         public string Name => InternalDevice.Name;
         public MACAddress Address { get; private set; }
-        public BluetoothLinkType DeviceType => throw new NotImplementedException();
         public BluetoothDeviceClass DeviceClass => throw new NotImplementedException();
         public DevicePairStatus PairStatus => throw new NotImplementedException();
         public ConnectionStatus ConnectionStatus => throw new NotImplementedException();

@@ -1,5 +1,6 @@
 ﻿using EmptyBox.IO.Interoperability;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,24 +12,28 @@ namespace EmptyBox.IO.Devices.Bluetooth
         public static async Task<IBluetoothAdapter> GetDefault()
         {
             await Task.Yield();
-            Assembly asm = InternalInterop.GetAssembly();
-            if (asm != null)
+            List<Assembly> libs = APIProvider.GetСompatibleAssembly();
+            foreach (Assembly asm in libs)
             {
-                Type type = asm.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Devices.Bluetooth.BluetoothAdapter");
-                if (type != null)
+                try
                 {
-                    Task item = (Task)type.GetTypeInfo().DeclaredMethods.First(x => x.GetCustomAttributes().Any(y => y.GetType() == typeof(StandardRealizationAttribute))).Invoke(null, new object[0]);
-                    return (IBluetoothAdapter)InternalInterop.GetTaskResult(item);
+                    Type type = asm.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Devices.Bluetooth.BluetoothAdapter");
+                    if (type != null)
+                    {
+                        Task item = (Task)type.GetTypeInfo().DeclaredMethods.First(x => x.GetCustomAttributes().Any(y => y.GetType() == typeof(StandardRealizationAttribute))).Invoke(null, new object[0]);
+                        return (IBluetoothAdapter)APIProvider.GetTaskResult(item);
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
-                else
+                catch
                 {
-                    return null;
+
                 }
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }

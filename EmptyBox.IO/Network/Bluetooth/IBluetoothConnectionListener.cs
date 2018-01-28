@@ -1,10 +1,15 @@
-﻿using EmptyBox.IO.Devices.Bluetooth;
-using EmptyBox.IO.Network.MAC;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public interface IBluetoothConnectionListener : IConnectionListener<MACAddress, BluetoothPort, BluetoothAccessPoint, IBluetoothAdapter>
+    public interface IBluetoothConnectionListener : IConnectionListener
     {
-
+        new IBluetoothConnectionProvider ConnectionProvider { get; }
+        /// <summary>
+        /// Порт на локальной машине.
+        /// </summary>
+        new BluetoothPort Port { get; }
     }
 }

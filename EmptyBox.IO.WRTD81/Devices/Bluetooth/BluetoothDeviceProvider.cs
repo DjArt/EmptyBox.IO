@@ -1,5 +1,6 @@
 ﻿using EmptyBox.IO.Interoperability;
-using EmptyBox.IO.Network.MAC;
+using EmptyBox.IO.Network;
+using EmptyBox.IO.Network.Bluetooth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +12,33 @@ namespace EmptyBox.IO.Devices.Bluetooth
 {
     public sealed class BluetoothDeviceProvider : IBluetoothDeviceProvider
     {
-        IBluetoothAdapter IBluetoothDeviceProvider.Provider => Provider;
+        #region IConnectionProvider interface properties
+        IAddress IConnectionProvider.Address => Adapter.Address;
+        #endregion
 
+        #region IBluetoothDeviceProvider interface properties
+        IBluetoothAdapter IBluetoothDeviceProvider.Adapter => Adapter;
+        #endregion
+
+        #region Private objects
         private DeviceWatcher Watcher;
         private List<BluetoothDevice> Cache;
         private object Lock = new object();
+        #endregion
 
+        #region Public objects
         public event EventHandler<IBluetoothDevice> DeviceAdded;
         public event EventHandler<IBluetoothDevice> DeviceRemoved;
 
-        public BluetoothAdapter Provider { get; private set; }
+        public BluetoothAdapter Adapter { get; private set; }
+        public MACAddress Address => Adapter.Address;
         public bool IsStarted { get; private set; }
+        #endregion
 
-        internal BluetoothDeviceProvider(BluetoothAdapter provider)
+        #region Constructors
+        internal BluetoothDeviceProvider(BluetoothAdapter adapter)
         {
-            Provider = provider;
+            Adapter = adapter;
             Cache = new List<BluetoothDevice>();
             Watcher = DeviceInformation.CreateWatcher(Constants.AQS_CLASS_GUID + Constants.AQS_BLUETOOTH_GUID);
             Watcher.Added += Watcher_Added;
@@ -34,7 +47,47 @@ namespace EmptyBox.IO.Devices.Bluetooth
             Watcher.Stopped += Watcher_Stopped;
             Watcher.Updated += Watcher_Updated;
         }
+        #endregion
 
+        #region IBluetoothConnectionProvider interface properties
+        IBluetoothConnection IBluetoothConnectionProvider.CreateConnection(BluetoothAccessPoint accessPoint)
+        {
+            return CreateConnection(accessPoint);
+        }
+
+        IBluetoothConnectionListener IBluetoothConnectionProvider.CreateConnectionListener(BluetoothPort port)
+        {
+            return CreateConnectionListener(port);
+        }
+        #endregion
+
+        #region IConnectionProvider interface functions
+        IConnection IConnectionProvider.CreateConnection(IAccessPoint accessPoint)
+        {
+            if (accessPoint is BluetoothAccessPoint point)
+            {
+                return CreateConnection(point);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        IConnectionListener IConnectionProvider.CreateConnectionListener(IPort port)
+        {
+            if (port is BluetoothPort _port)
+            {
+                return CreateConnectionListener(_port);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+        #endregion
+
+        #region Private functions
         private async void Watcher_Updated(DeviceWatcher sender, DeviceInformationUpdate args)
         {
 
@@ -79,7 +132,9 @@ namespace EmptyBox.IO.Devices.Bluetooth
 
             }
         }
+        #endregion Private function
 
+        #region Public functions
         public async Task<IEnumerable<IBluetoothDevice>> Find()
         {
             DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Constants.AQS_CLASS_GUID + Constants.AQS_BLUETOOTH_GUID);
@@ -118,5 +173,21 @@ namespace EmptyBox.IO.Devices.Bluetooth
             IsStarted = false;
             Cache.Clear();
         }
+
+        public BluetoothConnection CreateConnection(BluetoothAccessPoint accessPoint)
+        {
+            return new BluetoothConnection(this, accessPoint);
+        }
+
+        public BluetoothConnectionListener CreateConnectionListener(BluetoothPort port)
+        {
+            return new BluetoothConnectionListener(this, port);
+        }
+
+        public async Task<IBluetoothDevice> TryGetFromMAC(MACAddress address)
+        {
+            return (await Find()).FirstOrDefault(x => x.Address == address);
+        }
+        #endregion
     }
 }

@@ -48,6 +48,10 @@
     <Compile Include="Devices\Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Devices\Bluetooth\BluetoothDeviceProvider.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
+    <Compile Include="Interoperability\Сompatibility.cs" />
+    <Compile Include="Network\AConnection.cs" />
+    <Compile Include="Network\Bluetooth\BluetoothConnection.cs" />
+    <Compile Include="Network\Bluetooth\BluetoothConnectionListener.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,7 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Access\" />
-    <Folder Include="Network\" />
     <Folder Include="Storage\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

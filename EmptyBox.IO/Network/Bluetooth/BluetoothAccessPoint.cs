@@ -1,17 +1,17 @@
-﻿using EmptyBox.IO.Network.MAC;
+﻿using EmptyBox.IO.Devices.Bluetooth;
 using System.Text;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public struct BluetoothAccessPoint : IAccessPoint<MACAddress, BluetoothPort>
+    public struct BluetoothAccessPoint : IAccessPoint
     {
         IAddress IAccessPoint.Address => Address;
         IPort IAccessPoint.Port => Port;
 
-        public MACAddress Address { get; set; }
+        public IBluetoothDevice Address { get; set; }
         public BluetoothPort Port { get; set; }
 
-        public BluetoothAccessPoint(MACAddress address, BluetoothPort port)
+        public BluetoothAccessPoint(IBluetoothDevice address, BluetoothPort port)
         {
             Address = address;
             Port = port;

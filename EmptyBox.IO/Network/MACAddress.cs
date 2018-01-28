@@ -2,7 +2,7 @@
 using System.Text;
 using System.Linq;
 
-namespace EmptyBox.IO.Network.MAC
+namespace EmptyBox.IO.Network
 {
     public struct MACAddress : IAddress
     {
@@ -11,7 +11,8 @@ namespace EmptyBox.IO.Network.MAC
 
         public static MACAddress Parse(string value)
         {
-            throw new NotImplementedException();
+            TryParse(value, out MACAddress result);
+            return result;
         }
 
         public static bool TryParse(string value, out MACAddress address)
@@ -46,6 +47,13 @@ namespace EmptyBox.IO.Network.MAC
             return !(a0 == a1);
         }
 
+        public static implicit operator byte[](MACAddress address)
+        {
+            return address.Address;
+        }
+
+        private byte[] _Address;
+
         public byte[] Address
         {
             get => _Address;
@@ -62,7 +70,6 @@ namespace EmptyBox.IO.Network.MAC
                 }
             }
         }
-        private byte[] _Address;
 
         public MACAddress(params byte[] value)
         {
@@ -94,6 +101,11 @@ namespace EmptyBox.IO.Network.MAC
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return _Address.GetHashCode();
         }
 
         public override string ToString()

@@ -39,13 +39,19 @@
   <ItemGroup>
     <Folder Include="Access\" />
     <Folder Include="Devices\" />
-    <Folder Include="Interoperability\" />
     <Folder Include="Network\" />
     <Folder Include="Resources\" />
     <Folder Include="Storage\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interoperability\Сompatibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">
+      <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
+      <Name>EmptyBox.IO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

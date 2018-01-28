@@ -22,7 +22,7 @@ namespace EmptyBox.IO.Network.IP
         public IPort Port => throw new NotImplementedException();
 
         public event ConnectionInterruptHandler ConnectionInterrupt;
-        public event ConnectionSocketMessageReceiveHandler MessageReceived;
+        public event ConnectionMessageReceiveHandler MessageReceived;
 
         internal TCPConnection(Socket socket, IPAccessPoint remotehost)
         {

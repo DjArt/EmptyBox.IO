@@ -5,7 +5,8 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Network.Bluetooth;
 using Windows.Networking;
-using EmptyBox.IO.Network.MAC;
+using EmptyBox.IO.Network;
+using EmptyBox.IO.Access;
 
 namespace EmptyBox.IO.Interoperability
 {

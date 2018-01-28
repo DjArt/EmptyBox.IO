@@ -16,7 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Access\" />
+    <Compile Remove="Network\MAC\**" />
+    <EmbeddedResource Remove="Network\MAC\**" />
+    <None Remove="Network\MAC\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\Wi-Fi\Direct\" />
   </ItemGroup>

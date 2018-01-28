@@ -1,9 +1,8 @@
 ﻿namespace EmptyBox.IO.Network.IP
 {
-    public interface IUDPSocketProvider : ISocketProvider<IPAddress, IPPort, IPAccessPoint>
+    public interface IUDPSocketProvider : ISocketProvider
     {
         new IPAddress Address { get; }
-        new ISocket CreateSocket(IPPort port);
-        IUDPSocketProvider UDPProvider { get; }
+        IUDPSocket CreateSocket(IPPort port);
     }
 }

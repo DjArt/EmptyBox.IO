@@ -1,4 +1,4 @@
-﻿namespace EmptyBox.IO.Devices
+﻿namespace EmptyBox.IO.Access
 {
     public enum AccessStatus
     {

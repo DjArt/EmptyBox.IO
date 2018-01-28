@@ -10,7 +10,7 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
-        event ConnectionSocketMessageReceiveHandler MessageReceived;
+        event ConnectionMessageReceiveHandler MessageReceived;
         /// <summary>
         /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
@@ -45,21 +45,5 @@ namespace EmptyBox.IO.Network
         Task<SocketOperationStatus> Close();
 
         bool IsActive { get; }
-    }
-
-    public interface IConnection<TAddress, TPort, TAccessPoint, TProvider> : IConnection where TAddress : IAddress where TPort : IPort where TAccessPoint : IAccessPoint<TAddress, TPort> where TProvider : IConnectionProvider<TAddress, TPort, TAccessPoint>
-    {
-        /// <summary>
-        /// Интерфейс, на котором устанавливается соединение.
-        /// </summary>
-        new TProvider ConnectionProvider { get; }
-        /// <summary>
-        /// Порт на локальной машине.
-        /// </summary>
-        new TPort Port { get; }
-        /// <summary>
-        /// Адрес точки, с которой установлено соединение.
-        /// </summary>
-        new TAccessPoint RemoteHost { get; }
     }
 }

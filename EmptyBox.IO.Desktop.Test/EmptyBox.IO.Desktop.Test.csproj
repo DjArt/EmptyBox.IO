@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>EmptyBox.IO.Desktop.Test</RootNamespace>
     <AssemblyName>EmptyBox.IO.Desktop.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -114,6 +115,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.IO.Android\EmptyBox.IO.Android.csproj">
+      <Project>{2322aab0-a55e-405f-b165-f7a87e53e880}</Project>
+      <Name>EmptyBox.IO.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EmptyBox.IO.iOS\EmptyBox.IO.iOS.csproj">
+      <Project>{9f9b17d1-fc71-462a-aea4-3a259a67973a}</Project>
+      <Name>EmptyBox.IO.iOS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EmptyBox.IO.Linux\EmptyBox.IO.Linux.csproj">
       <Project>{d7ae61b7-1eeb-4a95-b239-b6227ae2c13c}</Project>
       <Name>EmptyBox.IO.Linux</Name>
@@ -125,6 +134,10 @@
     <ProjectReference Include="..\EmptyBox.IO.Test\EmptyBox.IO.Test.csproj">
       <Project>{d8e67dfc-dcbd-4441-9254-4054fed1d63f}</Project>
       <Name>EmptyBox.IO.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EmptyBox.IO.Tizen\EmptyBox.IO.Tizen.csproj">
+      <Project>{cfe881a6-f68c-4546-91ec-59a5581fccb0}</Project>
+      <Name>EmptyBox.IO.Tizen</Name>
     </ProjectReference>
     <ProjectReference Include="..\EmptyBox.IO.Windows\EmptyBox.IO.Windows.csproj">
       <Project>{bb1cf045-c147-4cc6-b850-d290e8201c0f}</Project>

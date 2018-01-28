@@ -16,6 +16,16 @@ namespace EmptyBox.IO.Network.Bluetooth
             ID = new Guid(shortid, 0, 0x1000, 128, 0, 0, 128, 95, 155, 52, 251);
         }
 
+        public static implicit operator Guid(BluetoothPort port)
+        {
+            return port.ID;
+        }
+
+        public static implicit operator byte[](BluetoothPort port)
+        {
+            return port.ID.ToByteArray();
+        }
+
         public override string ToString()
         {
             return ID.ToString();

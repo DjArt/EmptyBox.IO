@@ -31,7 +31,6 @@
   <ItemGroup>
     <Folder Include="Access\" />
     <Folder Include="Devices\" />
-    <Folder Include="Interoperability\" />
     <Folder Include="Network\" />
     <Folder Include="Storage\" />
   </ItemGroup>

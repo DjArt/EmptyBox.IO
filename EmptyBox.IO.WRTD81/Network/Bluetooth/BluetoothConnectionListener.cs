@@ -1,6 +1,5 @@
 ﻿using EmptyBox.IO.Devices.Bluetooth;
 using EmptyBox.IO.Interoperability;
-using EmptyBox.IO.Network.MAC;
 using System;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.Rfcomm;
@@ -8,21 +7,31 @@ using Windows.Networking.Sockets;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public class BluetoothConnectionListener : IBluetoothConnectionListener
+    public sealed class BluetoothConnectionListener : IBluetoothConnectionListener
     {
+        #region IConnectionProvider interface properties
         IConnectionProvider IConnectionListener.ConnectionProvider => ConnectionProvider;
         IPort IConnectionListener.Port => Port;
-        IBluetoothAdapter IConnectionListener<MACAddress, BluetoothPort, BluetoothAccessPoint, IBluetoothAdapter>.ConnectionProvider => ConnectionProvider;
+        #endregion
 
+        #region IBluetoothConnectionProvider interface properties
+        IBluetoothConnectionProvider IBluetoothConnectionListener.ConnectionProvider => ConnectionProvider;
+        #endregion
+
+        #region Private objects
         private StreamSocketListener _ConnectionListener { get; set; }
         private RfcommServiceProvider _ServiceProvider { get; set; }
+        #endregion
 
-        public BluetoothAdapter ConnectionProvider { get; private set; }
+        #region Public objects
+        public BluetoothDeviceProvider ConnectionProvider { get; private set; }
         public BluetoothPort Port { get; private set; }
         public bool IsActive { get; protected set; }
         public event ConnectionReceivedDelegate ConnectionSocketReceived;
-        
-        public BluetoothConnectionListener(BluetoothAdapter adapter, BluetoothPort port)
+        #endregion
+
+        #region Constructors
+        public BluetoothConnectionListener(BluetoothDeviceProvider adapter, BluetoothPort port)
         {
             ConnectionProvider = adapter;
             Port = port;
@@ -30,13 +39,18 @@ namespace EmptyBox.IO.Network.Bluetooth
             _ConnectionListener = new StreamSocketListener();
             _ConnectionListener.ConnectionReceived += _ConnectionListener_ConnectionReceived;
         }
+        #endregion
 
-        private void _ConnectionListener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+        #region Private functions
+        private async void _ConnectionListener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            BluetoothAccessPoint remotehost = new BluetoothAccessPoint(args.Socket.Information.RemoteHostName.ToMACAddress(), new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)));
-            ConnectionSocketReceived?.Invoke(this, new BluetoothConnection(ConnectionProvider, Port, args.Socket, remotehost));
+            IBluetoothDevice device = await ConnectionProvider.TryGetFromMAC(args.Socket.Information.RemoteHostName.ToMACAddress());
+            BluetoothAccessPoint remotehost = new BluetoothAccessPoint(device, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)));
+            ConnectionSocketReceived?.Invoke(this, new BluetoothConnection(ConnectionProvider, args.Socket, Port, remotehost));
         }
+        #endregion
 
+        #region Public functions
         public async Task<SocketOperationStatus> Start()
         {
             await Task.Yield();
@@ -82,5 +96,6 @@ namespace EmptyBox.IO.Network.Bluetooth
                 return SocketOperationStatus.ListenerIsAlreadyClosed;
             }
         }
+        #endregion
     }
 }

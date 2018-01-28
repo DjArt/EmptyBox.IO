@@ -7,7 +7,7 @@ using EmptyBox.IO.Devices.Ethernet;
 
 namespace EmptyBox.IO.Network.IP
 {
-    public class TCPConnectionListener : IConnectionListener<IPAddress, IPPort, IPAccessPoint, IEthernetAdapter>
+    public class TCPConnectionListener : IConnectionListener
     {
 
         private Task _ReceiveLoop;

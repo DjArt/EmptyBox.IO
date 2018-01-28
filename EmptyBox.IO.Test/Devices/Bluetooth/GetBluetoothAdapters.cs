@@ -16,7 +16,7 @@ namespace EmptyBox.IO.Test.Devices.Bluetooth
             IBluetoothAdapter @default = await BluetoothAdapterProvider.GetDefault();
             if (@default != null)
             {
-                result.AppendFormat("Найден Bluetooth-адаптер по умолчанию: {0}({1})", @default.Name, @default.Address);
+                result.AppendFormat("Найден Bluetooth-адаптер по умолчанию: {0}({1})", @default.Name, @default.DeviceProvider.Address);
             }
             else
             {

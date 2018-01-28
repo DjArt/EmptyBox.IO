@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EmptyBox.IO</RootNamespace>
     <AssemblyName>EmptyBox.IO.WRTD81</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetPlatformVersion>8.0</TargetPlatformVersion>
     <TargetFrameworkProfile />
@@ -54,13 +54,18 @@
     <Compile Include="Devices\Bluetooth\Constants.cs" />
     <Compile Include="Devices\Camera\Camera.cs" />
     <Compile Include="Devices\Bluetooth\BluetoothDeviceProvider.cs" />
+    <Compile Include="Devices\Ethernet\EthernetAdapter.cs" />
+    <Compile Include="Devices\WiFi\WiFiAdapter.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
+    <Compile Include="Interoperability\Сompatibility.cs" />
+    <Compile Include="Network\AConnection.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnection.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnectionListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Access\" />
+    <Folder Include="Devices\WiFi\Direct\" />
     <Folder Include="Network\IP\" />
     <Folder Include="Storage\" />
   </ItemGroup>

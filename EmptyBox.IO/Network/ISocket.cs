@@ -14,7 +14,7 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Интерфейс для приёма и отправки сообщений.
         /// </summary>
-        IConnectionProvider ConnectionProvider { get; }
+        ISocketProvider SocketProvider { get; }
         /// <summary>
         /// Порт на локальной машине.
         /// </summary>
@@ -24,7 +24,7 @@ namespace EmptyBox.IO.Network
         /// <param name="host">Адрес доставки.</param>
         /// <param name="data">Доставляемое сообщение.</param>
         /// <returns>Статус доставки сообщения, если применимо к протоколу.</returns>
-        Task<SocketOperationStatus> Send(IAddress host, byte[] data);
+        Task<SocketOperationStatus> Send(IAccessPoint host, byte[] data);
         /// <summary>
         /// Запускает прослушивание входящих сообщений.
         /// </summary>
@@ -35,17 +35,5 @@ namespace EmptyBox.IO.Network
         /// </summary>
         /// <returns>Результат закрытия.</returns>
         Task<SocketOperationStatus> Close();
-    }
-
-    public interface ISocket<TAddress, TPort, TAccessPoint, TProvider> : ISocket where TAddress : IAddress where TPort : IPort where TAccessPoint : IAccessPoint<TAddress, TPort> where TProvider : ISocketProvider<TAddress, TPort, TAccessPoint>
-    {
-        /// <summary>
-        /// Интерфейс для приёма и отправки сообщений.
-        /// </summary>
-        new TProvider ConnectionProvider { get; }
-        /// <summary>
-        /// Порт на локальной машине.
-        /// </summary>
-        new TPort Port { get; }
     }
 }

@@ -6,7 +6,8 @@ using System.Text;
 
 namespace EmptyBox.IO.Devices.WiFi
 {
-    public interface IWiFiAdapter : IRadio, IEthernetAdapter
+    public interface IWiFiAdapter : IRadio, IEthernetAdapter, IWiFiNetworkProvider
     {
+
     }
 }
