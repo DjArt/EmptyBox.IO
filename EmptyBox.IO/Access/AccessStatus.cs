@@ -1,10 +1,12 @@
 ﻿namespace EmptyBox.IO.Access
 {
-    public enum AccessStatus
+    public enum AccessStatus : byte
     {
-        Allowed,
+        Success,
         DeniedBySystem,
         DeniedByUser,
-        Unknown
+        NotSupported,
+        NotAvailable,
+        UnknownError
     }
 }

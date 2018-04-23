@@ -15,7 +15,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
     {
         #region Public static functions
         [StandardRealization]
-        public static async Task<BluetoothAdapter> GetDefaultBluetoothAdapter() => new BluetoothAdapter(await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync());
+        public static async Task<BluetoothAdapter> GetDefault() => new BluetoothAdapter(await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync());
         #endregion
 
         #region IBluetoothAdapter interface properties

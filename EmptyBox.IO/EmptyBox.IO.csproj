@@ -15,6 +15,10 @@
     <FileVersion>0.0.1.13</FileVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Network\MAC\**" />
     <EmbeddedResource Remove="Network\MAC\**" />

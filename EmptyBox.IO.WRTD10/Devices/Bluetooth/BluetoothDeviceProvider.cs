@@ -39,7 +39,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         }
         #endregion
 
-        #region IBluetoothConnectionProvider interface properties
+        #region IBluetoothConnectionProvider interface functions
         IBluetoothConnection IBluetoothConnectionProvider.CreateConnection(BluetoothAccessPoint accessPoint)
         {
             return CreateConnection(accessPoint);
