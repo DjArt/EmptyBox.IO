@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Access\" />
+    <Folder Include="Devices\GPIO\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Storage\" />
   </ItemGroup>

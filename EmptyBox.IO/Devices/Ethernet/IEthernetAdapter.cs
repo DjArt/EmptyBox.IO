@@ -4,7 +4,7 @@ using EmptyBox.IO.Network.Ethernet;
 
 namespace EmptyBox.IO.Devices.Ethernet
 {
-    public interface IEthernetAdapter : IRemovableDevice
+    public interface IEthernetAdapter : IDevice
     {
         MACAddress HardwareAddress { get; }
         ConnectionStatus NetworkStatus { get; }

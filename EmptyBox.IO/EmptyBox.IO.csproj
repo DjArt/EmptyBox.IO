@@ -26,6 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Devices\USB\" />
+    <Folder Include="Devices\Serial\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\Wi-Fi\Direct\" />
   </ItemGroup>

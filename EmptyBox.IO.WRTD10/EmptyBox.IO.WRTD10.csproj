@@ -77,6 +77,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Access\" />
+    <Folder Include="Devices\Audio\" />
+    <Folder Include="Devices\Camera\" />
+    <Folder Include="Devices\Ethernet\" />
+    <Folder Include="Devices\GPIO\" />
+    <Folder Include="Devices\NFC\" />
+    <Folder Include="Devices\WiFi\Direct\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Storage\" />
   </ItemGroup>

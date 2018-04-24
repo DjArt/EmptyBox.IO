@@ -1,6 +1,6 @@
 ﻿namespace EmptyBox.IO.Devices
 {
-    public interface IPairableDevice : IRemovableDevice
+    public interface IPairableDevice : IDevice
     {
         DevicePairStatus PairStatus { get; }
     }

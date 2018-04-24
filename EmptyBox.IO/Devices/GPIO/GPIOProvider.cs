@@ -5,11 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace EmptyBox.IO.Devices.Bluetooth
+namespace EmptyBox.IO.Devices.GPIO
 {
-    public static class BluetoothAdapterProvider
+    public static class GPIOProvider
     {
-        public static async Task<IBluetoothAdapter> GetDefault()
+        public static async Task<IGPIO> GetDefault()
         {
             await Task.Yield();
             List<Assembly> libs = APIProvider.GetСompatibleAssembly();
@@ -17,11 +17,11 @@ namespace EmptyBox.IO.Devices.Bluetooth
             {
                 try
                 {
-                    Type type = asm.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Devices.Bluetooth.BluetoothAdapter");
+                    Type type = asm.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Devices.GPIO.GPIO");
                     if (type != null)
                     {
                         Task item = (Task)type.GetTypeInfo().DeclaredMethods.First(x => x.GetCustomAttributes().Any(y => y.GetType() == typeof(StandardRealizationAttribute))).Invoke(null, new object[0]);
-                        return (IBluetoothAdapter)APIProvider.GetTaskResult(item);
+                        return (IGPIO)APIProvider.GetTaskResult(item);
                     }
                 }
                 catch

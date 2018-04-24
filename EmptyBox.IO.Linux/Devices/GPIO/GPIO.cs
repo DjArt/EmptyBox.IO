@@ -9,8 +9,9 @@ using EmptyBox.IO.Access;
 
 namespace EmptyBox.IO.Devices.GPIO
 {
-    public class GPIO : IGPIO
+    public sealed class GPIO : IGPIO
     {
+        #region Static internal objects
         /// <summary>
         /// Путь до папки драйвера GPIO
         /// </summary>
@@ -23,8 +24,9 @@ namespace EmptyBox.IO.Devices.GPIO
         /// Путь до файла подключения контактов GPIO
         /// </summary>
         internal const string GPIO_EXPORT_PATH = "/sys/class/gpio/export";
+        #endregion
 
-        #region Public static functions
+        #region Static public functions
         [StandardRealization]
         public static async Task<RefResult<GPIO, AccessStatus>> GetDefault()
         {
@@ -40,50 +42,157 @@ namespace EmptyBox.IO.Devices.GPIO
         }
         #endregion
 
-        internal List<GPIOPin> OpenedPins { get; private set; }
+        #region Public events
+        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
+        #endregion
 
+        #region Public objects
         public string Name => throw new NotImplementedException();
+        public ConnectionStatus ConnectionStatus => ConnectionStatus.Connected;
+        #endregion
 
         #region Constructors
         internal GPIO()
         {
-            OpenedPins = new List<GPIOPin>();
+
+        }
+        #endregion
+
+        #region IDisposable interface functions
+        void IDisposable.Dispose()
+        {
+            Close();
         }
         #endregion
 
         #region Interface IGPIO functions
-        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIO.OpenPin(uint number)
+        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIO.OpenPin(uint pin)
         {
-            var res = await OpenPin(number);
+            var res = await OpenPin(pin);
             return new RefResult<IGPIOPin, GPIOPinOpenStatus>(res.Result, res.Status, res.Exception);
         }
 
-        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIO.OpenPin(uint number, GPIOPinSharingMode shareMode)
+        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIO.OpenPin(uint pin, GPIOPinSharingMode shareMode)
         {
-            throw new NotImplementedException();
+            var res = await OpenPin(pin, shareMode);
+            return new RefResult<IGPIOPin, GPIOPinOpenStatus>(res.Result, res.Status, res.Exception);
         }
         #endregion
 
-        public async Task<RefResult<GPIOPin, GPIOPinOpenStatus>> OpenPin(uint number)
+        #region Public functions
+        /// <summary>
+        /// Пытается открыть ранее не открытый контакт GPIO в режиме монопольного доступа. Если контакт был открыт ранее, пытается  открыть его в режиме общего доступа для чтения.
+        /// </summary>
+        /// <param name="pin">Номер контакта GPIO.</param>
+        /// <returns></returns>
+        public async Task<RefResult<GPIOPin, GPIOPinOpenStatus>> OpenPin(uint pin)
         {
             await Task.Yield();
-            GPIOPin pin = OpenedPins.Find(x => x.Number == number);
-            if (pin != null)
-            {
-                return new RefResult<GPIOPin, GPIOPinOpenStatus>(pin, GPIOPinOpenStatus.PinOpened, null);
-            }
-            File.WriteAllText(GPIO_EXPORT_PATH, number.ToString());
-            string pinPath = GPIO_PATH + "/gpio" + number;
+            string pinPath = GPIO_PATH + "/gpio" + pin;
             if (Directory.Exists(pinPath))
             {
-                pin = new GPIOPin(number);
-                OpenedPins.Add(pin);
-                return new RefResult<GPIOPin, GPIOPinOpenStatus>(pin, GPIOPinOpenStatus.PinOpened, null);
+                bool accessible = true;
+                try
+                {
+                    File.ReadAllText(pinPath + "/value");
+                }
+                catch
+                {
+                    accessible = false;
+                }
+                if (accessible)
+                {
+                    return new RefResult<GPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, GPIOPinSharingMode.ReadOnlySharedAccess, GPIOPinSharingMode.ReadOnlySharedAccess), GPIOPinOpenStatus.PinOpened, null);
+                }
+                else
+                {
+                    return new RefResult<GPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.SharingViolation, new AccessViolationException("Контакт GPIO заблокирован другим приложением."));
+                }
             }
             else
             {
-                return new RefResult<GPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.PinUnavailable, new FileNotFoundException("Папка заданного контакта GPIO не была задана.", pinPath));
+                File.WriteAllText(GPIO_EXPORT_PATH, pin.ToString());
+                if (Directory.Exists(pinPath))
+                {
+                    return new RefResult<GPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, GPIOPinSharingMode.Exclusive, GPIOPinSharingMode.Exclusive), GPIOPinOpenStatus.PinOpened, null);
+                }
+                else
+                {
+                    return new RefResult<GPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.PinUnavailable, new FileNotFoundException("Папка заданного контакта GPIO не была найдена.", pinPath));
+                }
             }
         }
+
+        /// <summary>
+        /// Пытается открыть контакт GPIO в заданном режиме.
+        /// </summary>
+        /// <param name="pin">Номер контакта GPIO.</param>
+        /// <param name="shareMode">Режим открытия контакта GPIO.</param>
+        /// <returns></returns>
+        public async Task<RefResult<GPIOPin, GPIOPinOpenStatus>> OpenPin(uint pin, GPIOPinSharingMode shareMode)
+        {
+            await Task.Yield();
+            string pinPath = GPIO_PATH + "/gpio" + pin;
+            switch (shareMode)
+            {
+                default:
+                case GPIOPinSharingMode.Exclusive:
+                    if (Directory.Exists(pinPath))
+                    {
+                        return new RefResult<GPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.MuxingConflict, new FileLoadException("Контакт GPIO был открыт ранее", pinPath));
+                    }
+                    else
+                    {
+                        File.WriteAllText(GPIO_EXPORT_PATH, pin.ToString());
+                        if (Directory.Exists(pinPath))
+                        {
+                            return new RefResult<GPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, GPIOPinSharingMode.Exclusive, GPIOPinSharingMode.Exclusive), GPIOPinOpenStatus.PinOpened, null);
+                        }
+                        else
+                        {
+                            return new RefResult<GPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.PinUnavailable, new FileNotFoundException("Папка заданного контакта GPIO не была найдена.", pinPath));
+                        }
+                    }
+                case GPIOPinSharingMode.ReadOnlySharedAccess:
+                    if (Directory.Exists(pinPath))
+                    {
+                        bool accessible = true;
+                        try
+                        {
+                            File.ReadAllText(pinPath + "/value");
+                        }
+                        catch
+                        {
+                            accessible = false;
+                        }
+                        if (accessible)
+                        {
+                            return new RefResult<GPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, GPIOPinSharingMode.ReadOnlySharedAccess, GPIOPinSharingMode.ReadOnlySharedAccess), GPIOPinOpenStatus.PinOpened, null);
+                        }
+                        else
+                        {
+                            return new RefResult<GPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.SharingViolation, new AccessViolationException("Контакт GPIO заблокирован другим приложением."));
+                        }
+                    }
+                    else
+                    {
+                        File.WriteAllText(GPIO_EXPORT_PATH, pin.ToString());
+                        if (Directory.Exists(pinPath))
+                        {
+                            return new RefResult<GPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, GPIOPinSharingMode.ReadOnlySharedAccess, GPIOPinSharingMode.Exclusive), GPIOPinOpenStatus.PinOpened, null);
+                        }
+                        else
+                        {
+                            return new RefResult<GPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.PinUnavailable, new FileNotFoundException("Папка заданного контакта GPIO не была найдена.", pinPath));
+                        }
+                    }
+            }
+        }
+
+        public void Close()
+        {
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
