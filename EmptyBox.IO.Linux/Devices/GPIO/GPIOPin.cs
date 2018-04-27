@@ -11,9 +11,18 @@ namespace EmptyBox.IO.Devices.GPIO
 {
     public sealed class GPIOPin : IGPIOPin
     {
+        #region Static internal objects
         internal const string GPIO_PIN_ACTIVE_LOW = "/active_low";
-        internal const string GPIO_PIN_DIRECTION = "/direction";
         internal const string GPIO_PIN_VALUE = "/value";
+        internal const string GPIO_PIN_DIRECTION = "/direction";
+        internal const string GPIO_PIN_DIRECTION_IN = "in";
+        internal const string GPIO_PIN_DIRECTION_OUT = "out";
+        internal const string GPIO_PIN_EDGE = "/edge";
+        internal const string GPIO_PIN_EDGE_NONE = "none";
+        internal const string GPIO_PIN_EDGE_BOTH = "both";
+        internal const string GPIO_PIN_EDGE_FALLING = "falling";
+        internal const string GPIO_PIN_EDGE_RISING = "rising";
+        #endregion
 
         #region Private events
         private event GPIOPinEvent _ValueChanged;
@@ -22,13 +31,11 @@ namespace EmptyBox.IO.Devices.GPIO
 
         #region Private objects
         private bool Disposed;
-        private uint _PinNumber;
         private GPIOPinSharingMode _SharingMode;
         private GPIOPinSharingMode _OpenMode;
         private GPIOPinMode Mode;
-        private Task EventGenerator;
         private GPIOPinValue Value;
-        private CancellationTokenSource GeneratorToken;
+        private Task EventGenerator;
         private string PinPath;
         private TimeSpan _DebounceTime;
         #endregion
@@ -87,48 +94,9 @@ namespace EmptyBox.IO.Devices.GPIO
         #endregion
 
         #region Public objects
-        public string Name
-        {
-            get
-            {
-                if (!Disposed)
-                {
-                    return "GPIO" + _PinNumber;
-                }
-                else
-                {
-                    throw new ObjectDisposedException(ToString());
-                }
-            }
-        }
-        public uint PinNumber
-        {
-            get
-            {
-                if (!Disposed)
-                {
-                    return _PinNumber;
-                }
-                else
-                {
-                    throw new ObjectDisposedException(ToString());
-                }
-            }
-        }
-        public ConnectionStatus ConnectionStatus
-        {
-            get
-            {
-                if (!Disposed)
-                {
-                    return ConnectionStatus.Connected;
-                }
-                else
-                {
-                    throw new ObjectDisposedException(ToString());
-                }
-            }
-        }
+        public string Name => "GPIO" + PinNumber;
+        public uint PinNumber { get; private set; }
+        public ConnectionStatus ConnectionStatus { get; private set; }
         public GPIOPinSharingMode SharingMode
         {
             get
@@ -188,7 +156,6 @@ namespace EmptyBox.IO.Devices.GPIO
             {
                 if (!Disposed)
                 {
-                    //Нужно опрашивать устройство, но как?
                     yield return GPIOPinMode.Input;
                     yield return GPIOPinMode.Output;
                 }
@@ -204,44 +171,98 @@ namespace EmptyBox.IO.Devices.GPIO
         internal GPIOPin(uint number, GPIOPinSharingMode sharingMode, GPIOPinSharingMode openMode)
         {
             Disposed = false;
-            _PinNumber = number;
+            PinNumber = number;
             _SharingMode = sharingMode;
             _OpenMode = openMode;
             Mode = GPIOPinMode.Input;
-            PinPath = GPIO.GPIO_PATH + "/gpio" + _PinNumber;
-            //EventGenerator = new Task(ReaderLoop);
-            //EventGenerator.Start();
+            PinPath = GPIO.GPIO_PATH + "/gpio" + PinNumber;
+            ConnectionStatus = ConnectionStatus.Connected;
+            switch (_OpenMode)
+            {
+                case GPIOPinSharingMode.Exclusive:
+                    try
+                    {
+                        File.WriteAllText(PinPath + GPIO_PIN_DIRECTION, GPIO_PIN_DIRECTION_IN);
+                        File.WriteAllText(PinPath + GPIO_PIN_VALUE, "0");
+                        File.WriteAllText(PinPath + GPIO_PIN_ACTIVE_LOW, "0");
+                        File.WriteAllText(PinPath + GPIO_PIN_EDGE, "both");
+                    }
+                    catch
+                    {
+                        Close(false);
+                    }
+                    break;
+                default:
+                case GPIOPinSharingMode.ReadOnlySharedAccess:
+
+                    break;
+            }
         }
         #endregion
 
         #region Destructor
         ~GPIOPin()
         {
-            Close();
-        }
-        #endregion
-
-        #region IDisposable interface functions
-        void IDisposable.Dispose()
-        {
-            Close();
+            Close(false);
         }
         #endregion
 
         #region Private functions
         private void ReaderLoop()
         {
-            while(!Disposed && GeneratorToken.Token.IsCancellationRequested)
+            while(!Disposed)
             {
+                try
+                {
+                    string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE);
+                    string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW);
+                    GPIOPinValue _value;
+                    switch (value)
+                    {
+                        case "0":
+                            _value = invert == "0" ? GPIOPinValue.Low : GPIOPinValue.High;
+                            if (Value != _value)
+                            {
+                                Value = _value;
+                                _ValueChanged?.Invoke(this, GPIOPinEdge.FallingEdge);
+                            }
+                            break;
+                        case "1":
+                            _value = invert == "0" ? GPIOPinValue.High : GPIOPinValue.Low;
+                            if (Value != _value)
+                            {
+                                Value = _value;
+                                _ValueChanged?.Invoke(this, GPIOPinEdge.RisingEdge);
+                            }
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is FileNotFoundException)
+                    {
+                        Close(true);
+                    }
+                }
+            }
+        }
 
+        private void Close(bool unexcepted)
+        {
+            if (!Disposed)
+            {
+                Disposed = true;
+                _ConnectionStatusChanged?.Invoke(this, ConnectionStatus.Disconnected);
+                GC.SuppressFinalize(this);
             }
         }
         #endregion
 
         #region Public functions
-        public void Close()
+        public void Dispose()
         {
-            GC.SuppressFinalize(this);
+            Close(false);
+            EventGenerator.Dispose();
         }
 
         public async Task<ValResult<bool, AccessStatus>> SetValue(GPIOPinValue value)
@@ -262,16 +283,22 @@ namespace EmptyBox.IO.Devices.GPIO
                                 }
                                 catch (Exception ex)
                                 {
-                                    //TODO: реализовать разбор ошибок, если возможно.
-                                    return new ValResult<bool, AccessStatus>(false, AccessStatus.UnknownError, ex);
+                                    if (ex is FileNotFoundException)
+                                    {
+                                        Close(true);
+                                        return new ValResult<bool, AccessStatus>(false, AccessStatus.DeniedBySystem, ex);
+                                    }
+                                    else
+                                    {
+                                        return new ValResult<bool, AccessStatus>(false, AccessStatus.UnknownError, ex);
+                                    }
                                 }
                             default:
-                                return new ValResult<bool, AccessStatus>(false, AccessStatus.NotSupported, new NotImplementedException("Данный режим работы контакта GPIO не поддерживается."));
+                                return new ValResult<bool, AccessStatus>(false, AccessStatus.NotSupported, new NotImplementedException("Указанный режим работы контакта GPIO не поддерживается."));
                         }
                     default:
                     case GPIOPinSharingMode.ReadOnlySharedAccess:
                         return new ValResult<bool, AccessStatus>(false, AccessStatus.DeniedBySystem, new NotSupportedException("Контакт GPIO открыт в режиме \"Только считывание\"."));
-
                 }
             }
             else
@@ -284,40 +311,80 @@ namespace EmptyBox.IO.Devices.GPIO
         {
             if (!Disposed)
             {
-                await Task.Yield();
-                //switch (_OpenMode)
-                //{
-                //    case GPIOPinSharingMode.Exclusive:
-                //        switch (Mode)
-                //        {
-                //            case GPIOPinMode.Input:
-                //                return new ValResult<GPIOPinMode, AccessStatus>(Mode, AccessStatus.Success, null);
-                //            case GPIOPinMode.Output:
-                //                try
-                //                {
-                //                    string direction = File.ReadAllText(PinPath + GPIO_PIN_DIRECTION);
-                //                    switch (direction)
-                //                    {
-                //                        case "in":
-                //                            return new ValResult<GPIOPinMode, AccessStatus>(GPIOPinMode.Input, AccessStatus.Success, null);
-                //                        case "out":
-                //                            return new ValResult<GPIOPinMode, AccessStatus>(GPIOPinMode.Output, AccessStatus.Success, null);
-                //                        default:
-                //                            return new ValResult<GPIOPinMode, AccessStatus>(null, AccessStatus.UnknownError, new FileLoadException("В файле конфигурации контакта GPIO оказались неподдерживаемые параметры.", PinPath + GPIO_PIN_DIRECTION));
-                //                    }
-                //                }
-                //                catch (Exception ex)
-                //                {
-                //                    return new ValResult<GPIOPinMode, AccessStatus>(null, AccessStatus.DeniedBySystem, ex);
-                //                }
-                //        }
-                //    case GPIOPinSharingMode.ReadOnlySharedAccess:
-                //        switch (Mode)
-                //        {
-
-                //        }
-                //}
-                throw new NotImplementedException();
+                ValResult<GPIOPinEdge, AccessStatus> eventMode = await SupportedEventModes();
+                switch (eventMode.Status)
+                {
+                    case AccessStatus.Success:
+                        switch (eventMode.Result)
+                        {
+                            case GPIOPinEdge.None:
+                                try
+                                {
+                                    string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE);
+                                    string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW);
+                                    if (invert != "0" && invert != "1")
+                                    {
+                                        return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.NotSupported, new FileLoadException("Было считано неизвестное значение настройки вывода контакта GPIO.", PinPath + GPIO_PIN_ACTIVE_LOW));
+                                    }
+                                    switch (value)
+                                    {
+                                        case "0":
+                                            return new ValResult<GPIOPinValue, AccessStatus>(invert == "0" ? GPIOPinValue.Low : GPIOPinValue.High, AccessStatus.Success, null);
+                                        case "1":
+                                            return new ValResult<GPIOPinValue, AccessStatus>(invert == "0" ? GPIOPinValue.High : GPIOPinValue.Low, AccessStatus.Success, null);
+                                        default:
+                                            return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.NotSupported, new FileLoadException("Было считано неизвестное значение контакта GPIO.", PinPath + GPIO_PIN_VALUE));
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (ex is FileNotFoundException)
+                                    {
+                                        Close(true);
+                                        return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.DeniedBySystem, ex);
+                                    }
+                                    else
+                                    {
+                                        return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.UnknownError, ex);
+                                    }
+                                }
+                            default:
+                                return new ValResult<GPIOPinValue, AccessStatus>(Value, AccessStatus.Success, null);
+                        }
+                    case AccessStatus.NotSupported:
+                        try
+                        {
+                            string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE);
+                            string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW);
+                            if (invert != "0" && invert != "1")
+                            {
+                                return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.NotSupported, new FileLoadException("Было считано неизвестное значение настройки вывода контакта GPIO.", PinPath + GPIO_PIN_ACTIVE_LOW));
+                            }
+                            switch (value)
+                            {
+                                case "0":
+                                    return new ValResult<GPIOPinValue, AccessStatus>(invert == "0" ? GPIOPinValue.Low : GPIOPinValue.High, AccessStatus.Success, null);
+                                case "1":
+                                    return new ValResult<GPIOPinValue, AccessStatus>(invert == "0" ? GPIOPinValue.High : GPIOPinValue.Low, AccessStatus.Success, null);
+                                default:
+                                    return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.NotSupported, new FileLoadException("Было считано неизвестное значение контакта GPIO.", PinPath + GPIO_PIN_VALUE));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex is FileNotFoundException)
+                            {
+                                Close(true);
+                                return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.DeniedBySystem, ex);
+                            }
+                            else
+                            {
+                                return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.UnknownError, ex);
+                            }
+                        }
+                    default:
+                        return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.UnknownError, eventMode.Exception);
+                }
             }
             else
             {
@@ -338,7 +405,9 @@ namespace EmptyBox.IO.Devices.GPIO
                             case GPIOPinMode.Input:
                                 try
                                 {
-                                    File.WriteAllText(PinPath + GPIO_PIN_DIRECTION, "in");
+                                    File.WriteAllText(PinPath + GPIO_PIN_DIRECTION, GPIO_PIN_DIRECTION_IN);
+                                    File.WriteAllText(PinPath + GPIO_PIN_ACTIVE_LOW, "0");
+                                    File.WriteAllText(PinPath + GPIO_PIN_EDGE, "both");
                                     return new ValResult<bool, AccessStatus>(true, AccessStatus.Success, null);
                                 }
                                 catch (Exception ex)
@@ -349,8 +418,10 @@ namespace EmptyBox.IO.Devices.GPIO
                             case GPIOPinMode.Output:
                                 try
                                 {
-                                    File.WriteAllText(PinPath + GPIO_PIN_DIRECTION, "in");
+                                    File.WriteAllText(PinPath + GPIO_PIN_DIRECTION, GPIO_PIN_DIRECTION_OUT);
                                     File.WriteAllText(PinPath + GPIO_PIN_VALUE, "0");
+                                    File.WriteAllText(PinPath + GPIO_PIN_ACTIVE_LOW, "0");
+                                    File.WriteAllText(PinPath + GPIO_PIN_EDGE, "none");
                                     return new ValResult<bool, AccessStatus>(true, AccessStatus.Success, null);
                                 }
                                 catch (Exception ex)
@@ -387,9 +458,9 @@ namespace EmptyBox.IO.Devices.GPIO
                             string direction = File.ReadAllText(PinPath + GPIO_PIN_DIRECTION);
                             switch (direction)
                             {
-                                case "in":
+                                case GPIO_PIN_DIRECTION_IN:
                                     return new ValResult<GPIOPinMode, AccessStatus>(GPIOPinMode.Input, AccessStatus.Success, null);
-                                case "out":
+                                case GPIO_PIN_DIRECTION_OUT:
                                     return new ValResult<GPIOPinMode, AccessStatus>(GPIOPinMode.Output, AccessStatus.Success, null);
                                 default:
                                     return new ValResult<GPIOPinMode, AccessStatus>(null, AccessStatus.UnknownError, new FileLoadException("В файле конфигурации контакта GPIO оказались неподдерживаемые параметры.", PinPath + GPIO_PIN_DIRECTION));
@@ -399,6 +470,47 @@ namespace EmptyBox.IO.Devices.GPIO
                         {
                             return new ValResult<GPIOPinMode, AccessStatus>(null, AccessStatus.DeniedBySystem, ex);
                         }
+                }
+            }
+            else
+            {
+                throw new ObjectDisposedException(ToString());
+            }
+        }
+
+        public async Task<ValResult<GPIOPinEdge, AccessStatus>> SupportedEventModes()
+        {
+            if (!Disposed)
+            {
+                await Task.Yield();
+                try
+                {
+                    string eventMode = File.ReadAllText(PinPath + GPIO_PIN_EDGE);
+                    switch (eventMode)
+                    {
+                        case "none":
+                            return new ValResult<GPIOPinEdge, AccessStatus>(GPIOPinEdge.None, AccessStatus.Success, null);
+                        case "rising":
+                            return new ValResult<GPIOPinEdge, AccessStatus>(GPIOPinEdge.RisingEdge, AccessStatus.Success, null);
+                        case "falling":
+                            return new ValResult<GPIOPinEdge, AccessStatus>(GPIOPinEdge.FallingEdge, AccessStatus.Success, null);
+                        case "both":
+                            return new ValResult<GPIOPinEdge, AccessStatus>(GPIOPinEdge.FallingEdge | GPIOPinEdge.RisingEdge, AccessStatus.Success, null);
+                        default:
+                            return new ValResult<GPIOPinEdge, AccessStatus>(null, AccessStatus.NotSupported, new NotSupportedException("Текущий режим контакта GPIO не поддерживается."));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (ex is FileNotFoundException)
+                    {
+                        Close(true);
+                        return new ValResult<GPIOPinEdge, AccessStatus>(null, AccessStatus.DeniedBySystem, ex);
+                    }
+                    else
+                    {
+                        return new ValResult<GPIOPinEdge, AccessStatus>(null, AccessStatus.UnknownError, ex);
+                    }
                 }
             }
             else

@@ -20,5 +20,6 @@ namespace EmptyBox.IO.Devices.GPIO
         Task<ValResult<GPIOPinValue, AccessStatus>> GetValue();
         Task<ValResult<bool, AccessStatus>> SetMode(GPIOPinMode mode);
         Task<ValResult<GPIOPinMode, AccessStatus>> GetMode();
+        Task<ValResult<GPIOPinEdge, AccessStatus>> SupportedEventModes();
     }
 }
