@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" Layout="Sugiyama" ZoomLevel="-1" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="5dbcb3c5-ebe6-470c-8b79-b7794685ec651" Bounds="1768.35209769204,620.061985750664,235.036666666667,73.8400000000001" Label="По хорошему, требуются уведомления&#xD;&#xA; об изменении разрешения дисплея.&#xD;&#xA;Но, нужно учесть, возможно ли такое&#xD;&#xA;хоть на одно платформе. Вдруг нет?" />
+    <Node Id="8eb8713f-5c45-41b9-8217-0aee6ea912381" Bounds="1768.35213594074,476.221812648604,277.073333333333,41.92" Label="Нужен метод для задания разрешения экрана.&#xD;&#xA;Некоторые платформы это не поддерживают." />
+    <Node Id="Access" Category="Category1" Bounds="147.578333333334,4144,62.5299999999997,25.96" Label="[Access]" />
+    <Node Id="AccessRequest" Category="Category1" Bounds="270.395,4200,97.6866666666665,25.96" />
+    <Node Id="AccessStatus" Category="Category2" Bounds="275.538333333333,4144,87.4000000000001,25.96" />
+    <Node Id="Audio" Category="Category1" Bounds="289.851666666667,4088,58.7733333333335,25.96" Label="[Audio]" />
+    <Node Id="Audio1" Category="Category1" Bounds="289.851666666666,1624,58.7733333333335,25.96" Label="[Audio]" />
+    <Node Id="AudioBuffer" Category="Category1" Bounds="453.925,1680,83.1666666666665,25.96" />
+    <Node Id="AudioFrame" Category="Category1" Bounds="453.365,1624,84.2866666666669,25.96" />
+    <Node Id="Bluetooth" Category="Category2" Bounds="279.7,3808,79.0766666666668,25.96" Label="[Bluetooth]" />
+    <Node Id="Bluetooth1" Category="Category2" Bounds="279.7,1232,79.0766666666668,25.96" Label="[Bluetooth]" />
+    <Node Id="BluetoothAccessPoint" Category="Category2" Bounds="428.409999999999,1400,134.196666666667,25.96" />
+    <Node Id="BluetoothAdapterProvider" Category="Category2" Bounds="416.301666666667,4032,158.413333333333,25.96" />
+    <Node Id="BluetoothClass" Category="Category2" Bounds="446.275,3976,98.4666666666672,25.96" />
+    <Node Id="BluetoothClassExtensions" Category="Category2" Bounds="418.463333333333,3920,154.09,25.96" />
+    <Node Id="BluetoothPort" Category="Category2" Bounds="448.816666666666,1344,93.3833333333332,25.96" />
+    <Node Id="BluetoothSDPCacheMode" Category="Category2" Bounds="417.188333333334,3864,156.639999999999,25.96" />
+    <Node Id="Camera" Category="Category1" Bounds="285.403333333333,3416,67.6700000000001,25.96" Label="[Camera]" />
+    <Node Id="ConnectionStatus" Category="Category2" Bounds="262.856666666667,3360,112.763333333332,25.96" />
+    <Node Id="DevicePairStatus" Category="Category2" Bounds="265.853333333333,3304,106.77,25.96" />
+    <Node Id="Devices" Category="Category6" Bounds="145.095000000001,2968,67.496666666666,25.96" Label="[Devices]" />
+    <Node Id="Display" Category="Category1" Bounds="286.475,3248,65.5266666666666,25.96" Label="[Display]" />
+    <Node Id="EmptyBox.IO" Category="Category6" Bounds="0,1512,94.8299999999999,25.96" Label="[EmptyBox.IO]" />
+    <Node Id="Ethernet" Category="Category6" Bounds="283.363333333333,3192,71.75,25.96" Label="[Ethernet]" />
+    <Node Id="Ethernet1" Category="Category6" Bounds="283.363333333333,728,71.75,25.96" Label="[Ethernet]" />
+    <Node Id="GPIO" Category="Category2" Bounds="292.021666666667,3136,54.4333333333334,25.9599999999996" Label="[GPIO]" />
+    <Node Id="GPIOPinEdge" Category="Category2" Bounds="450.463333333333,3416,90.0900000000001,25.96" />
+    <Node Id="GPIOPinMode" Category="Category2" Bounds="448.128333333333,3360,94.7600000000002,25.96" />
+    <Node Id="GPIOPinOpenStatus" Category="Category2" Bounds="433.065,3304,124.886666666667,25.96" />
+    <Node Id="GPIOPinSharingMode" Category="Category2" Bounds="428.025,3248,134.966666666667,25.96" />
+    <Node Id="GPIOPinValue" Category="Category2" Bounds="449.376666666667,3192,92.2633333333333,25.96" />
+    <Node Id="GPIOProvider" Category="Category2" Bounds="449.865,3136,91.2866666666669,25.96" />
+    <Node Id="HID" Category="Category1" Bounds="294.238333333333,3080,50,25.96" Label="[HID]" />
+    <Node Id="IAccelerometer" Category="Category1" Bounds="445.601666666666,2744,99.8133333333335,25.96" />
+    <Node Id="IAccessPoint" Category="Category2" Bounds="452.731666666666,616,85.5533333333333,25.96" />
+    <Node Id="IAddress" Category="Category2" Bounds="462.656666666666,560,65.7033333333334,25.96" />
+    <Node Id="IAudioDevice" Category="Category1" Bounds="450.563333333334,4200,89.8899999999994,25.96" />
+    <Node Id="IAudioInputDevice" Category="Category1" Bounds="436.616666666667,4144,117.783333333333,25.96" />
+    <Node Id="IAudioOutputDevice" Category="Category1" Bounds="431.656666666667,4088,127.703333333333,25.96" />
+    <Node Id="IBarometer" Category="Category1" Bounds="456.251666666666,2688,78.5133333333333,25.96" />
+    <Node Id="IBluetoothAdapter" Category="Category2" Bounds="436.751666666667,3808,117.513333333332,25.96" />
+    <Node Id="IBluetoothConnection" Category="Category2" Bounds="427.666666666667,1288,135.683333333333,25.96" />
+    <Node Id="IBluetoothConnectionListener" Category="Category2" Bounds="407.05,1232,176.916666666667,25.96" />
+    <Node Id="IBluetoothConnectionProvider" Category="Category2" Bounds="405.62,1176,179.776666666667,25.96" />
+    <Node Id="IBluetoothDevice" Category="Category2" Bounds="440.411666666666,3752,110.193333333335,25.96" />
+    <Node Id="IBluetoothDeviceProvider" Category="Category2" Bounds="418.365,3696,154.286666666667,25.96" />
+    <Node Id="IBluetoothLEDevice" Category="Category2" Bounds="434.551666666667,3640,121.913333333333,25.96" />
+    <Node Id="IBluetoothLEDeviceProvider" Category="Category2" Bounds="412.505,3584,166.006666666667,25.96" />
+    <Node Id="ICamera" Category="Category1" Bounds="463.696666666667,3528,63.623333333333,25.96" />
+    <Node Id="ICompass" Category="Category1" Bounds="459.84,2632,71.3366666666661,25.96" />
+    <Node Id="IConnection" Category="Category2" Bounds="453.585,504,83.8466666666668,25.96" />
+    <Node Id="IConnectionListener" Category="Category2" Bounds="432.968333333333,448,125.08,25.96" />
+    <Node Id="IConnectionProvider" Category="Category2" Bounds="431.538333333333,392,127.94,25.96" />
+    <Node Id="IContainer" Category="Category1" Bounds="265.29,1568,107.896666666667,25.96" Label="IMediaContainer" />
+    <Node Id="IDevice" Category="Category2" Bounds="290.06,3024,58.3566666666666,25.96" />
+    <Node Id="IDeviceProvider" Category="Category2" Bounds="268.013333333334,2968,102.45,25.9599999999996" />
+    <Node Id="IDisplay" Category="Category1" Bounds="454.768333333334,3472.48,81.4799999999996,25" Group="Collapsed" />
+    <Node Id="IEthernetSocketProvider" Category="Category2" Bounds="421.983333333333,1120,147.05,25.96" />
+    <Node Id="IFIle" Category="Category1" Bounds="294.238333333333,448,50,25.96" />
+    <Node Id="IFlash" Category="Category1" Bounds="470.508333333333,1792,50,25.96" />
+    <Node Id="IFolder" Category="Category1" Bounds="290.985,392,56.5066666666667,25.96" />
+    <Node Id="IGPIO" Category="Category2" Bounds="470.315,3080,50.3866666666672,25.96" />
+    <Node Id="IGPIOPin" Category="Category2" Bounds="462.106666666667,3024,66.8033333333333,25.96" />
+    <Node Id="IGyrometer" Category="Category1" Bounds="455.843333333333,2576,79.3299999999999,25.96" />
+    <Node Id="IHID" Category="Category1" Bounds="470.508333333333,2968,50,25.96" />
+    <Node Id="IInclinometer" Category="Category1" Bounds="450.766666666666,2520,89.4833333333336,25.96" />
+    <Node Id="ILED" Category="Category1" Bounds="470.508333333333,1736,50,25.96" />
+    <Node Id="ILightSensor" Category="Category1" Bounds="452.803333333333,2464,85.4099999999999,25.96" />
+    <Node Id="IMagnetometer" Category="Category1" Bounds="444.29,2408,102.436666666666,25.96" />
+    <Node Id="INFC" Category="Category1" Bounds="470.508333333333,2912,50,25.96" />
+    <Node Id="IOrientationSensor" Category="Category1" Bounds="435.963333333333,2352,119.09,25.96" />
+    <Node Id="IP" Category="Category2" Bounds="294.238333333333,672,50,25.96" Label="[IP]" />
+    <Node Id="IPAccessPoint" Category="Category2" Bounds="449.781666666667,1064,91.4533333333329,25.96" />
+    <Node Id="IPAddress" Category="Category2" Bounds="459.706666666666,1008,71.6033333333335,25.96" />
+    <Node Id="IPLSocket" Category="Category2" Bounds="460.1,336,70.8166666666666,25.96" />
+    <Node Id="IPPort" Category="Category2" Bounds="469.778333333333,952,51.4600000000002,25.96" />
+    <Node Id="IPairableDevice" Category="Category2" Bounds="269.14,2912,100.196666666667,25.96" />
+    <Node Id="IPedometer" Category="Category1" Bounds="455.021666666667,2296,80.9733333333334,25.96" />
+    <Node Id="IPort" Category="Category2" Bounds="470.508333333333,280,50,25.96" />
+    <Node Id="IProximitySensor" Category="Category1" Bounds="441.316666666667,2240,108.383333333333,25.96" />
+    <Node Id="IRadio" Category="Category2" Bounds="468.768333333333,2856,53.4799999999996,25.96" />
+    <Node Id="ISocket" Category="Category2" Bounds="466.285,224,58.4466666666667,25.96" />
+    <Node Id="ISocketProvider" Category="Category2" Bounds="444.238333333333,168,102.54,25.96" />
+    <Node Id="IStorageItem" Category="Category1" Bounds="275.351666666666,336,87.7733333333335,25.96" />
+    <Node Id="ITCPConnection" Category="Category2" Bounds="443.645,896,103.726666666666,25.96" />
+    <Node Id="ITCPConnectionListener" Category="Category2" Bounds="423.028333333333,840,144.96,25.96" />
+    <Node Id="ITCPConnectionProvider" Category="Category2" Bounds="421.598333333333,784,147.82,25.96" />
+    <Node Id="IUDPSOcketProvider" Category="Category2" Bounds="432.55,728,125.916666666666,25.96" Label="IUDPSocketProvider" />
+    <Node Id="IUDPSocket" Category="Category2" Bounds="454.596666666666,672,81.8233333333337,25.96" />
+    <Node Id="IWiFiAdapter" Category="Category1" Bounds="451.228333333333,2184,88.5599999999995,25.96" />
+    <Node Id="IWiFiDirectAdapter" Category="Category1" Bounds="615.396666666667,2072,119.940000000001,25.96" />
+    <Node Id="IWiFiNetworkProvider" Category="Category1" Bounds="427.843333333333,2128,135.33,25.96" />
+    <Node Id="Image" Category="Category1" Bounds="289.128333333333,1512,60.2200000000003,25.96" Label="[Image]" />
+    <Node Id="ImageBuffer" Category="Category1" Bounds="453.201666666667,1568,84.6133333333332,25.96" />
+    <Node Id="ImageFrame" Category="Category1" Bounds="452.641666666666,1512,85.7333333333336,25.96" />
+    <Node Id="Interoperability" Category="Category6" Bounds="124.83,1568,108.026666666667,25.96" Label="[Interoperability]" />
+    <Node Id="MAC" Category="Category6" Bounds="275.126666666667,616,88.2233333333334,25.96" Label="MACAddress" />
+    <Node Id="Media" Category="Category1" Bounds="148.656666666667,1512,60.3733333333334,25.96" Label="[Media]" />
+    <Node Id="MediaStream" Category="Category1" Bounds="274.198333333333,1456,90.0799999999999,25.96" />
+    <Node Id="NFC" Category="Category1" Bounds="294.238333333333,2856,50,25.96" Label="[NFC]" />
+    <Node Id="Network" Category="Category1" Bounds="142.643333333334,728,72.3999999999996,25.96" Label="[Network]">
+      <Category Ref="Category6" />
+    </Node>
+    <Node Id="ProtocolStatus" Category="Category2" Bounds="447.203333333333,112,96.6100000000001,25.96" />
+    <Node Id="Radio" Category="Category2" Bounds="290.475,2800,57.5266666666666,25.96" Label="[Radio]" />
+    <Node Id="RadioStatus" Category="Category2" Bounds="454.31,2800,82.3966666666665,25.96" />
+    <Node Id="Sensors" Category="Category1" Bounds="285.203333333333,2576,68.0699999999997,25.96" Label="[Sensors]" />
+    <Node Id="Serial" Category="Category1" Bounds="291.246666666667,2520,55.9833333333336,25.96" Label="[Serial]" />
+    <Node Id="Serializator" Category="Category2" Bounds="135.996666666667,672,85.6933333333336,25.96" Label="[Serializator]" />
+    <Node Id="Size" Category="Category1" Bounds="470.508333333333,1456,50,25.96" />
+    <Node Id="SocketOperationStatus" Category="Category2" Bounds="425.101666666666,56.0000000000001,140.813333333333,25.96" />
+    <Node Id="Storage" Category="Category1" Bounds="148.49,448,60.7066666666669,25.96" />
+    <Node Id="USB" Category="Category1" Bounds="294.238333333333,2464,50,25.96" Label="[USB]" />
+    <Node Id="VPN" Category="Category1" Bounds="294.043333333333,560,50.3900000000003,25.96" Label="[VPN]" />
+    <Node Id="Wi-Fi" Category="Category1" Bounds="291.776666666667,504,54.9233333333332,25.96" Label="[Wi-Fi]" />
+    <Node Id="Wi-FiDirect" Category="Category1" Bounds="450.713333333333,2072,89.5900000000001,25.96" Label="[Wi-Fi Direct]" />
+    <Node Id="Wi-FiDirect1" Category="Category1" Bounds="450.713333333333,0,89.5900000000001,25.96" Label="[Wi-Fi Direct]" />
+    <Node Id="WiFi" Category="Category1" Bounds="291.776666666667,2072,54.9233333333332,25.96" Label="[Wi-Fi]" />
+    <Node Id="WiFiAdapterProvider" Category="Category1" Bounds="430.778333333333,2016,129.46,25.96" />
+    <Node Id="WiFiNetwork" Category="Category1" Bounds="451.486666666667,1960,88.0433333333331,25.96" />
+    <Node Id="[Hotspot]" Category="Category1" Bounds="460.458333333333,1848,70.0999999999999,25.96" />
+    <Node Id="[Light]" Category="Category1" Bounds="292.378333333333,1792,53.72,25.96" />
+    <Node Id="[Location]" Category="Category1" Bounds="283.056666666667,2016,72.3633333333328,25.96" />
+    <Node Id="[Miracast]" Category="Category1" Bounds="459.501666666667,1904,72.0133333333333,25.96" />
+    <Node Id="ДеталиРеализацииНаДеле" Bounds="1748.35220674152,743.902284822929,172.593333333333,25.96" Label="Детали реализации на деле" UseManualLocation="True" />
+    <Node Id="ДеталиРеализацииНаСловах" Bounds="1748.35209769204,436.221635674243,317.07337158203,277.680527050781" Group="Expanded" Label="Детали реализации на словах" UseManualLocation="True" />
+    <Node Id="ЕстьСомненияПоПоводуФункционала" Category="Category5" Bounds="785.336666666667,151.92,237.136666666667,25.96" Label="Есть сомнения по поводу функционала" />
+    <Node Id="ИнтерфейсДолженПредоставлятьДоступ" Bounds="1768.3521961621,548.142039699386,250.03,41.9199999999998" Label="Интерфейс должен предоставлять доступ&#xD;&#xA;к основным параметрам дисплея." />
+    <Node Id="Легенда" Bounds="765.336666666667,0,277.136666666667,253.84" Group="Expanded" />
+    <Node Id="НекоторыФункционалРеализован" Category="Category6" Bounds="785.336666666667,95.96,220.85,25.96" Label="Некоторый функционал реализован" />
+    <Node Id="ПолностьюГотоваяЧасть" Category="Category2" Bounds="785.336666666667,40,160.183333333333,25.96" Label="Полностью готовая часть" />
+    <Node Id="ПолностьюНеготоваяЧасть" Category="Category1" Bounds="785.336666666667,207.88,173.386666666667,25.96" Label="Полностью неготовая часть" />
+  </Nodes>
+  <Links>
+    <Link Source="Access" Target="AccessRequest" Bounds="209.216003417969,4169.0947265625,69.1212463378906,27.57080078125" />
+    <Link Source="Access" Target="AccessStatus" Bounds="210.108337402344,4156.97998046875,56.4299926757813,0" />
+    <Link Source="Audio" Target="IAudioDevice" Bounds="339.666778564453,4113.9599609375,127.816802978516,81.21337890625" />
+    <Link Source="Audio" Target="IAudioInputDevice" Bounds="348.625,4110.31591796875,97.4489135742188,30.958984375" />
+    <Link Source="Audio" Target="IAudioOutputDevice" Bounds="348.625,4100.97998046875,74.0316772460938,0" />
+    <Link Source="Audio1" Target="AudioBuffer" Bounds="348.625,1646.31604003906,98.4062805175781,31.2630615234375" />
+    <Link Source="Audio1" Target="AudioFrame" Bounds="348.625,1636.97998046875,95.739990234375,0" />
+    <Link Source="Bluetooth" Target="BluetoothAdapterProvider" Bounds="327.1875,3833.9599609375,137.607757568359,193.5927734375" />
+    <Link Source="Bluetooth" Target="BluetoothClass" Bounds="328.093170166016,3833.9599609375,126.773345947266,138.683349609375" />
+    <Link Source="Bluetooth" Target="BluetoothClassExtensions" Bounds="335.344390869141,3833.9599609375,122.492553710938,82.408935546875" />
+    <Link Source="Bluetooth" Target="BluetoothSDPCacheMode" Bounds="357.753936767578,3833.21630859375,88.3199768066406,28.05859375" />
+    <Link Source="Bluetooth" Target="IBluetoothAdapter" Bounds="358.776672363281,3820.97998046875,68.9750061035156,0" />
+    <Link Source="Bluetooth" Target="IBluetoothDevice" Bounds="357.753936767578,3780.68505859375,88.3199768066406,28.058837890625" />
+    <Link Source="Bluetooth" Target="IBluetoothDeviceProvider" Bounds="339.666778564453,3726.78662109375,127.816802978516,81.21337890625" />
+    <Link Source="Bluetooth" Target="IBluetoothLEDevice" Bounds="328.083648681641,3669.31323242188,126.744140625,138.686767578125" />
+    <Link Source="Bluetooth" Target="IBluetoothLEDeviceProvider" Bounds="326.658111572266,3614.13989257813,136.129211425781,193.860107421875" />
+    <Link Source="Bluetooth1" Target="BluetoothAccessPoint" Bounds="332.242858886719,1257.9599609375,140.803314208984,136.273193359375" />
+    <Link Source="Bluetooth1" Target="BluetoothPort" Bounds="338.889831542969,1257.9599609375,127.117340087891,81.43115234375" />
+    <Link Source="Bluetooth1" Target="IBluetoothConnection" Bounds="357.753936767578,1257.21618652344,88.3199768066406,28.058837890625" />
+    <Link Source="Bluetooth1" Target="IBluetoothConnectionListener" Bounds="358.776672363281,1244.97998046875,39.2733154296875,0" />
+    <Link Source="Bluetooth1" Target="IBluetoothConnectionProvider" Bounds="357.753936767578,1204.68505859375,88.3199768066406,28.0587158203125" />
+    <Link Source="Camera" Target="ICamera" Bounds="339.666778564453,3441.9599609375,127.816802978516,81.21337890625" />
+    <Link Source="Devices" Target="Audio" Bounds="180.254089355469,2993.9599609375,135.076507568359,1085.1806640625" />
+    <Link Source="Devices" Target="Bluetooth" Bounds="181.012771606445,2993.9599609375,134.572463989258,805.1630859375" />
+    <Link Source="Devices" Target="Camera" Bounds="181.26237487793,2993.9599609375,109.278732299805,417.314208984375" />
+    <Link Source="Devices" Target="ConnectionStatus" Bounds="181.754486083984,2993.9599609375,109.680694580078,361.1796875" />
+    <Link Source="Devices" Target="DevicePairStatus" Bounds="182.881500244141,2993.9599609375,112.616058349609,304.505126953125" />
+    <Link Source="Devices" Target="Display" Bounds="183.698623657227,2993.9599609375,110.726638793945,248.6923828125" />
+    <Link Source="Devices" Target="Ethernet" Bounds="186.76301574707,2993.9599609375,118.24723815918,190.663330078125" />
+    <Link Source="Devices" Target="GPIO" Bounds="189.690521240234,2993.9599609375,112.929382324219,135.134033203125" />
+    <Link Source="Devices" Target="HID" Bounds="195.114105224609,2993.9599609375,100.817901611328,80.427490234375" />
+    <Link Source="Devices" Target="IDevice" Bounds="210.775039672852,2993.716796875,71.3264923095703,28.4501953125" />
+    <Link Source="Devices" Target="IDeviceProvider" Bounds="212.591659545898,2980.97998046875,46.4216766357422,0" />
+    <Link Source="Devices" Target="IPairableDevice" Bounds="210.775039672852,2941.29443359375,67.5622100830078,26.94873046875" />
+    <Link Source="Devices" Target="NFC" Bounds="195.114105224609,2887.57250976563,100.817901611328,80.427490234375" />
+    <Link Source="Devices" Target="Radio" Bounds="189.690521240234,2832.86596679688,112.929382324219,135.134033203125" />
+    <Link Source="Devices" Target="Sensors" Bounds="183.492126464844,2610.43286132813,128.062805175781,357.567138671875" />
+    <Link Source="Devices" Target="Serial" Bounds="181.958572387695,2552.146484375,117.028030395508,415.853515625" />
+    <Link Source="Devices" Target="USB" Bounds="181.753173828125,2496.6474609375,119.771453857422,471.3525390625" />
+    <Link Source="Devices" Target="WiFi" Bounds="180.877182006836,2106.8515625,134.934097290039,861.1484375" />
+    <Link Source="Devices" Target="[Light]" Bounds="180.069671630859,1826.72229003906,134.070434570313,1141.27770996094" />
+    <Link Source="Devices" Target="[Location]" Bounds="180.332122802734,2048.76147460938,121.764434814453,919.238525390625" />
+    <Link Source="Display" Target="IDisplay" Bounds="346.301422119141,3273.9599609375,124.335357666016,193.297119140625" />
+    <Link Source="EmptyBox.IO" Target="Access" Bounds="48.0631523132324,1537.9599609375,129.683170318604,2597.05126953125" />
+    <Link Source="EmptyBox.IO" Target="Devices" Bounds="48.5866622924805,1537.9599609375,128.275901794434,1421.07641601563" />
+    <Link Source="EmptyBox.IO" Target="Interoperability" Bounds="77.8782119750977,1537.9599609375,62.2221755981445,26.51220703125" />
+    <Link Source="EmptyBox.IO" Target="Media" Bounds="94.8300018310547,1524.97998046875,44.82666015625,0" />
+    <Link Source="EmptyBox.IO" Target="Network" Bounds="49.5909423828125,762.836120605469,125.588470458984,749.163879394531" />
+    <Link Source="EmptyBox.IO" Target="Serializator" Bounds="48.8246917724609,704.078125,109.414291381836,807.921875" />
+    <Link Source="EmptyBox.IO" Target="Storage" Bounds="48.6317100524902,482.701721191406,124.89236831665,1029.29827880859" />
+    <Link Source="Ethernet1" Target="IEthernetSocketProvider" Bounds="323.742980957031,753.960021972656,146.447601318359,360.778869628906" />
+    <Link Source="GPIO" Target="GPIOPinEdge" Bounds="334.264373779297,3161.9599609375,134.895477294922,248.94970703125" />
+    <Link Source="GPIO" Target="GPIOPinMode" Bounds="331.573303222656,3161.9599609375,130.846862792969,193.9052734375" />
+    <Link Source="GPIO" Target="GPIOPinOpenStatus" Bounds="332.916198730469,3161.9599609375,120.064147949219,138.794921875" />
+    <Link Source="GPIO" Target="GPIOPinSharingMode" Bounds="339.666778564453,3161.9599609375,127.816802978516,81.21337890625" />
+    <Link Source="GPIO" Target="GPIOPinValue" Bounds="346.454986572266,3157.62646484375,99.6189270019531,31.6484375" />
+    <Link Source="GPIO" Target="GPIOProvider" Bounds="346.454986572266,3148.97998046875,94.4100036621094,0" />
+    <Link Source="GPIO" Target="IGPIO" Bounds="346.454986572266,3103.70874023438,115.282470703125,36.624755859375" />
+    <Link Source="GPIO" Target="IGPIOPin" Bounds="339.666778564453,3054.78662109375,127.816802978516,81.21337890625" />
+    <Link Source="HID" Target="IHID" Bounds="339.666778564453,2998.78662109375,127.816802978516,81.21337890625" />
+    <Link Source="IDisplay" Target="ДеталиРеализацииНаДеле" Category="Contains" />
+    <Link Source="IDisplay" Target="ДеталиРеализацииНаСловах" Category="Contains" />
+    <Link Source="IP" Target="IAccessPoint" Bounds="344.238342285156,644.58544921875,102.149139404297,32.4522094726563" />
+    <Link Source="IP" Target="IAddress" Bounds="339.666778564453,590.78662109375,127.816802978516,81.21337890625" />
+    <Link Source="IP" Target="IConnection" Bounds="333.128936767578,536.190856933594,142.356048583984,135.809143066406" />
+    <Link Source="IP" Target="IConnectionListener" Bounds="337.613922119141,479.003845214844,131.241638183594,192.996154785156" />
+    <Link Source="IP" Target="IConnectionProvider" Bounds="341.260894775391,422.26708984375,122.529937744141,249.732971191406" />
+    <Link Source="IP" Target="IPAccessPoint" Bounds="337.858032226563,697.960021972656,136.585601806641,360.010314941406" />
+    <Link Source="IP" Target="IPAddress" Bounds="336.340423583984,697.960021972656,142.165893554688,303.21044921875" />
+    <Link Source="IP" Target="IPLSocket" Bounds="336.969421386719,366.242706298828,126.63232421875,305.757293701172" />
+    <Link Source="IP" Target="IPPort" Bounds="334.264373779297,697.960021972656,133.183319091797,249.218811035156" />
+    <Link Source="IP" Target="IPort" Bounds="336.711547851563,312.018371582031,137.8818359375,359.981628417969" />
+    <Link Source="IP" Target="ISocket" Bounds="336.523010253906,256.407989501953,140.067047119141,415.592010498047" />
+    <Link Source="IP" Target="ISocketProvider" Bounds="336.379150390625,200.553268432617,140.942810058594,471.446731567383" />
+    <Link Source="IP" Target="ITCPConnection" Bounds="331.573303222656,697.960021972656,127.061981201172,194.328491210938" />
+    <Link Source="IP" Target="ITCPConnectionListener" Bounds="334.434753417969,697.960021972656,109.768432617188,139.164428710938" />
+    <Link Source="IP" Target="ITCPConnectionProvider" Bounds="339.666778564453,697.960021972656,127.816802978516,81.21337890625" />
+    <Link Source="IP" Target="IUDPSOcketProvider" Bounds="344.238342285156,692.92236328125,101.835571289063,32.3526000976563" />
+    <Link Source="IP" Target="IUDPSocket" Bounds="344.238342285156,684.97998046875,101.358337402344,0" />
+    <Link Source="IP" Target="ProtocolStatus" Bounds="336.265777587891,143.019409179688,132.703430175781,528.980590820313" />
+    <Link Source="IP" Target="SocketOperationStatus" Bounds="336.174133300781,87.2122955322266,133.964416503906,584.787704467773" />
+    <Link Source="Image" Target="ImageBuffer" Bounds="349.348327636719,1534.54577636719,97.27099609375,30.9024658203125" />
+    <Link Source="Image" Target="ImageFrame" Bounds="349.348327636719,1524.97998046875,94.2933349609375,0" />
+    <Link Source="Image" Target="Size" Bounds="349.348327636719,1479.64733886719,112.582458496094,35.766845703125" />
+    <Link Source="Media" Target="Audio1" Bounds="196.220474243164,1537.9599609375,97.6440277099609,80.7884521484375" />
+    <Link Source="Media" Target="IContainer" Bounds="208.417602539063,1536.7763671875,69.9196472167969,27.8892822265625" />
+    <Link Source="Media" Target="Image" Bounds="209.029998779297,1524.97998046875,71.0983276367188,0" />
+    <Link Source="Media" Target="MediaStream" Bounds="208.417602539063,1485.29443359375,69.9196472167969,27.88916015625" />
+    <Link Source="NFC" Target="INFC" Bounds="344.238342285156,2876.92236328125,117.692443847656,37.39013671875" />
+    <Link Source="Network" Target="Bluetooth1" Bounds="182.459060668945,753.960021972656,130.748428344727,469.370056152344" />
+    <Link Source="Network" Target="Ethernet1" Bounds="215.043334960938,740.97998046875,59.3200073242188,0" />
+    <Link Source="Network" Target="IP" Bounds="211.384887695313,698.286254882813,74.4939270019531,29.7137451171875" />
+    <Link Source="Network" Target="MAC" Bounds="195.114105224609,647.572570800781,100.817901611328,80.4274291992188" />
+    <Link Source="Network" Target="VPN" Bounds="195.253356933594,590.848205566406,96.3500366210938,137.151794433594" />
+    <Link Source="Network" Target="Wi-Fi" Bounds="199.749084472656,536.975830078125,103.422576904297,191.024169921875" />
+    <Link Source="Radio" Target="IRadio" Bounds="348.001678466797,2822.11791992188,112.189117431641,35.641845703125" />
+    <Link Source="Radio" Target="RadioStatus" Bounds="348.001678466797,2812.97998046875,97.3083190917969,0" />
+    <Link Source="Sensors" Target="IAccelerometer" Bounds="332.857299804688,2601.9599609375,142.517120361328,135.830810546875" />
+    <Link Source="Sensors" Target="IBarometer" Bounds="339.666778564453,2601.9599609375,127.816802978516,81.21337890625" />
+    <Link Source="Sensors" Target="ICompass" Bounds="353.165161132813,2599.75830078125,98.3761291503906,31.253662109375" />
+    <Link Source="Sensors" Target="IGyrometer" Bounds="353.273345947266,2588.97998046875,93.5699768066406,0" />
+    <Link Source="Sensors" Target="IInclinometer" Bounds="353.165161132813,2548.68505859375,92.9087524414063,29.5166015625" />
+    <Link Source="Sensors" Target="ILightSensor" Bounds="339.666778564453,2494.78662109375,127.816802978516,81.21337890625" />
+    <Link Source="Sensors" Target="IMagnetometer" Bounds="332.857299804688,2440.16918945313,142.517120361328,135.830810546875" />
+    <Link Source="Sensors" Target="IOrientationSensor" Bounds="329.303955078125,2382.14672851563,133.416687011719,193.853271484375" />
+    <Link Source="Sensors" Target="IPedometer" Bounds="328.762847900391,2326.32690429688,135.485565185547,249.673095703125" />
+    <Link Source="Sensors" Target="IProximitySensor" Bounds="330.370849609375,2271.56640625,141.796325683594,304.43359375" />
+    <Link Source="Storage" Target="IFIle" Bounds="209.196670532227,460.980010986328,76.0416717529297,0" />
+    <Link Source="Storage" Target="IFolder" Bounds="208.544799804688,419.485565185547,74.3273010253906,29.6472778320313" />
+    <Link Source="Storage" Target="IStorageItem" Bounds="195.114105224609,367.572601318359,100.817901611328,80.4273986816406" />
+    <Link Source="Wi-Fi" Target="Wi-FiDirect1" Bounds="331.138153076172,30.0335941314697,130.773162841797,473.96640586853" />
+    <Link Source="Wi-FiDirect" Target="IWiFiDirectAdapter" Bounds="540.303344726563,2084.97998046875,66.0933227539063,0" />
+    <Link Source="WiFi" Target="IWiFiAdapter" Bounds="338.953674316406,2097.9599609375,127.178283691406,81.413330078125" />
+    <Link Source="WiFi" Target="IWiFiNetworkProvider" Bounds="346.700012207031,2093.70434570313,99.3739013671875,31.570556640625" />
+    <Link Source="WiFi" Target="Wi-FiDirect" Bounds="346.700012207031,2084.97998046875,95.0133361816406,0" />
+    <Link Source="WiFi" Target="WiFiAdapterProvider" Bounds="346.700012207031,2044.68505859375,99.3739013671875,31.570556640625" />
+    <Link Source="WiFi" Target="WiFiNetwork" Bounds="339.666778564453,1990.78662109375,127.816802978516,81.21337890625" />
+    <Link Source="WiFi" Target="[Hotspot]" Bounds="331.776000976563,1880.30749511719,144.304473876953,191.692504882813" />
+    <Link Source="WiFi" Target="[Miracast]" Bounds="332.785797119141,1936.11804199219,142.324645996094,135.881958007813" />
+    <Link Source="[Light]" Target="IFlash" Bounds="346.098327636719,1804.97998046875,115.410003662109,0" />
+    <Link Source="[Light]" Target="ILED" Bounds="346.098327636719,1759.64733886719,115.832458496094,36.7994384765625" />
+    <Link Source="ДеталиРеализацииНаСловах" Target="5dbcb3c5-ebe6-470c-8b79-b7794685ec651" Category="Contains" />
+    <Link Source="ДеталиРеализацииНаСловах" Target="8eb8713f-5c45-41b9-8217-0aee6ea912381" Category="Contains" />
+    <Link Source="ДеталиРеализацииНаСловах" Target="ИнтерфейсДолженПредоставлятьДоступ" Category="Contains" />
+    <Link Source="Легенда" Target="ЕстьСомненияПоПоводуФункционала" Category="Contains" />
+    <Link Source="Легенда" Target="НекоторыФункционалРеализован" Category="Contains" />
+    <Link Source="Легенда" Target="ПолностьюГотоваяЧасть" Category="Contains" />
+    <Link Source="Легенда" Target="ПолностьюНеготоваяЧасть" Category="Contains" />
+  </Links>
+  <Categories>
+    <Category Id="Category1" Label="Категория 1" Background="#FFE51400" IsTag="True" />
+    <Category Id="Category2" Label="Категория 2" Background="#FF339933" IsTag="True" />
+    <Category Id="Category5" Label="Категория 5" Background="#FF9B4F96" IsTag="True" />
+    <Category Id="Category6" Label="Категория 6" Background="#FFA1260D" IsTag="True" />
+    <Category Id="Contains" Label="Содержит" Description="Указывает, содержит ли источник связи целевой объект" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="Содержится в" IsContainment="True" OutgoingActionLabel="Содержит" />
+  </Categories>
+  <Properties>
+    <Property Id="Background" Label="Фон" Description="Цвет фона" DataType="System.Windows.Media.Brush" />
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
+    <Property Id="Group" Label="Группа" Description="Отображать узел как группу" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="IsTag" DataType="System.Boolean" />
+    <Property Id="Label" Label="Метка" Description="Отображаемая метка аннотируемого объекта" DataType="System.String" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+    <Property Id="ZoomLevel" DataType="System.String" />
+  </Properties>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Категория 5" ValueLabel="Имеет категорию">
+      <Condition Expression="HasCategory('Category5')" />
+      <Setter Property="Background" Value="#FF9B4F96" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Категория 6" ValueLabel="Имеет категорию">
+      <Condition Expression="HasCategory('Category6')" />
+      <Setter Property="Background" Value="#FFA1260D" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Категория 1" ValueLabel="Имеет категорию">
+      <Condition Expression="HasCategory('Category1')" />
+      <Setter Property="Background" Value="#FFE51400" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Категория 2" ValueLabel="Имеет категорию">
+      <Condition Expression="HasCategory('Category2')" />
+      <Setter Property="Background" Value="#FF339933" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Комментарий" ValueLabel="Имеет комментарий">
+      <Condition Expression="HasCategory('Comment')" />
+      <Setter Property="Background" Value="#FFFFFACD" />
+      <Setter Property="Stroke" Value="#FFE5C365" />
+      <Setter Property="StrokeThickness" Value="1" />
+      <Setter Property="NodeRadius" Value="2" />
+      <Setter Property="MaxWidth" Value="250" />
+    </Style>
+  </Styles>
+</DirectedGraph>

@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Devices\Audio\" />
+    <Folder Include="Devices\Bluetooth\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

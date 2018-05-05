@@ -39,8 +39,9 @@
   <ItemGroup>
     <Folder Include="Devices\USB\" />
     <Folder Include="Devices\Serial\" />
+    <Folder Include="Media\Audio\" />
     <Folder Include="Network\VPN\" />
-    <Folder Include="Network\Wi-Fi\Direct\" />
+    <Folder Include="Network\WiFi\Direct\" />
   </ItemGroup>
 
   <ItemGroup>
