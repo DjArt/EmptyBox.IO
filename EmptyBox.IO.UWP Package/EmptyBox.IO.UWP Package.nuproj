@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.IO.UWP\EmptyBox.IO.UWP.csproj" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>d3b15f01-7baa-477b-a725-0ccfa939c864</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>EmptyBox.IO.UWP</Id>
+    <Version>0.0.0.15</Version>
+    <Title>EmptyBox.IO.UWP</Title>
+    <Authors>Dj Art</Authors>
+    <Owners>Dj Art</Owners>
+    <Summary>
+    </Summary>
+    <Description>Cross-platform IO library</Description>
+    <ReleaseNotes>Alpha version</ReleaseNotes>
+    <ProjectUrl>https://github.com/DjArt/EmptyBox.IO</ProjectUrl>
+    <LicenseUrl>https://github.com/DjArt/EmptyBox.IO/blob/master/LICENSE</LicenseUrl>
+    <Copyright>
+    </Copyright>
+    <Tags>IO, Cross-Platform, UWP</Tags>
+    <IconUrl>https://raw.githubusercontent.com/DjArt/EmptyBox.IO/master/EmptyBox.IO Logo.png</IconUrl>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.targets" />
+</Project>

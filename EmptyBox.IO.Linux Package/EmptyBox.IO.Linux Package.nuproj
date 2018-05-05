@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.IO.Linux\EmptyBox.IO.Linux.csproj" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>c33ed85c-6b4c-4c15-b5e2-b41b37cb714a</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>EmptyBox.IO.Linux</Id>
+    <Version>0.0.0.15</Version>
+    <Title>EmptyBox.IO.Linux</Title>
+    <Authors>Dj Art</Authors>
+    <Owners>Dj Art</Owners>
+    <Summary>
+    </Summary>
+    <Description>Cross-platform IO library</Description>
+    <ReleaseNotes>Alpha version</ReleaseNotes>
+    <ProjectUrl>https://github.com/DjArt/EmptyBox.IO</ProjectUrl>
+    <LicenseUrl>https://github.com/DjArt/EmptyBox.IO/blob/master/LICENSE</LicenseUrl>
+    <Copyright>
+    </Copyright>
+    <Tags>IO, Cross-Platform, Linux</Tags>
+    <IconUrl>https://raw.githubusercontent.com/DjArt/EmptyBox.IO/master/EmptyBox.IO Logo.png</IconUrl>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.targets" />
+</Project>
