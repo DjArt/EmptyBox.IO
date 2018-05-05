@@ -104,7 +104,7 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmptyBox.IO.Android\EmptyBox.IO.Android.csproj">
+    <ProjectReference Include="..\..\EmptyBox.IO.Android\EmptyBox.IO.Android.csproj">
       <Project>{2322aab0-a55e-405f-b165-f7a87e53e880}</Project>
       <Name>EmptyBox.IO.Android</Name>
     </ProjectReference>

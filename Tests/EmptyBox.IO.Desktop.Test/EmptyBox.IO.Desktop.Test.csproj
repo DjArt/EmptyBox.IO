@@ -120,11 +120,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmptyBox.IO.Linux\EmptyBox.IO.Linux.csproj">
+    <ProjectReference Include="..\..\EmptyBox.IO.Linux\EmptyBox.IO.Linux.csproj">
       <Project>{d7ae61b7-1eeb-4a95-b239-b6227ae2c13c}</Project>
       <Name>EmptyBox.IO.Linux</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EmptyBox.IO.macOS\EmptyBox.IO.macOS.csproj">
+    <ProjectReference Include="..\..\EmptyBox.IO.macOS\EmptyBox.IO.macOS.csproj">
       <Project>{60cfd4b7-503e-4450-8063-b82faf9cc413}</Project>
       <Name>EmptyBox.IO.macOS</Name>
     </ProjectReference>
@@ -132,15 +132,15 @@
       <Project>{d8e67dfc-dcbd-4441-9254-4054fed1d63f}</Project>
       <Name>EmptyBox.IO.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EmptyBox.IO.Windows\EmptyBox.IO.Windows.csproj">
+    <ProjectReference Include="..\..\EmptyBox.IO.Windows\EmptyBox.IO.Windows.csproj">
       <Project>{bb1cf045-c147-4cc6-b850-d290e8201c0f}</Project>
       <Name>EmptyBox.IO.Windows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EmptyBox.IO.WRTD10\EmptyBox.IO.WRTD10.csproj">
+    <ProjectReference Include="..\..\EmptyBox.IO.WRTD10\EmptyBox.IO.WRTD10.csproj">
       <Project>{f6403e0b-b53e-47cb-8e4f-0cb5bab8ac1a}</Project>
       <Name>EmptyBox.IO.WRTD10</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EmptyBox.IO.WRTD81\EmptyBox.IO.WRTD81.csproj">
+    <ProjectReference Include="..\..\EmptyBox.IO.WRTD81\EmptyBox.IO.WRTD81.csproj">
       <Project>{b0e89c81-e716-4ae4-b42a-80d2a2e6000c}</Project>
       <Name>EmptyBox.IO.WRTD81</Name>
     </ProjectReference>

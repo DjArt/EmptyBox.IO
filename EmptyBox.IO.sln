@@ -25,33 +25,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.macOS", "EmptyB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.WRTD10", "EmptyBox.IO.WRTD10\EmptyBox.IO.WRTD10.csproj", "{F6403E0B-B53E-47CB-8E4F-0CB5BAB8AC1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.UWP.Test", "EmptyBox.IO.UWP.Test\EmptyBox.IO.UWP.Test.csproj", "{943A736D-6469-4123-BB9C-CCC8F4708828}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.UWP.Test", "Tests\EmptyBox.IO.UWP.Test\EmptyBox.IO.UWP.Test.csproj", "{943A736D-6469-4123-BB9C-CCC8F4708828}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.Desktop.Test", "EmptyBox.IO.Desktop.Test\EmptyBox.IO.Desktop.Test.csproj", "{6765C6A3-E476-4BC2-BEEE-69D4B53C0997}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.Desktop.Test", "Tests\EmptyBox.IO.Desktop.Test\EmptyBox.IO.Desktop.Test.csproj", "{6765C6A3-E476-4BC2-BEEE-69D4B53C0997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.Android.Test", "EmptyBox.IO.Android.Test\EmptyBox.IO.Android.Test.csproj", "{2F9D89E9-6317-4DD7-B81E-1CCF4717C6D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.Android.Test", "Tests\EmptyBox.IO.Android.Test\EmptyBox.IO.Android.Test.csproj", "{2F9D89E9-6317-4DD7-B81E-1CCF4717C6D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.iOS.Test", "EmptyBox.IO.iOS.Test\EmptyBox.IO.iOS.Test.csproj", "{748222AB-5F87-4423-9197-1A5F71F7CC2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.iOS.Test", "Tests\EmptyBox.IO.iOS.Test\EmptyBox.IO.iOS.Test.csproj", "{748222AB-5F87-4423-9197-1A5F71F7CC2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyBox.IO.Test", "EmptyBox.IO.Test\EmptyBox.IO.Test.csproj", "{D8E67DFC-DCBD-4441-9254-4054FED1D63F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyBox.IO.Test", "Tests\EmptyBox.IO.Test\EmptyBox.IO.Test.csproj", "{D8E67DFC-DCBD-4441-9254-4054FED1D63F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet Packages", "NuGet Packages", "{273FA66D-1ECF-4F58-A009-920BF070B7C0}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.Android Package", "EmptyBox.IO.Android Package\EmptyBox.IO.Android Package.nuproj", "{5F82AED2-161C-463F-B267-1F77AF0DAC0E}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.Android Package", "NuGet Packages\EmptyBox.IO.Android Package\EmptyBox.IO.Android Package.nuproj", "{5F82AED2-161C-463F-B267-1F77AF0DAC0E}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.iOS Package", "EmptyBox.IO.iOS Package\EmptyBox.IO.iOS Package.nuproj", "{F7D0FF62-889B-4AA2-9B19-29B65D81BDF5}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.iOS Package", "NuGet Packages\EmptyBox.IO.iOS Package\EmptyBox.IO.iOS Package.nuproj", "{F7D0FF62-889B-4AA2-9B19-29B65D81BDF5}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.Linux Package", "EmptyBox.IO.Linux Package\EmptyBox.IO.Linux Package.nuproj", "{C33ED85C-6B4C-4C15-B5E2-B41B37CB714A}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.Linux Package", "NuGet Packages\EmptyBox.IO.Linux Package\EmptyBox.IO.Linux Package.nuproj", "{C33ED85C-6B4C-4C15-B5E2-B41B37CB714A}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.macOS Package", "EmptyBox.IO.macOS Package\EmptyBox.IO.macOS Package.nuproj", "{89BEE7A1-B1DE-4C38-A5D8-B27BAAE7382C}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.macOS Package", "NuGet Packages\EmptyBox.IO.macOS Package\EmptyBox.IO.macOS Package.nuproj", "{89BEE7A1-B1DE-4C38-A5D8-B27BAAE7382C}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.UWP Package", "EmptyBox.IO.UWP Package\EmptyBox.IO.UWP Package.nuproj", "{D3B15F01-7BAA-477B-A725-0CCFA939C864}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.UWP Package", "NuGet Packages\EmptyBox.IO.UWP Package\EmptyBox.IO.UWP Package.nuproj", "{D3B15F01-7BAA-477B-A725-0CCFA939C864}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.Windows Package", "EmptyBox.IO.Windows Package\EmptyBox.IO.Windows Package.nuproj", "{281B7496-476B-4F7E-8D35-F8F0C0D4F6E3}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.Windows Package", "NuGet Packages\EmptyBox.IO.Windows Package\EmptyBox.IO.Windows Package.nuproj", "{281B7496-476B-4F7E-8D35-F8F0C0D4F6E3}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.WRTD10 Package", "EmptyBox.IO.WRTD10 Package\EmptyBox.IO.WRTD10 Package.nuproj", "{958824BA-AC08-4F77-9E6E-ED38FC22185D}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.WRTD10 Package", "NuGet Packages\EmptyBox.IO.WRTD10 Package\EmptyBox.IO.WRTD10 Package.nuproj", "{958824BA-AC08-4F77-9E6E-ED38FC22185D}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.WRTD81 Package", "EmptyBox.IO.WRTD81 Package\EmptyBox.IO.WRTD81 Package.nuproj", "{C889179C-073B-4F54-A020-24F77752A64C}"
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "EmptyBox.IO.WRTD81 Package", "NuGet Packages\EmptyBox.IO.WRTD81 Package\EmptyBox.IO.WRTD81 Package.nuproj", "{C889179C-073B-4F54-A020-24F77752A64C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
