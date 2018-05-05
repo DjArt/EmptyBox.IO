@@ -118,8 +118,11 @@
     <EmbeddedResource Include="Properties\WarBox.IO.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EmptyBox.IO">
+      <Version>0.0.0.15</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.0.6</Version>
+      <Version>6.0.8</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -127,12 +130,6 @@
     <Folder Include="Devices\GPIO\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Storage\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">
-      <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
-      <Name>EmptyBox.IO</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

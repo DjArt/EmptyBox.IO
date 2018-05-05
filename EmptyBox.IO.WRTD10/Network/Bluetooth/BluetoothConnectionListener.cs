@@ -44,9 +44,12 @@ namespace EmptyBox.IO.Network.Bluetooth
         #region Private functions
         private async void _ConnectionListener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            IBluetoothDevice device = await ConnectionProvider.TryGetFromMAC(args.Socket.Information.RemoteHostName.ToMACAddress());
-            BluetoothAccessPoint remotehost = new BluetoothAccessPoint(device, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)));
-            ConnectionSocketReceived?.Invoke(this, new BluetoothConnection(ConnectionProvider, args.Socket, Port, remotehost));
+            var result = await ConnectionProvider.TryGetFromMAC(args.Socket.Information.RemoteHostName.ToMACAddress());
+            if (result.Status == Access.AccessStatus.Success)
+            {
+                BluetoothAccessPoint remotehost = new BluetoothAccessPoint(result.Result, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)));
+                ConnectionSocketReceived?.Invoke(this, new BluetoothConnection(ConnectionProvider, args.Socket, Port, remotehost));
+            }
         }
         #endregion
 

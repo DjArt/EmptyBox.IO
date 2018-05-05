@@ -1,4 +1,5 @@
 ﻿using EmptyBox.IO.Access;
+using EmptyBox.ScriptRuntime;
 using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices.Radio
@@ -6,6 +7,6 @@ namespace EmptyBox.IO.Devices.Radio
     public interface IRadio : IDevice
     {
         RadioStatus RadioStatus { get; }
-        Task<AccessStatus> SetRadioStatus(RadioStatus state);
+        Task<VoidResult<AccessStatus>> SetRadioStatus(RadioStatus state);
     }
 }

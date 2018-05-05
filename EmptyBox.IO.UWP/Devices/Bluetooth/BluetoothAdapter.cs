@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using EmptyBox.IO.Devices.Radio;
-using Windows.Devices.Enumeration;
 using EmptyBox.IO.Interoperability;
-using EmptyBox.IO.Network.Bluetooth;
 using System.Threading.Tasks;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Access;
+using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
-    public class BluetoothAdapter : IBluetoothAdapter
+    public sealed class BluetoothAdapter : IBluetoothAdapter
     {
-        #region Public static functions
+        #region Static public functions
         [StandardRealization]
         public static async Task<BluetoothAdapter> GetDefault() => new BluetoothAdapter(await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync());
         #endregion
@@ -23,13 +20,15 @@ namespace EmptyBox.IO.Devices.Bluetooth
         IBluetoothLEDeviceProvider IBluetoothAdapter.LEDeviceProvider => throw new NotImplementedException();
         #endregion
 
-        #region Private objects
-        private Windows.Devices.Bluetooth.BluetoothAdapter _Adapter { get; set; }
-        private Windows.Devices.Radios.Radio _Radio { get; set; }
+        #region Public events
+        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
         #endregion
 
         #region Public objects
-        public RadioStatus RadioStatus => _Radio.State.ToRadioStatus();
+        public Windows.Devices.Bluetooth.BluetoothAdapter InternalAdapter { get; set; }
+        public Windows.Devices.Radios.Radio InternalRadio { get; set; }
+        public RadioStatus RadioStatus => InternalRadio.State.ToRadioStatus();
+        public ConnectionStatus ConnectionStatus { get; private set; }
         public MACAddress Address { get; private set; }
         public BluetoothDeviceProvider DeviceProvider { get; private set; }
         public string Name { get; private set; }
@@ -40,22 +39,58 @@ namespace EmptyBox.IO.Devices.Bluetooth
         {
             async void Initialization()
             {
-                _Radio = await _Adapter.GetRadioAsync();
+                try
+                {
+                    InternalRadio = await InternalAdapter.GetRadioAsync();
+                }
+                catch
+                {
+                    InternalRadio = null;
+                }
             }
 
-            _Adapter = adapter;
+            InternalAdapter = adapter;
             Task init = Task.Run((Action)Initialization);
-            Address = new MACAddress(_Adapter.BluetoothAddress);
+            Address = new MACAddress(InternalAdapter.BluetoothAddress);
             DeviceProvider = new BluetoothDeviceProvider(this);
-            Name = _Radio.Name;
             init.Wait();
+            if (InternalRadio != null)
+            {
+                Name = InternalRadio.Name;
+            }
+        }
+        #endregion
+
+        #region Destructor
+        ~BluetoothAdapter()
+        {
+            Close(false);
+        }
+        #endregion
+
+        #region Private functions
+        private void Close(bool unexcepted)
+        {
+            //TODO
         }
         #endregion
 
         #region Public functions
-        public async Task<AccessStatus> SetRadioStatus(RadioStatus state)
+        public void Dispose()
         {
-            return (await _Radio.SetStateAsync(state.ToRadioState())).ToAccessStatus();
+            Close(false);
+        }
+
+        public async Task<VoidResult<AccessStatus>> SetRadioStatus(RadioStatus state)
+        {
+            try
+            {
+                return new VoidResult<AccessStatus>((await InternalRadio.SetStateAsync(state.ToRadioState())).ToAccessStatus(), null);
+            }
+            catch (Exception ex)
+            {
+                return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
+            }
         }
         #endregion
     }

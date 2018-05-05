@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.Android.Test", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.iOS.Test", "EmptyBox.IO.iOS.Test\EmptyBox.IO.iOS.Test.csproj", "{748222AB-5F87-4423-9197-1A5F71F7CC2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyBox.IO.Test", "EmptyBox.IO.Test\EmptyBox.IO.Test.csproj", "{D8E67DFC-DCBD-4441-9254-4054FED1D63F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmptyBox.IO.Test", "EmptyBox.IO.Test\EmptyBox.IO.Test.csproj", "{D8E67DFC-DCBD-4441-9254-4054FED1D63F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

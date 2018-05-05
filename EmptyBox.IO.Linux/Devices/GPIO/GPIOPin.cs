@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using EmptyBox.IO.Access;
 using System.IO;
+using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Devices.GPIO
 {

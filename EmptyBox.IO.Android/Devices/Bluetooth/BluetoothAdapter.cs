@@ -6,23 +6,36 @@ using EmptyBox.IO.Interoperability;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Bluetooth;
 using EmptyBox.IO.Access;
+using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
     public sealed class BluetoothAdapter : IBluetoothAdapter
     {
+        #region Static public functions
         [StandardRealization]
         public static async Task<BluetoothAdapter> GetDefault() => new BluetoothAdapter(Android.Bluetooth.BluetoothAdapter.DefaultAdapter);
+        #endregion
 
+        #region IBluetoothAdapter interface objects
         IBluetoothDeviceProvider IBluetoothAdapter.DeviceProvider => DeviceProvider;
         IBluetoothLEDeviceProvider IBluetoothAdapter.LEDeviceProvider => null;
-        
+        #endregion
+
+        #region Public events
+        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
+        #endregion
+
+        #region Public objects
         public Android.Bluetooth.BluetoothAdapter InternalDevice { get; private set; }
         public RadioStatus RadioStatus => InternalDevice.State.ToRadioStatus();
+        public ConnectionStatus ConnectionStatus { get; private set; }
         public MACAddress Address { get; private set; }
         public BluetoothDeviceProvider DeviceProvider { get; private set; }
         public string Name => InternalDevice.Name;
+        #endregion
 
+        #region Constructors
         internal BluetoothAdapter(Android.Bluetooth.BluetoothAdapter adapter)
         {
             InternalDevice = adapter;
@@ -30,10 +43,32 @@ namespace EmptyBox.IO.Devices.Bluetooth
             Address = address;
             DeviceProvider = new BluetoothDeviceProvider(this);
         }
+        #endregion
 
-        public Task<AccessStatus> SetRadioStatus(RadioStatus state)
+        #region Destructor
+        ~BluetoothAdapter()
+        {
+            Close(false);
+        }
+        #endregion
+
+        #region Private functions
+        private void Close(bool unexcepted)
+        {
+
+        }
+        #endregion
+
+        #region Public functions
+        public void Dispose()
+        {
+            Close(false);
+        }
+
+        public async Task<VoidResult<AccessStatus>> SetRadioStatus(RadioStatus state)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

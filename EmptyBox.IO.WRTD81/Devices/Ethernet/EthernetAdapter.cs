@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Ethernet;
 using EmptyBox.IO.Network.IP;
@@ -22,6 +18,10 @@ namespace EmptyBox.IO.Devices.Ethernet
         private NetworkAdapter Adapter;
         #endregion
 
+        #region Public events
+        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
+        #endregion
+
         #region Public objects
         public event DeviceConnectionStatusHandler ConnectionStatusEvent;
 
@@ -37,6 +37,13 @@ namespace EmptyBox.IO.Devices.Ethernet
         internal EthernetAdapter(NetworkAdapter adapter)
         {
             Adapter = adapter;
+        }
+        #endregion
+
+        #region Public functions
+        public void Dispose()
+        {
+
         }
         #endregion
     }

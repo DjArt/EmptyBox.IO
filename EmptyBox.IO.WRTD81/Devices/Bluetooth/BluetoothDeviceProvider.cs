@@ -1,6 +1,8 @@
-﻿using EmptyBox.IO.Interoperability;
+﻿using EmptyBox.IO.Access;
+using EmptyBox.IO.Interoperability;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Bluetooth;
+using EmptyBox.ScriptRuntime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -184,9 +186,17 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return new BluetoothConnectionListener(this, port);
         }
 
-        public async Task<IBluetoothDevice> TryGetFromMAC(MACAddress address)
+        public async Task<RefResult<IBluetoothDevice, AccessStatus>> TryGetFromMAC(MACAddress address)
         {
-            return (await Find()).FirstOrDefault(x => x.Address == address);
+            try
+            {
+                IBluetoothDevice device = (await Find()).FirstOrDefault(x => x.Address == address);
+                return new RefResult<IBluetoothDevice, AccessStatus>(device, AccessStatus.Success, null);
+            }
+            catch (Exception ex)
+            {
+                return new RefResult<IBluetoothDevice, AccessStatus>(null, AccessStatus.UnknownError, ex);
+            }
         }
         #endregion
     }

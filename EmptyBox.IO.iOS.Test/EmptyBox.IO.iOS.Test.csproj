@@ -66,9 +66,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
     <Content Include="Entitlements.plist" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EmptyBox.IO, Version=0.0.0.15, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EmptyBox.IO.0.0.0.15\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="EmptyBox.ScriptRuntime, Version=0.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EmptyBox.ScriptRuntime.0.0.0.4\lib\netstandard1.4\EmptyBox.ScriptRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />

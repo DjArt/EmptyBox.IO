@@ -6,45 +6,81 @@ using Windows.Devices.Enumeration;
 using EmptyBox.IO.Network;
 using Windows.Devices.Bluetooth.Rfcomm;
 using EmptyBox.IO.Interoperability;
+using EmptyBox.IO.Access;
+using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
     public sealed class BluetoothDevice : IBluetoothDevice
     {
+        #region Public events
+        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
+        #endregion
+
+        #region Public objects
         public string Name { get; private set; }
         public MACAddress Address { get; private set; }
         public DevicePairStatus PairStatus => DevicePairStatus.Paired;
         public ConnectionStatus ConnectionStatus => ConnectionStatus.Unknow;
-        public BluetoothDeviceClass DeviceClass => throw new NotImplementedException();
+        public BluetoothClass DeviceClass => throw new NotImplementedException();
+        #endregion
 
-        public event DeviceConnectionStatusHandler ConnectionStatusEvent;
-
+        #region Constructors
         internal BluetoothDevice(MACAddress address, string name)
         {
             Address = address;
             Name = name;
         }
+        #endregion
 
-        public async Task<IEnumerable<BluetoothAccessPoint>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        #region Destructors
+        ~BluetoothDevice()
         {
-            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Constants.AQS_CLASS_GUID + Constants.AQS_BLUETOOTH_GUID);
-            List<BluetoothAccessPoint> result = new List<BluetoothAccessPoint>();
-            foreach (DeviceInformation device in devices)
+            Close(false);
+        }
+        #endregion
+
+        #region Private functions
+        private void Close(bool unexcepted)
+        {
+
+        }
+        #endregion
+
+        #region Public function
+        public void Dispose()
+        {
+            Close(false);
+        }
+
+        public async Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        {
+            try
             {
-                try
+                DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Constants.AQS_CLASS_GUID + Constants.AQS_BLUETOOTH_GUID);
+                List<BluetoothAccessPoint> result = new List<BluetoothAccessPoint>();
+                foreach (DeviceInformation device in devices)
                 {
-                    RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
-                    if (rds != null)
+                    try
                     {
-                        result.Add(new BluetoothAccessPoint(this, rds.ServiceId.ToBluetoothPort()));
+                        RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
+                        if (rds != null)
+                        {
+                            result.Add(new BluetoothAccessPoint(this, rds.ServiceId.ToBluetoothPort()));
+                        }
+                    }
+                    catch
+                    {
+
                     }
                 }
-                catch
-                {
-
-                }
+                return new RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>(result, AccessStatus.Success, null);
             }
-            return result;
+            catch (Exception ex)
+            {
+                return new RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>(null, AccessStatus.UnknownError, ex);
+            }
         }
+        #endregion
     }
 }

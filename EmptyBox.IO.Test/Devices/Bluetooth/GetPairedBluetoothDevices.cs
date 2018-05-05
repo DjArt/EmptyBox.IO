@@ -13,7 +13,7 @@ namespace EmptyBox.IO.Test.Devices.Bluetooth
         public async Task<string> Run()
         {
             StringBuilder result = new StringBuilder();
-            IBluetoothAdapter @default = await BluetoothAdapterProvider.GetDefault();
+            IBluetoothAdapter @default = (await BluetoothAdapterProvider.GetDefault()).Result;
             if (@default != null)
             {
                 result.AppendFormat("Найден Bluetooth-адаптер по умолчанию: {0}({1})", @default.Name, @default.DeviceProvider.Address);

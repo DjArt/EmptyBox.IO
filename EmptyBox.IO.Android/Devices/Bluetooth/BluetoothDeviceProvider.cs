@@ -9,8 +9,10 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using EmptyBox.IO.Access;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Bluetooth;
+using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -24,18 +26,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
         IBluetoothAdapter IBluetoothDeviceProvider.Adapter => Adapter;
         #endregion
 
-        public event EventHandler<IBluetoothDevice> DeviceAdded;
-        public event EventHandler<IBluetoothDevice> DeviceRemoved;
-
-        public bool IsStarted => throw new NotImplementedException();
-        public BluetoothAdapter Adapter { get; private set; }
-        public MACAddress Address => Adapter.Address;
-
-        internal BluetoothDeviceProvider(BluetoothAdapter adapter)
-        {
-            Adapter = Adapter;
-        }
-
         #region IBluetoothConnectionProvider interface properties
         IBluetoothConnection IBluetoothConnectionProvider.CreateConnection(BluetoothAccessPoint accessPoint)
         {
@@ -45,6 +35,24 @@ namespace EmptyBox.IO.Devices.Bluetooth
         IBluetoothConnectionListener IBluetoothConnectionProvider.CreateConnectionListener(BluetoothPort port)
         {
             return CreateConnectionListener(port);
+        }
+        #endregion
+
+        #region Public events
+        public event EventHandler<IBluetoothDevice> DeviceAdded;
+        public event EventHandler<IBluetoothDevice> DeviceRemoved;
+        #endregion
+
+        #region Public objects
+        public bool IsStarted => throw new NotImplementedException();
+        public BluetoothAdapter Adapter { get; private set; }
+        public MACAddress Address => Adapter.Address;
+        #endregion
+
+        #region Constructors
+        internal BluetoothDeviceProvider(BluetoothAdapter adapter)
+        {
+            Adapter = Adapter;
         }
         #endregion
 
@@ -74,6 +82,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         }
         #endregion
 
+        #region Public functions
         public async Task<IEnumerable<IBluetoothDevice>> Find()
         {
             await Task.Yield();
@@ -100,9 +109,18 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return new BluetoothConnectionListener(this, port);
         }
 
-        public async Task<IBluetoothDevice> TryGetFromMAC(MACAddress address)
+        public async Task<RefResult<IBluetoothDevice, AccessStatus>> TryGetFromMAC(MACAddress address)
         {
-            return (await Find()).FirstOrDefault(x => x.Address == address);
+            try
+            {
+                IBluetoothDevice device = (await Find()).FirstOrDefault(x => x.Address == address);
+                return new RefResult<IBluetoothDevice, AccessStatus>(device, AccessStatus.Success, null);
+            }
+            catch (Exception ex)
+            {
+                return new RefResult<IBluetoothDevice, AccessStatus>(null, AccessStatus.UnknownError, ex);
+            }
         }
+        #endregion
     }
 }

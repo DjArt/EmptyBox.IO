@@ -8,6 +8,7 @@
     <Version>0.0.0.0</Version>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
+    <RootNamespace>EmptyBox.IO</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,14 +20,12 @@
 
   <!-- Include Nuget Package for Tizen Project building -->
   <ItemGroup>
+    <PackageReference Include="EmptyBox.IO" Version="0.0.0.15" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="Tizen.NET" Version="4.0.0">
       <ExcludeAssets>Runtime</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Tizen.NET.Sdk" Version="1.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj" />
+    <PackageReference Include="Tizen.NET.Sdk" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Access\" />

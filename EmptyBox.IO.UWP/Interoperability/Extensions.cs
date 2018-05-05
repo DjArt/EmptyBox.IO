@@ -78,14 +78,13 @@ namespace EmptyBox.IO.Interoperability
             switch (status)
             {
                 case RadioAccessStatus.Allowed:
-                    return AccessStatus.Allowed;
+                    return AccessStatus.Success;
                 case RadioAccessStatus.DeniedBySystem:
                     return AccessStatus.DeniedBySystem;
                 case RadioAccessStatus.DeniedByUser:
                     return AccessStatus.DeniedByUser;
                 default:
-                case RadioAccessStatus.Unspecified:
-                    return AccessStatus.Unknown;
+                    return AccessStatus.UnknownError;
             }
         }
 
@@ -93,14 +92,14 @@ namespace EmptyBox.IO.Interoperability
         {
             switch (status)
             {
-                case AccessStatus.Allowed:
+                case AccessStatus.Success:
                     return RadioAccessStatus.Allowed;
                 case AccessStatus.DeniedBySystem:
                     return RadioAccessStatus.DeniedBySystem;
                 case AccessStatus.DeniedByUser:
                     return RadioAccessStatus.DeniedByUser;
                 default:
-                case AccessStatus.Unknown:
+                case AccessStatus.UnknownError:
                     return RadioAccessStatus.Unspecified;
             }
         }
@@ -110,14 +109,13 @@ namespace EmptyBox.IO.Interoperability
             switch (status)
             {
                 case DeviceAccessStatus.Allowed:
-                    return AccessStatus.Allowed;
+                    return AccessStatus.Success;
                 case DeviceAccessStatus.DeniedBySystem:
                     return AccessStatus.DeniedBySystem;
                 case DeviceAccessStatus.DeniedByUser:
                     return AccessStatus.DeniedByUser;
                 default:
-                case DeviceAccessStatus.Unspecified:
-                    return AccessStatus.Unknown;
+                    return AccessStatus.UnknownError;
             }
         }
         
@@ -125,14 +123,13 @@ namespace EmptyBox.IO.Interoperability
         {
             switch (status)
             {
-                case AccessStatus.Allowed:
+                case AccessStatus.Success:
                     return DeviceAccessStatus.Allowed;
                 case AccessStatus.DeniedBySystem:
                     return DeviceAccessStatus.DeniedBySystem;
                 case AccessStatus.DeniedByUser:
                     return DeviceAccessStatus.DeniedByUser;
                 default:
-                case AccessStatus.Unknown:
                     return DeviceAccessStatus.Unspecified;
             }
         }

@@ -5,11 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj" />
+    <PackageReference Include="EmptyBox.IO" Version="0.0.0.15" />
   </ItemGroup>
 
 </Project>

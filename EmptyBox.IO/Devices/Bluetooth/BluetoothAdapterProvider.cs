@@ -1,4 +1,6 @@
-﻿using EmptyBox.IO.Interoperability;
+﻿using EmptyBox.IO.Access;
+using EmptyBox.IO.Interoperability;
+using EmptyBox.ScriptRuntime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
 {
     public static class BluetoothAdapterProvider
     {
-        public static async Task<IBluetoothAdapter> GetDefault()
+        public static async Task<RefResult<IBluetoothAdapter, AccessStatus>> GetDefault()
         {
             await Task.Yield();
             List<Assembly> libs = APIProvider.GetСompatibleAssembly();
@@ -21,15 +23,15 @@ namespace EmptyBox.IO.Devices.Bluetooth
                     if (type != null)
                     {
                         Task item = (Task)type.GetTypeInfo().DeclaredMethods.First(x => x.GetCustomAttributes().Any(y => y.GetType() == typeof(StandardRealizationAttribute))).Invoke(null, new object[0]);
-                        return (IBluetoothAdapter)APIProvider.GetTaskResult(item);
+                        return new RefResult<IBluetoothAdapter, AccessStatus>((IBluetoothAdapter)APIProvider.GetTaskResult(item), AccessStatus.Success, null);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    return new RefResult<IBluetoothAdapter, AccessStatus>(null, AccessStatus.UnknownError, ex);
                 }
             }
-            return null;
+            return new RefResult<IBluetoothAdapter, AccessStatus>(null, AccessStatus.NotSupported, null);
         }
     }
 }
