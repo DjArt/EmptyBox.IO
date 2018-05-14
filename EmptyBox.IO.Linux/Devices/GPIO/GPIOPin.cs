@@ -176,7 +176,7 @@ namespace EmptyBox.IO.Devices.GPIO
             _SharingMode = sharingMode;
             _OpenMode = openMode;
             Mode = GPIOPinMode.Input;
-            PinPath = GPIO.GPIO_PATH + "/gpio" + PinNumber;
+            PinPath = GPIOController.GPIO_PATH + "/gpio" + PinNumber;
             ConnectionStatus = ConnectionStatus.Connected;
             switch (_OpenMode)
             {

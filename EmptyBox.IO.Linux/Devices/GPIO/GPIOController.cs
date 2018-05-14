@@ -10,7 +10,7 @@ using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Devices.GPIO
 {
-    public sealed class GPIO : IGPIO
+    public sealed class GPIOController : IGPIOController
     {
         #region Static internal objects
         /// <summary>
@@ -29,16 +29,16 @@ namespace EmptyBox.IO.Devices.GPIO
 
         #region Static public functions
         [StandardRealization]
-        public static async Task<RefResult<GPIO, AccessStatus>> GetDefault()
+        public static async Task<RefResult<GPIOController, AccessStatus>> GetDefault()
         {
             await Task.Yield();
             if (Directory.Exists(GPIO_PATH) && File.Exists(GPIO_EXPORT_PATH) && File.Exists(GPIO_UNEXPORT_PATH))
             {
-                return new RefResult<GPIO, AccessStatus>();
+                return new RefResult<GPIOController, AccessStatus>();
             }
             else
             {
-                return new RefResult<GPIO, AccessStatus>(null, AccessStatus.NotAvailable, new FileNotFoundException("Файлы драйвера GPIO не найден.", GPIO_PATH));
+                return new RefResult<GPIOController, AccessStatus>(null, AccessStatus.NotAvailable, new FileNotFoundException("Файлы драйвера GPIO не найден.", GPIO_PATH));
             }
         }
         #endregion
@@ -53,34 +53,40 @@ namespace EmptyBox.IO.Devices.GPIO
         #endregion
 
         #region Constructors
-        internal GPIO()
+        internal GPIOController()
         {
 
-        }
-        #endregion
-
-        #region IDisposable interface functions
-        void IDisposable.Dispose()
-        {
-            Close();
         }
         #endregion
 
         #region Interface IGPIO functions
-        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIO.OpenPin(uint pin)
+        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIOController.OpenPin(uint pin)
         {
             var res = await OpenPin(pin);
             return new RefResult<IGPIOPin, GPIOPinOpenStatus>(res.Result, res.Status, res.Exception);
         }
 
-        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIO.OpenPin(uint pin, GPIOPinSharingMode shareMode)
+        async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> IGPIOController.OpenPin(uint pin, GPIOPinSharingMode shareMode)
         {
             var res = await OpenPin(pin, shareMode);
             return new RefResult<IGPIOPin, GPIOPinOpenStatus>(res.Result, res.Status, res.Exception);
         }
         #endregion
+        
+        #region Private functions
+        private void Close(bool unexcepted)
+        {
+            ConnectionStatusChanged?.Invoke(this, ConnectionStatus.Disconnected);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
 
         #region Public functions
+        public void Dispose()
+        {
+            Close(false);
+        }
+
         /// <summary>
         /// Пытается открыть ранее не открытый контакт GPIO в режиме монопольного доступа. Если контакт был открыт ранее, пытается  открыть его в режиме общего доступа для чтения.
         /// </summary>
@@ -188,11 +194,6 @@ namespace EmptyBox.IO.Devices.GPIO
                         }
                     }
             }
-        }
-
-        public void Close()
-        {
-            GC.SuppressFinalize(this);
         }
         #endregion
     }

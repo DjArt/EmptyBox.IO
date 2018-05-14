@@ -11,6 +11,8 @@ using EmptyBox.IO.Devices.Bluetooth;
 using System.Threading.Tasks;
 using System;
 using EmptyBox.IO.Access;
+using EmptyBox.IO.Devices.GPIO;
+using Windows.Devices.Gpio;
 
 namespace EmptyBox.IO.Interoperability
 {
@@ -197,6 +199,104 @@ namespace EmptyBox.IO.Interoperability
                     return BluetoothSDPCacheMode.Cached;
                 case BluetoothCacheMode.Uncached:
                     return BluetoothSDPCacheMode.Uncached;
+            }
+        }
+
+        public static GPIOPinEdge ToGPIOPinEdge(this GpioPinEdge pinEdge)
+        {
+            switch (pinEdge)
+            {
+                default:
+                    return GPIOPinEdge.None;
+                case GpioPinEdge.FallingEdge:
+                    return GPIOPinEdge.FallingEdge;
+                case GpioPinEdge.RisingEdge:
+                    return GPIOPinEdge.RisingEdge;
+            }
+        }
+
+        public static GpioPinEdge ToGpioPinEdge(this GPIOPinEdge pinEdge)
+        {
+            switch (pinEdge)
+            {
+                default:
+                case GPIOPinEdge.None:
+                case GPIOPinEdge.FallingEdge:
+                    return GpioPinEdge.FallingEdge;
+                case GPIOPinEdge.RisingEdge:
+                    return GpioPinEdge.RisingEdge;
+            }
+        }
+
+        public static GPIOPinMode ToGPIOPinMode(this GpioPinDriveMode mode)
+        {
+            switch (mode)
+            {
+                default:
+                case GpioPinDriveMode.Input:
+                    return GPIOPinMode.Input;
+                case GpioPinDriveMode.InputPullDown:
+                    return GPIOPinMode.InputPullDown;
+                case GpioPinDriveMode.InputPullUp:
+                    return GPIOPinMode.InputPullUp;
+                case GpioPinDriveMode.Output:
+                    return GPIOPinMode.Output;
+                case GpioPinDriveMode.OutputOpenDrain:
+                    return GPIOPinMode.OutputOpenDrain;
+                case GpioPinDriveMode.OutputOpenDrainPullUp:
+                    return GPIOPinMode.OutputOpenDrainPullUp;
+                case GpioPinDriveMode.OutputOpenSource:
+                    return GPIOPinMode.OutputOpenSource;
+                case GpioPinDriveMode.OutputOpenSourcePullDown:
+                    return GPIOPinMode.OutputOpenSourcePullDown;
+            }
+        }
+
+        public static GpioPinDriveMode ToGpioPinDriveMode(this GPIOPinMode mode)
+        {
+            switch (mode)
+            {
+                default:
+                case GPIOPinMode.Input:
+                    return GpioPinDriveMode.Input;
+                case GPIOPinMode.InputPullDown:
+                    return GpioPinDriveMode.InputPullDown;
+                case GPIOPinMode.InputPullUp:
+                    return GpioPinDriveMode.InputPullUp;
+                case GPIOPinMode.Output:
+                    return GpioPinDriveMode.Output;
+                case GPIOPinMode.OutputOpenDrain:
+                    return GpioPinDriveMode.OutputOpenDrain;
+                case GPIOPinMode.OutputOpenDrainPullUp:
+                    return GpioPinDriveMode.OutputOpenDrainPullUp;
+                case GPIOPinMode.OutputOpenSource:
+                    return GpioPinDriveMode.OutputOpenSource;
+                case GPIOPinMode.OutputOpenSourcePullDown:
+                    return GpioPinDriveMode.OutputOpenSourcePullDown;
+            }
+        }
+
+        public static GPIOPinValue ToGPIOPinValue(this GpioPinValue value)
+        {
+            switch (value)
+            {
+                default:
+                case GpioPinValue.Low:
+                    return GPIOPinValue.Low;
+                case GpioPinValue.High:
+                    return GPIOPinValue.High;
+            }
+        }
+
+        public static GpioPinValue ToGpioPinValue(this GPIOPinValue value)
+        {
+            switch (value)
+            {
+                default:
+                case GPIOPinValue.Low:
+                    return GpioPinValue.Low;
+                case GPIOPinValue.High:
+                    return GpioPinValue.High;
             }
         }
     }

@@ -9,7 +9,7 @@ namespace EmptyBox.IO.Devices.GPIO
 {
     public static class GPIOProvider
     {
-        public static async Task<IGPIO> GetDefault()
+        public static async Task<IGPIOController> GetDefault()
         {
             await Task.Yield();
             List<Assembly> libs = APIProvider.GetСompatibleAssembly();
@@ -21,7 +21,7 @@ namespace EmptyBox.IO.Devices.GPIO
                     if (type != null)
                     {
                         Task item = (Task)type.GetTypeInfo().DeclaredMethods.First(x => x.GetCustomAttributes().Any(y => y.GetType() == typeof(StandardRealizationAttribute))).Invoke(null, new object[0]);
-                        return (IGPIO)APIProvider.GetTaskResult(item);
+                        return (IGPIOController)APIProvider.GetTaskResult(item);
                     }
                 }
                 catch

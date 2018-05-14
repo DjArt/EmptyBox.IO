@@ -109,6 +109,8 @@
     <Compile Include="Devices\Bluetooth\BluetoothAdapter.cs" />
     <Compile Include="Devices\Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Devices\Bluetooth\BluetoothDeviceProvider.cs" />
+    <Compile Include="Devices\GPIO\GPIOController.cs" />
+    <Compile Include="Devices\GPIO\GPIOPin.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
     <Compile Include="Interoperability\Сompatibility.cs" />
     <Compile Include="Network\AConnection.cs" />
@@ -119,7 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EmptyBox.IO">
-      <Version>0.0.0.15</Version>
+      <Version>0.0.0.17</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
@@ -128,7 +130,6 @@
   <ItemGroup>
     <Folder Include="Access\" />
     <Folder Include="Devices\Audio\" />
-    <Folder Include="Devices\GPIO\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Storage\" />
   </ItemGroup>
