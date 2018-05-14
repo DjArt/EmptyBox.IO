@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using static System.Console;
 using EmptyBox.IO.Test.Devices.Bluetooth;
 using EmptyBox.IO.Test;
+using EmptyBox.ScriptRuntime;
 
 namespace EmptyBox.IO.Desktop.Test
 {

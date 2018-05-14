@@ -34,7 +34,7 @@ namespace EmptyBox.IO.Devices.GPIO
             await Task.Yield();
             if (Directory.Exists(GPIO_PATH) && File.Exists(GPIO_EXPORT_PATH) && File.Exists(GPIO_UNEXPORT_PATH))
             {
-                return new RefResult<GPIOController, AccessStatus>();
+                return new RefResult<GPIOController, AccessStatus>(new GPIOController(), AccessStatus.Success, null);
             }
             else
             {

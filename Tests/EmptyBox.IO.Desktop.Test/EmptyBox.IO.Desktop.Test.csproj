@@ -33,8 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EmptyBox.IO, Version=0.0.0.17, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EmptyBox.IO.0.0.0.17\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
+    <Reference Include="EmptyBox.IO, Version=0.0.0.18, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EmptyBox.IO.0.0.0.18\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="EmptyBox.ScriptRuntime, Version=0.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EmptyBox.ScriptRuntime.0.0.0.4\lib\netstandard1.4\EmptyBox.ScriptRuntime.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>

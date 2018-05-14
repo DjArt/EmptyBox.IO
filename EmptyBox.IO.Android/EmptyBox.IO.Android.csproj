@@ -35,8 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EmptyBox.IO, Version=0.0.0.17, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EmptyBox.IO.0.0.0.17\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
+    <Reference Include="EmptyBox.IO, Version=0.0.0.18, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EmptyBox.IO.0.0.0.18\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Android" />
