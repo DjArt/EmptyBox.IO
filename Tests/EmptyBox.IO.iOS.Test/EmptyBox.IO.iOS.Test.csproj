@@ -70,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EmptyBox.IO, Version=0.0.0.15, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EmptyBox.IO.0.0.0.18\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
+      <HintPath>..\..\packages\EmptyBox.IO.0.0.0.19\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EmptyBox.ScriptRuntime, Version=0.0.0.4, Culture=neutral, processorArchitecture=MSIL">

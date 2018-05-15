@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Devices.GPIO
             {
                 try
                 {
-                    Type type = asm.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Devices.GPIO.GPIO");
+                    Type type = asm.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Devices.GPIO.GPIOController");
                     if (type != null)
                     {
                         Task item = (Task)type.GetTypeInfo().DeclaredMethods.First(x => x.GetCustomAttributes().Any(y => y.GetType() == typeof(StandardRealizationAttribute))).Invoke(null, new object[0]);
@@ -27,9 +27,9 @@ namespace EmptyBox.IO.Devices.GPIO
                         return new RefResult<IGPIOController, AccessStatus>(result.Result, result.Status, result.Exception);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    return new RefResult<IGPIOController, AccessStatus>(null, AccessStatus.UnknownError, ex);
                 }
             }
             return new RefResult<IGPIOController, AccessStatus>(null, AccessStatus.NotSupported, new PlatformNotSupportedException());
