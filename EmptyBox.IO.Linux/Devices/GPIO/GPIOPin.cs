@@ -215,8 +215,8 @@ namespace EmptyBox.IO.Devices.GPIO
             {
                 try
                 {
-                    string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE);
-                    string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW);
+                    string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE).Replace("\n", "").Replace("\r", "").Replace(" ","");
+                    string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW).Replace("\n", "").Replace("\r", "").Replace(" ", "");
                     GPIOPinValue _value;
                     switch (value)
                     {
@@ -321,8 +321,8 @@ namespace EmptyBox.IO.Devices.GPIO
                             case GPIOPinEdge.None:
                                 try
                                 {
-                                    string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE);
-                                    string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW);
+                                    string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE).Replace("\n", "").Replace("\r", "").Replace(" ", "");
+                                    string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW).Replace("\n", "").Replace("\r", "").Replace(" ", "");
                                     if (invert != "0" && invert != "1")
                                     {
                                         return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.NotSupported, new FileLoadException("Было считано неизвестное значение настройки вывода контакта GPIO.", PinPath + GPIO_PIN_ACTIVE_LOW));
@@ -355,8 +355,8 @@ namespace EmptyBox.IO.Devices.GPIO
                     case AccessStatus.NotSupported:
                         try
                         {
-                            string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE);
-                            string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW);
+                            string value = File.ReadAllText(PinPath + GPIO_PIN_VALUE).Replace("\n", "").Replace("\r", "").Replace(" ", "");
+                            string invert = File.ReadAllText(PinPath + GPIO_PIN_ACTIVE_LOW).Replace("\n", "").Replace("\r", "").Replace(" ", "");
                             if (invert != "0" && invert != "1")
                             {
                                 return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.NotSupported, new FileLoadException("Было считано неизвестное значение настройки вывода контакта GPIO.", PinPath + GPIO_PIN_ACTIVE_LOW));
@@ -456,7 +456,7 @@ namespace EmptyBox.IO.Devices.GPIO
                     case GPIOPinSharingMode.ReadOnlySharedAccess:
                         try
                         {
-                            string direction = File.ReadAllText(PinPath + GPIO_PIN_DIRECTION);
+                            string direction = File.ReadAllText(PinPath + GPIO_PIN_DIRECTION).Replace("\n", "").Replace("\r", "").Replace(" ", "");
                             switch (direction)
                             {
                                 case GPIO_PIN_DIRECTION_IN:
@@ -486,7 +486,7 @@ namespace EmptyBox.IO.Devices.GPIO
                 await Task.Yield();
                 try
                 {
-                    string eventMode = File.ReadAllText(PinPath + GPIO_PIN_EDGE);
+                    string eventMode = File.ReadAllText(PinPath + GPIO_PIN_EDGE).Replace("\n", "").Replace("\r", "").Replace(" ", "");
                     switch (eventMode)
                     {
                         case "none":

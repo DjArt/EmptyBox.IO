@@ -70,10 +70,10 @@ namespace EmptyBox.IO.Devices.GPIO
             await Task.Yield();
             try
             {
-                bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.SharedReadOnly, out GpioPin pin, out GpioOpenStatus status);
+                bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
                 if (success)
                 {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.PinOpened, null);
+                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin), GPIOPinOpenStatus.PinOpened, null);
                 }
                 else
                 {
@@ -91,10 +91,10 @@ namespace EmptyBox.IO.Devices.GPIO
             await Task.Yield();
             try
             {
-                bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.SharedReadOnly, out GpioPin pin, out GpioOpenStatus status);
+                bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
                 if (success)
                 {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.PinOpened, null);
+                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin), GPIOPinOpenStatus.PinOpened, null);
                 }
                 else
                 {
