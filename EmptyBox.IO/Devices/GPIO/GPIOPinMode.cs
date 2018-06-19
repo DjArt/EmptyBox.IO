@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EmptyBox.IO.Devices.GPIO
+﻿namespace EmptyBox.IO.Devices.GPIO
 {
     /// <summary>
     /// Описывает, настроен ли контакт ввода-вывода общего назначения (GPIO) на ввод или на вывод и как значения передаются в контакт.

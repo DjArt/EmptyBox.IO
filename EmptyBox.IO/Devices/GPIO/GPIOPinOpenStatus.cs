@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EmptyBox.IO.Devices.GPIO
+﻿namespace EmptyBox.IO.Devices.GPIO
 {
     public enum GPIOPinOpenStatus : byte
     {

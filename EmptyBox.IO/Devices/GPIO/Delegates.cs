@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EmptyBox.IO.Devices.GPIO
+﻿namespace EmptyBox.IO.Devices.GPIO
 {
     /// <summary>
     /// Событие, уведомляющее об изменении напряжения на контакте GPIO.

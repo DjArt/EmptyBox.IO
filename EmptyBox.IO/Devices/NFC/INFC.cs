@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using EmptyBox.IO.Devices.Radio;
 
 namespace EmptyBox.IO.Devices.NFC
 {
-    public interface INFC : IDevice
+    public interface INFC : IRadio, IDevice
     {
     }
 }
