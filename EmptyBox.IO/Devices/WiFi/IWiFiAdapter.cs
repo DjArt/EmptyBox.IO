@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EmptyBox.IO.Devices.WiFi
 {
-    public interface IWiFiAdapter : IRadio, IEthernetAdapter, IDeviceProvider<WiFiNetwork>
+    public interface IWiFiAdapter : IRadio, IEthernetAdapter
     {
         event WiFiAdapterBandChanged BandChanged;
         event WiFiAdapterBandwidthChanged BandwidthChanged;

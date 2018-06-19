@@ -5,10 +5,8 @@ using System.Text;
 
 namespace EmptyBox.IO.Devices.WiFi
 {
-    public sealed class WiFiNetwork : IDevice
+    public sealed class WiFiNetwork
     {
-        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
-
         /// <summary>
         /// Name of Wi-Fi Network. Also known as SSID.
         /// </summary>
@@ -19,10 +17,5 @@ namespace EmptyBox.IO.Devices.WiFi
         public MACAddress BSSID { get; private set; }
         public ConnectionStatus ConnectionStatus { get; private set; }
         public WiFiEncryptionMode EncryptionMode { get; private set; }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
