@@ -4,7 +4,12 @@ using System.Text;
 
 namespace EmptyBox.IO.Devices.WiFi
 {
-    public interface IWiFiNetworkProvider : IDeviceProvider<WiFiNetwork>
+    public enum WiFiBandwidths
     {
+        Unknown,
+        F_20MHz,
+        F_40MHz,
+        F_80MHz,
+        F_160MHz
     }
 }

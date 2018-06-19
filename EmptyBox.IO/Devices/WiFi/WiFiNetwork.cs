@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmptyBox.IO.Network;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,9 +9,16 @@ namespace EmptyBox.IO.Devices.WiFi
     {
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
 
+        /// <summary>
+        /// Name of Wi-Fi Network. Also known as SSID.
+        /// </summary>
         public string Name { get; private set; }
-
-        public ConnectionStatus ConnectionStatus => throw new NotImplementedException();
+        /// <summary>
+        /// Address of network owner device.
+        /// </summary>
+        public MACAddress BSSID { get; private set; }
+        public ConnectionStatus ConnectionStatus { get; private set; }
+        public WiFiEncryptionMode EncryptionMode { get; private set; }
 
         public void Dispose()
         {
