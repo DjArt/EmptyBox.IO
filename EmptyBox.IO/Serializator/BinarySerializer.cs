@@ -33,6 +33,7 @@ namespace EmptyBox.IO.Serializator
                 new SByteRule(),
                 new ShortRule(),
                 new StringRule(encoding),
+                new TimeSpanRule(),
                 new UIntRule(),
                 new ULongRule(),
                 new UShortRule(),
