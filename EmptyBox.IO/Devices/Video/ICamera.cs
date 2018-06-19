@@ -1,6 +1,7 @@
-﻿namespace EmptyBox.IO.Devices.Camera
+﻿namespace EmptyBox.IO.Devices.Video
 {
     public interface ICamera : IDevice
     {
+
     }
 }
