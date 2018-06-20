@@ -5,5 +5,5 @@
     /// </summary>
     /// <param name="pin">Контакт, на котором изменилось напряжение.</param>
     /// <param name="edge">Тип произошедшего изменения.</param>
-    public delegate void GPIOPinEvent(IGPIOPin pin, GPIOPinEdge edge);
+    public delegate void GPIOPinValueChanged(IGPIOPin pin, GPIOPinEdge edge);
 }
