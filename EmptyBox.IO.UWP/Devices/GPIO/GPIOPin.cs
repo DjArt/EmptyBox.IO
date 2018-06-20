@@ -13,7 +13,7 @@ namespace EmptyBox.IO.Devices.GPIO
     public sealed class GPIOPin : IGPIOPin
     {
         #region Public events
-        public event GPIOPinEvent ValueChanged;
+        public event GPIOPinValueChanged ValueChanged;
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
         #endregion
 
@@ -75,31 +75,31 @@ namespace EmptyBox.IO.Devices.GPIO
             }
         }
 
-        public async Task<ValResult<bool, AccessStatus>> SetMode(GPIOPinMode mode)
+        public async Task<VoidResult<AccessStatus>> SetMode(GPIOPinMode mode)
         {
             await Task.Yield();
             try
             {
                 InternalDevice.SetDriveMode(mode.ToGpioPinDriveMode());
-                return new ValResult<bool, AccessStatus>(true, AccessStatus.Success, null);
+                return new VoidResult<AccessStatus>(AccessStatus.Success, null);
             }
             catch (Exception ex)
             {
-                return new ValResult<bool, AccessStatus>(false, AccessStatus.Success, ex);
+                return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
             }
         }
 
-        public async Task<ValResult<bool, AccessStatus>> SetValue(GPIOPinValue value)
+        public async Task<VoidResult<AccessStatus>> SetValue(GPIOPinValue value)
         {
             await Task.Yield();
             try
             {
                 InternalDevice.Write(value.ToGpioPinValue());
-                return new ValResult<bool, AccessStatus>(true, AccessStatus.Success, null);
+                return new VoidResult<AccessStatus>(AccessStatus.Success, null);
             }
             catch (Exception ex)
             {
-                return new ValResult<bool, AccessStatus>(false, AccessStatus.Success, ex);
+                return new VoidResult<AccessStatus>(AccessStatus.Success, ex);
             }
         }
 

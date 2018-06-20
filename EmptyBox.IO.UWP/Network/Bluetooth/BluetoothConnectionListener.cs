@@ -7,7 +7,7 @@ using Windows.Networking.Sockets;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public class BluetoothConnectionListener : IBluetoothConnectionListener
+    public sealed class BluetoothConnectionListener : IBluetoothConnectionListener
     {
         #region IConnectionProvider interface properties
         IConnectionProvider IConnectionListener.ConnectionProvider => ConnectionProvider;
