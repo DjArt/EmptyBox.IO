@@ -9,25 +9,25 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// None of the following.
         /// </summary>
-        other = 1,
-        regular1822 = 2,
+        Other = 1,
+        Regular1822 = 2,
         hdh1822 = 3,
         ddnX25 = 4,
-        rfc877x25 = 5,
+        RFC877x25 = 5,
         /// <summary>
-        /// For all ethernet-like interfaces, regardless of speed, as per RFC3635.
+        /// For all Ethernet-like interfaces, regardless of speed, as per RFC3635.
         /// </summary>
-        ethernetCsmacd = 6,
+        EthernetCsmacd = 6,
         /// <summary>
-        /// Obsoleted via RFC3635. ethernetCsmacd(6) should be used instead.
+        /// Obsoleted via RFC3635. EthernetCsmacd(6) should be used instead.
         /// </summary>
         [Obsolete]
-        iso88023Csmacd = 7,
-        iso88024TokenBus = 8,
-        iso88025TokenRing = 9,
-        iso88026Man = 10,
+        ISO88023Csmacd = 7,
+        ISO88024TokenBus = 8,
+        ISO88025TokenRing = 9,
+        ISO88026Man = 10,
         /// <summary>
-        /// Obsoleted via RFC3635. ethernetCsmacd(6) should be used instead.
+        /// Obsoleted via RFC3635. EthernetCsmacd(6) should be used instead.
         /// </summary>
         [Obsolete]
         starLan = 11,
@@ -50,7 +50,7 @@ namespace EmptyBox.IO.Devices
         /// No longer used. See also RFC2127.
         /// </summary>
         [Obsolete]
-        basicISDN = 20,
+        BasicISDN = 20,
         /// <summary>
         /// No longer used. See also RFC2127.
         /// </summary>
@@ -66,7 +66,7 @@ namespace EmptyBox.IO.Devices
         /// CLNP over IP
         /// </summary>
         eon = 25,
-        ethernet3Mbit = 26,
+        Ethernet3Mbit = 26,
         /// <summary>
         /// XNS over IP
         /// </summary>
@@ -114,7 +114,7 @@ namespace EmptyBox.IO.Devices
         /// </summary>
         sonet = 39,
         x25ple = 40,
-        iso88022llc = 41,
+        ISO88022llc = 41,
         localTalk = 42,
         smdsDxi = 43,
         /// <summary>
@@ -176,7 +176,7 @@ namespace EmptyBox.IO.Devices
         /// </summary>
         cctEmul = 61,
         /// <summary>
-        /// Obsoleted via RFC3635. ethernetCsmacd(6) should be used instead.
+        /// Obsoleted via RFC3635. EthernetCsmacd(6) should be used instead.
         /// </summary>
         [Obsolete]
         fastEther = 62,
@@ -206,7 +206,7 @@ namespace EmptyBox.IO.Devices
         /// </summary>
         qllc = 68,
         /// <summary>
-        /// Obsoleted via RFC3635. ethernetCsmacd(6) should be used instead.
+        /// Obsoleted via RFC3635. EthernetCsmacd(6) should be used instead.
         /// </summary>
         [Obsolete]
         fastEtherFX = 69,
@@ -277,7 +277,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// ISO 802.5r DTR
         /// </summary>
-        iso88025Dtr = 86,
+        ISO88025Dtr = 86,
         /// <summary>
         /// Ext Pos Loc Report Sys
         /// </summary>
@@ -309,23 +309,23 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Asymmetric Digital Subscriber Loop
         /// </summary>
-        adsl = 94,
+        ADSL = 94,
         /// <summary>
         /// Rate-Adapt.Digital Subscriber Loop
         /// </summary>
-        radsl = 95,
+        RADSL = 95,
         /// <summary>
         /// Symmetric Digital Subscriber Loop
         /// </summary>
-        sdsl = 96,
+        SDSL = 96,
         /// <summary>
         /// Very H-Speed Digital Subscrib.Loop
         /// </summary>
-        vdsl = 97,
+        VDSL = 97,
         /// <summary>
         /// ISO 802.5 CRFP
         /// </summary>
-        iso88025CRFPInt = 98,
+        ISO88025CRFPInt = 98,
         /// <summary>
         /// Myricom Myrinet
         /// </summary>
@@ -393,20 +393,20 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// ISO 802.5j Fiber Token Ring
         /// </summary>
-        iso88025Fiber = 115,
+        ISO88025Fiber = 115,
         /// <summary>
         /// IBM twinaxial data link control
         /// </summary>
         tdlc = 116,
         /// <summary>
-        /// Obsoleted via RFC3635. ethernetCsmacd(6) should be used instead.
+        /// Obsoleted via RFC3635. EthernetCsmacd(6) should be used instead.
         /// </summary>
         [Obsolete]
-        gigabitEthernet = 117,
+        GigabitEthernet = 117,
         /// <summary>
         /// HDLC
         /// </summary>
-        hdlc = 118,
+        HDLC = 118,
         /// <summary>
         /// LAP F
         /// </summary>
@@ -414,7 +414,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// V.37
         /// </summary>
-        v37 = 120,
+        V37 = 120,
         /// <summary>
         /// Multi-Link Protocol
         /// </summary>
@@ -426,19 +426,19 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Transp HDLC
         /// </summary>
-        transpHdlc = 123,
+        TranspHDLC = 123,
         /// <summary>
         /// Interleave channel
         /// </summary>
-        interleave = 124,
+        Interleave = 124,
         /// <summary>
         /// Fast channel
         /// </summary>
-        fast = 125,
+        Fast = 125,
         /// <summary>
         /// IP = for APPN HPR in IP networks
         /// </summary>
-        ip = 126,
+        IP = 126,
         /// <summary>
         /// CATV Mac Layer
         /// </summary>
@@ -506,7 +506,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Multi-rate Symmetric DSL
         /// </summary>
-        msdsl = 143,
+        MSDSL = 143,
         /// <summary>
         /// IEEE1394 High Performance Serial Bus
         /// </summary>
@@ -550,7 +550,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Digital Subscriber Loop over ISDN
         /// </summary>
-        idsl = 154,
+        IDSL = 154,
         /// <summary>
         /// Avici Composite Link Interface
         /// </summary>
@@ -570,7 +570,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Multiprotocol over ATM AAL5
         /// </summary>
-        rfc1483 = 159,
+        RFC1483 = 159,
         /// <summary>
         /// USB Interface
         /// </summary>
@@ -606,7 +606,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// High Bit-Rate DSL - 2nd generation
         /// </summary>
-        hdsl2 = 168,
+        HDSL2 = 168,
         /// <summary>
         /// Multirate HDSL2
         /// </summary>
@@ -705,7 +705,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Long Reach DSL
         /// </summary>
-        reachDSL = 192,
+        ReachDSL = 192,
         /// <summary>
         /// Frame Relay DLCI End Point
         /// </summary>
@@ -721,39 +721,39 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Optical Transport
         /// </summary>
-        opticalTransport = 196,
+        OpticalTransport = 196,
         /// <summary>
         /// Proprietary ATM
         /// </summary>
-        propAtm = 197,
+        PropATM = 197,
         /// <summary>
         /// Voice Over Cable Interface
         /// </summary>
-        voiceOverCable = 198,
+        VoiceOverCable = 198,
         /// <summary>
         /// Infiniband
         /// </summary>
-        infiniband = 199,
+        Infiniband = 199,
         /// <summary>
         /// TE Link
         /// </summary>
-        teLink = 200,
+        TELink = 200,
         /// <summary>
         /// Q.2931
         /// </summary>
-        q2931 = 201,
+        Q2931 = 201,
         /// <summary>
         /// Virtual Trunk Group
         /// </summary>
-        virtualTg = 202,
+        VirtualTG = 202,
         /// <summary>
         /// SIP Trunk Group
         /// </summary>
-        sipTg = 203,
+        SIPTG = 203,
         /// <summary>
         /// SIP Signaling
         /// </summary>
-        sipSig = 204,
+        SIPSig = 204,
         /// <summary>
         /// CATV Upstream Channel
         /// </summary>
@@ -761,19 +761,19 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Acorn Econet
         /// </summary>
-        econet = 206,
+        Econet = 206,
         /// <summary>
         /// FSAN 155Mb Symetrical PON interface
         /// </summary>
-        pon155 = 207,
+        PON155 = 207,
         /// <summary>
         /// FSAN622Mb Symetrical PON interface
         /// </summary>
-        pon622 = 208,
+        PON622 = 208,
         /// <summary>
         /// Transparent bridge interface
         /// </summary>
-        bridge = 209,
+        Bridge = 209,
         /// <summary>
         /// Interface common to multiple lines
         /// </summary>
@@ -793,16 +793,16 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// MPEG transport interface
         /// </summary>
-        mpegTransport = 214,
+        MPEGTransport = 214,
         /// <summary>
         /// 6to4 interface
         /// </summary>
         [Obsolete]
-        sixToFour = 215,
+        SixToFour = 215,
         /// <summary>
         /// GTP = GPRS Tunneling Protocol
         /// </summary>
-        gtp = 216,
+        GTP = 216,
         /// <summary>
         /// Paradyne EtherLoop 1
         /// </summary>
@@ -857,10 +857,10 @@ namespace EmptyBox.IO.Devices
         docsCableMCmtsDownstream = 229,
         /// <summary>
         /// Asymmetric Digital Subscriber Loop Version 2
-        /// DEPRECATED/OBSOLETED - please use adsl2plus(238) instead
+        /// DEPRECATED/OBSOLETED - please use ADSL2Plus(238) instead
         /// </summary>
         [Obsolete]
-        adsl2 = 230,
+        ADSL2 = 230,
         /// <summary>
         /// MACSecControlled
         /// </summary>
@@ -892,7 +892,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Asymmetric Digital Subscriber Loop Version 2, Version 2 Plus and all variants
         /// </summary>
-        adsl2plus = 238,
+        ADSL2Plus = 238,
         /// <summary>
         /// DVB-RCS MAC Layer
         /// </summary>
@@ -944,7 +944,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// Very high speed digital subscriber line Version 2  = as per ITU-T Recommendation G.993.2
         /// </summary>
-        vdsl2 = 251,
+        VDSL2 = 251,
         /// <summary>
         /// WLAN Profile Interface
         /// </summary>
@@ -1052,7 +1052,7 @@ namespace EmptyBox.IO.Devices
         /// <summary>
         /// FastDSL
         /// </summary>
-        fastdsl = 282,
+        FastDSL = 282,
         /// <summary>
         /// Cable SCTE 55-1 OOB Forward Channel
         /// </summary>
@@ -1086,8 +1086,8 @@ namespace EmptyBox.IO.Devices
         /// </summary>
         ghn = 290,
         /// <summary>
-        /// Optical Tributary Signal
+        /// Optical Tributary Signal Interface
         /// </summary>
-        otsi = 291
-}
+        OTSI = 291
+    }
 }

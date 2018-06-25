@@ -1,6 +1,6 @@
 ﻿using EmptyBox.IO.Access;
 using EmptyBox.IO.Interoperability;
-using EmptyBox.ScriptRuntime;
+using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;

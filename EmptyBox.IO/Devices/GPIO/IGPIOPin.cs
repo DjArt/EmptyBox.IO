@@ -1,5 +1,5 @@
 ﻿using EmptyBox.IO.Access;
-using EmptyBox.ScriptRuntime;
+using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

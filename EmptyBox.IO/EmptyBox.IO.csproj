@@ -42,10 +42,11 @@
     <Folder Include="Media\Audio\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\WiFi\Direct\" />
+    <Folder Include="Network\Mobile\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.4" />
+    <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.5" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>

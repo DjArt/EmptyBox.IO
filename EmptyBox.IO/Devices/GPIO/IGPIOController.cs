@@ -1,4 +1,4 @@
-﻿using EmptyBox.ScriptRuntime;
+﻿using EmptyBox.ScriptRuntime.Results;
 using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices.GPIO

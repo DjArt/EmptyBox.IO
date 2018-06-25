@@ -1,18 +1,20 @@
-﻿using System;
+﻿using EmptyBox.IO.Access;
+using EmptyBox.ScriptRuntime.Results;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices
 {
-    public interface IDeviceProvider<TDevice> where TDevice : IDevice
+    public interface IDeviceProvider<out TDevice> where TDevice : IDevice
     {
-        event EventHandler<TDevice> DeviceAdded;
-        event EventHandler<TDevice> DeviceRemoved;
+        event DeviceProviderEventHandler<TDevice> DeviceFound;
+        event DeviceProviderEventHandler<TDevice> DeviceLost;
 
         bool IsStarted { get; }
 
-        Task<IEnumerable<TDevice>> Find();
-        void StartWatcher();
-        void StopWatcher();
+        IAsyncCovariantResult<IEnumerable<TDevice>> Find();
+        Task<VoidResult<AccessStatus>> StartWatcher();
+        Task<VoidResult<AccessStatus>> StopWatcher();
     }
 }
