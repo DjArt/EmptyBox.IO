@@ -8,7 +8,7 @@ using Windows.Storage.Streams;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public class BluetoothConnection : AConnection<BluetoothAccessPoint, BluetoothPort, BluetoothDeviceProvider>, IBluetoothConnection
+    public sealed class BluetoothConnection : AConnection<BluetoothAccessPoint, BluetoothPort, BluetoothDeviceProvider>, IBluetoothConnection
     {
         IBluetoothConnectionProvider IBluetoothConnection.ConnectionProvider => ConnectionProvider;
 

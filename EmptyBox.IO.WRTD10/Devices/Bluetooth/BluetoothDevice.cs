@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System;
 using EmptyBox.ScriptRuntime;
 using EmptyBox.IO.Access;
+using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -26,7 +27,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         public DevicePairStatus PairStatus => throw new NotImplementedException();
         public BluetoothClass DeviceClass => throw new NotImplementedException();
         #endregion
-
+        
         #region Constructors
         public BluetoothDevice(Windows.Devices.Bluetooth.BluetoothDevice device)
         {

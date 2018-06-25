@@ -33,11 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EmptyBox.IO, Version=0.0.0.20, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EmptyBox.IO.0.0.0.20\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
+    <Reference Include="EmptyBox.IO, Version=0.0.0.21, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EmptyBox.IO.0.0.0.21\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
     </Reference>
-    <Reference Include="EmptyBox.ScriptRuntime, Version=0.0.0.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EmptyBox.ScriptRuntime.0.0.0.4\lib\netstandard1.4\EmptyBox.ScriptRuntime.dll</HintPath>
+    <Reference Include="EmptyBox.ScriptRuntime, Version=0.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EmptyBox.ScriptRuntime.0.0.0.5\lib\netstandard1.4\EmptyBox.ScriptRuntime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -57,6 +57,9 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.InteropServices.WindowsRuntime" />
     <Reference Include="System.Runtime.WindowsRuntime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -65,6 +68,9 @@
     <Reference Include="System.Runtime.WindowsRuntime.UI.Xaml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.UI.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
@@ -88,6 +94,7 @@
     <Compile Include="Devices\Bluetooth\BluetoothAdapter.cs" />
     <Compile Include="Devices\Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Devices\Bluetooth\BluetoothDeviceProvider.cs" />
+    <Compile Include="Devices\Ethernet\EthernetAdapter.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
     <Compile Include="Interoperability\Сompatibility.cs" />
     <Compile Include="Network\AConnection.cs" />
@@ -98,11 +105,6 @@
   <ItemGroup>
     <Folder Include="Access\" />
     <Folder Include="Devices\Audio\" />
-    <Folder Include="Devices\Camera\" />
-    <Folder Include="Devices\Ethernet\" />
-    <Folder Include="Devices\GPIO\" />
-    <Folder Include="Devices\NFC\" />
-    <Folder Include="Devices\WiFi\Direct\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Storage\" />
   </ItemGroup>

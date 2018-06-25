@@ -3,6 +3,7 @@ using EmptyBox.IO.Interoperability;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Bluetooth;
 using EmptyBox.ScriptRuntime;
+using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +29,12 @@ namespace EmptyBox.IO.Devices.Bluetooth
         private object Lock = new object();
         #endregion
 
-        #region Public objects
-        public event EventHandler<IBluetoothDevice> DeviceAdded;
-        public event EventHandler<IBluetoothDevice> DeviceRemoved;
+        #region Public events
+        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceFound;
+        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceLost;
+        #endregion
 
+        #region Public objects
         public BluetoothAdapter Adapter { get; private set; }
         public MACAddress Address => Adapter.Address;
         public bool IsStarted { get; private set; }
@@ -124,7 +127,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
                         {
                             BluetoothDevice device = new BluetoothDevice(address, args.Name);
                             Cache.Add(device);
-                            DeviceAdded?.Invoke(this, device);
+                            DeviceFound?.Invoke(this, device);
                         }
                     }
                 }
@@ -137,7 +140,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         #endregion Private function
 
         #region Public functions
-        public async Task<IEnumerable<IBluetoothDevice>> Find()
+        public async IAsyncCovariantResult<IEnumerable<IBluetoothDevice>> Find()
         {
             DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Constants.AQS_CLASS_GUID + Constants.AQS_BLUETOOTH_GUID);
             List<BluetoothDevice> result = new List<BluetoothDevice>();
@@ -163,17 +166,35 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return result;
         }
 
-        public void StartWatcher()
+        public async Task<VoidResult<AccessStatus>> StartWatcher()
         {
-            Watcher.Start();
-            IsStarted = true;
+            await Task.Yield();
+            try
+            {
+                Watcher.Start();
+                IsStarted = true;
+                return new VoidResult<AccessStatus>(AccessStatus.Success, null);
+            }
+            catch (Exception ex)
+            {
+                return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
+            }
         }
 
-        public void StopWatcher()
+        public async Task<VoidResult<AccessStatus>> StopWatcher()
         {
-            Watcher.Stop();
-            IsStarted = false;
-            Cache.Clear();
+            await Task.Yield();
+            try
+            {
+                Watcher.Stop();
+                IsStarted = false;
+                Cache.Clear();
+                return new VoidResult<AccessStatus>(AccessStatus.Success, null);
+            }
+            catch (Exception ex)
+            {
+                return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
+            }
         }
 
         public BluetoothConnection CreateConnection(BluetoothAccessPoint accessPoint)

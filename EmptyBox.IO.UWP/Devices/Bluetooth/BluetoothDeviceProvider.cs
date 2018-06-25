@@ -2,6 +2,7 @@
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Bluetooth;
 using EmptyBox.ScriptRuntime;
+using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,12 @@ namespace EmptyBox.IO.Devices.Bluetooth
         private DeviceWatcher Watcher;
         #endregion
 
-        #region Public objects
-        public event EventHandler<IBluetoothDevice> DeviceAdded;
-        public event EventHandler<IBluetoothDevice> DeviceRemoved;
+        #region Public events
+        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceFound;
+        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceLost;
+        #endregion
 
+        #region Public objects
         public BluetoothAdapter Adapter { get; private set; }
         public MACAddress Address => Adapter.Address;
         public bool IsStarted { get; private set; }
@@ -94,7 +97,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         {
             try
             {
-                DeviceRemoved?.Invoke(this, new BluetoothDevice(await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(args.Id)));
+                DeviceLost?.Invoke(this, new BluetoothDevice(await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(args.Id)));
             }
             catch
             {
@@ -111,7 +114,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         {
             try
             {
-                DeviceAdded?.Invoke(this, new BluetoothDevice(await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(args.Id)));
+                DeviceFound?.Invoke(this, new BluetoothDevice(await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(args.Id)));
             }
             catch
             {
@@ -121,7 +124,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         #endregion
 
         #region Public functions
-        public async Task<IEnumerable<IBluetoothDevice>> Find()
+        public async IAsyncCovariantResult<IEnumerable<IBluetoothDevice>> Find()
         {
             DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelector());
             List<IBluetoothDevice> result = new List<IBluetoothDevice>();
@@ -133,16 +136,20 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return result;
         }
 
-        public void StartWatcher()
+        public async Task<VoidResult<AccessStatus>> StartWatcher()
         {
+            await Task.Yield();
             Watcher.Start();
             IsStarted = true;
+            return new VoidResult<AccessStatus>(AccessStatus.Success, null);
         }
 
-        public void StopWatcher()
+        public async Task<VoidResult<AccessStatus>> StopWatcher()
         {
+            await Task.Yield();
             Watcher.Stop();
             IsStarted = false;
+            return new VoidResult<AccessStatus>(AccessStatus.Success, null);
         }
 
         public async Task<RefResult<IBluetoothDevice, AccessStatus>> TryGetFromMAC(MACAddress address)

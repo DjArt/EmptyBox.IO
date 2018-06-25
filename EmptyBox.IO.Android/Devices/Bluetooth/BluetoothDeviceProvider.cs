@@ -13,6 +13,7 @@ using EmptyBox.IO.Access;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Bluetooth;
 using EmptyBox.ScriptRuntime;
+using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -39,8 +40,8 @@ namespace EmptyBox.IO.Devices.Bluetooth
         #endregion
 
         #region Public events
-        public event EventHandler<IBluetoothDevice> DeviceAdded;
-        public event EventHandler<IBluetoothDevice> DeviceRemoved;
+        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceFound;
+        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceLost;
         #endregion
 
         #region Public objects
@@ -83,18 +84,18 @@ namespace EmptyBox.IO.Devices.Bluetooth
         #endregion
 
         #region Public functions
-        public async Task<IEnumerable<IBluetoothDevice>> Find()
+        public async IAsyncCovariantResult<IEnumerable<IBluetoothDevice>> Find()
         {
             await Task.Yield();
             return Adapter.InternalDevice.BondedDevices.Select(x => new BluetoothDevice(x));
         }
 
-        public void StartWatcher()
+        public async Task<VoidResult<AccessStatus>> StartWatcher()
         {
             throw new NotImplementedException();
         }
 
-        public void StopWatcher()
+        public async Task<VoidResult<AccessStatus>> StopWatcher()
         {
             throw new NotImplementedException();
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Access;
 using EmptyBox.ScriptRuntime;
+using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {

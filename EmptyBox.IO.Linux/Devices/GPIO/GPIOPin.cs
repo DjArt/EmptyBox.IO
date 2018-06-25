@@ -7,6 +7,7 @@ using System.Threading;
 using EmptyBox.IO.Access;
 using System.IO;
 using EmptyBox.ScriptRuntime;
+using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Devices.GPIO
 {
@@ -26,7 +27,7 @@ namespace EmptyBox.IO.Devices.GPIO
         #endregion
 
         #region Private events
-        private event GPIOPinEvent _ValueChanged;
+        private event GPIOPinValueChanged _ValueChanged;
         private event DeviceConnectionStatusHandler _ConnectionStatusChanged;
         #endregion
 
@@ -42,7 +43,7 @@ namespace EmptyBox.IO.Devices.GPIO
         #endregion
 
         #region Public events
-        public event GPIOPinEvent ValueChanged
+        public event GPIOPinValueChanged ValueChanged
         {
             add
             {
@@ -266,7 +267,7 @@ namespace EmptyBox.IO.Devices.GPIO
             EventGenerator.Dispose();
         }
 
-        public async Task<ValResult<bool, AccessStatus>> SetValue(GPIOPinValue value)
+        public async Task<VoidResult<AccessStatus>> SetValue(GPIOPinValue value)
         {
             if (!Disposed)
             {
@@ -280,26 +281,26 @@ namespace EmptyBox.IO.Devices.GPIO
                                 try
                                 {
                                     File.WriteAllText(PinPath + GPIO_PIN_VALUE, ((byte)value).ToString());
-                                    return new ValResult<bool, AccessStatus>(true, AccessStatus.Success, null);
+                                    return new VoidResult<AccessStatus>(AccessStatus.Success, null);
                                 }
                                 catch (Exception ex)
                                 {
                                     if (ex is FileNotFoundException)
                                     {
                                         Close(true);
-                                        return new ValResult<bool, AccessStatus>(false, AccessStatus.DeniedBySystem, ex);
+                                        return new VoidResult<AccessStatus>(AccessStatus.DeniedBySystem, ex);
                                     }
                                     else
                                     {
-                                        return new ValResult<bool, AccessStatus>(false, AccessStatus.UnknownError, ex);
+                                        return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
                                     }
                                 }
                             default:
-                                return new ValResult<bool, AccessStatus>(false, AccessStatus.NotSupported, new NotImplementedException("Указанный режим работы контакта GPIO не поддерживается."));
+                                return new VoidResult<AccessStatus>(AccessStatus.NotSupported, new NotImplementedException("Указанный режим работы контакта GPIO не поддерживается."));
                         }
                     default:
                     case GPIOPinSharingMode.ReadOnlySharedAccess:
-                        return new ValResult<bool, AccessStatus>(false, AccessStatus.DeniedBySystem, new NotSupportedException("Контакт GPIO открыт в режиме \"Только считывание\"."));
+                        return new VoidResult<AccessStatus>(AccessStatus.DeniedBySystem, new NotSupportedException("Контакт GPIO открыт в режиме \"Только считывание\"."));
                 }
             }
             else
@@ -393,7 +394,7 @@ namespace EmptyBox.IO.Devices.GPIO
             }
         }
 
-        public async Task<ValResult<bool, AccessStatus>> SetMode(GPIOPinMode mode)
+        public async Task<VoidResult<AccessStatus>> SetMode(GPIOPinMode mode)
         {
             if (!Disposed)
             {
@@ -409,12 +410,12 @@ namespace EmptyBox.IO.Devices.GPIO
                                     File.WriteAllText(PinPath + GPIO_PIN_DIRECTION, GPIO_PIN_DIRECTION_IN);
                                     File.WriteAllText(PinPath + GPIO_PIN_ACTIVE_LOW, "0");
                                     File.WriteAllText(PinPath + GPIO_PIN_EDGE, "both");
-                                    return new ValResult<bool, AccessStatus>(true, AccessStatus.Success, null);
+                                    return new VoidResult<AccessStatus>(AccessStatus.Success, null);
                                 }
                                 catch (Exception ex)
                                 {
                                     //TODO: реализовать разбор ошибок, если возможно.
-                                    return new ValResult<bool, AccessStatus>(false, AccessStatus.UnknownError, ex);
+                                    return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
                                 }
                             case GPIOPinMode.Output:
                                 try
@@ -423,18 +424,18 @@ namespace EmptyBox.IO.Devices.GPIO
                                     File.WriteAllText(PinPath + GPIO_PIN_VALUE, "0");
                                     File.WriteAllText(PinPath + GPIO_PIN_ACTIVE_LOW, "0");
                                     File.WriteAllText(PinPath + GPIO_PIN_EDGE, "none");
-                                    return new ValResult<bool, AccessStatus>(true, AccessStatus.Success, null);
+                                    return new VoidResult<AccessStatus>(AccessStatus.Success, null);
                                 }
                                 catch (Exception ex)
                                 {
                                     //TODO: реализовать разбор ошибок, если возможно.
-                                    return new ValResult<bool, AccessStatus>(false, AccessStatus.UnknownError, ex);
+                                    return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
                                 }
                             default:
-                                return new ValResult<bool, AccessStatus>(false, AccessStatus.NotSupported, new NotImplementedException("Данный режим работы контакта GPIO не поддерживается."));
+                                return new VoidResult<AccessStatus>(AccessStatus.NotSupported, new NotImplementedException("Данный режим работы контакта GPIO не поддерживается."));
                         }
                     default:
-                        return new ValResult<bool, AccessStatus>(false, AccessStatus.DeniedBySystem, new NotSupportedException("Данный режим работы контакта GPIO не поддерживается."));
+                        return new VoidResult<AccessStatus>(AccessStatus.DeniedBySystem, new NotSupportedException("Данный режим работы контакта GPIO не поддерживается."));
                 }
             }
             else

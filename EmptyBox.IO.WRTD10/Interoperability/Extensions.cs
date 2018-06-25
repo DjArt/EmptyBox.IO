@@ -11,6 +11,8 @@ using EmptyBox.IO.Devices.Bluetooth;
 using System.Threading.Tasks;
 using System;
 using EmptyBox.IO.Access;
+using EmptyBox.IO.Devices.GPIO;
+using Windows.Devices.Gpio;
 
 namespace EmptyBox.IO.Interoperability
 {
@@ -118,7 +120,7 @@ namespace EmptyBox.IO.Interoperability
                     return AccessStatus.UnknownError;
             }
         }
-
+        
         public static DeviceAccessStatus ToDeviceAccessStatus(this AccessStatus status)
         {
             switch (status)

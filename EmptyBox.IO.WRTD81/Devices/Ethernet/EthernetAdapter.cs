@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Network.Ethernet;
 using EmptyBox.IO.Network.IP;
@@ -9,8 +10,8 @@ namespace EmptyBox.IO.Devices.Ethernet
     public sealed class EthernetAdapter : IEthernetAdapter
     {
         #region IEthernetAdapter interface properties
-        ITCPConnectionProvider IEthernetAdapter.TCPProvider => throw new NotImplementedException();
-        IUDPSocketProvider IEthernetAdapter.UDPProvider => throw new NotImplementedException();
+        IEnumerable<ITCPConnectionProvider> IEthernetAdapter.TCPProviders => throw new NotImplementedException();
+        IEnumerable<IUDPSocketProvider> IEthernetAdapter.UDPProviders => throw new NotImplementedException();
         IEthernetSocketProvider IEthernetAdapter.EthernetProvider => throw new NotImplementedException();
         #endregion
 
@@ -23,8 +24,7 @@ namespace EmptyBox.IO.Devices.Ethernet
         #endregion
 
         #region Public objects
-        public event DeviceConnectionStatusHandler ConnectionStatusEvent;
-
+        public IANAInterfaceType IANAInterfaceType { get; private set; }
         public ConnectionStatus ConnectionStatus => throw new NotImplementedException();
         public MACAddress HardwareAddress => throw new NotImplementedException();
         public string Name => throw new NotImplementedException();
