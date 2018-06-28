@@ -26,7 +26,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags flag);
             if (result)
@@ -52,7 +52,7 @@ namespace EmptyBox.IO.Serializator.Rules
                             dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
                             for (int i0 = 0; i0 < length; i0++)
                             {
-                                result &= BinarySerializer.TryDeserialize(reader, generictype, out dynamic val0);
+                                result &= BinarySerializer.TryDeserialize(reader, generictype, out object val0);
                                 tmp.Add(val0);
                             }
                             if (result)
@@ -84,7 +84,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(dynamic value, out uint length)
+        public bool TryGetLength(object value, out uint length)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TryGetLength(flag, out length);
@@ -93,11 +93,12 @@ namespace EmptyBox.IO.Serializator.Rules
                 switch (flag)
                 {
                     case ObjectFlags.None:
-                        int count = Enumerable.Count(value);
+                        IEnumerable<object> _value = (IEnumerable<object>)value;
+                        int count = Enumerable.Count(_value);
                         result = BinarySerializer.TryGetLength(count, out length);
                         for (int i0 = 0; i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TryGetLength(Enumerable.ElementAt(value, i0), out uint _length);
+                            result &= BinarySerializer.TryGetLength(Enumerable.ElementAt(_value, i0), out uint _length);
                             length += _length;
                         }
                         break;
@@ -110,7 +111,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, object value)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TrySerialize(writer, flag);
@@ -119,12 +120,13 @@ namespace EmptyBox.IO.Serializator.Rules
                 switch (flag)
                 {
                     case ObjectFlags.None:
+                        IEnumerable<object> _value = (IEnumerable<object>)value;
                         Type type = value.GetType().GetElementType();
-                        int count = Enumerable.Count(value);
+                        int count = Enumerable.Count(_value);
                         result = BinarySerializer.TrySerialize(writer, count);
                         for (int i0 = 0; i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TrySerialize(writer, Enumerable.ElementAt(value, i0));
+                            result &= BinarySerializer.TrySerialize(writer, Enumerable.ElementAt(_value, i0));
                         }
                         break;
                     default:

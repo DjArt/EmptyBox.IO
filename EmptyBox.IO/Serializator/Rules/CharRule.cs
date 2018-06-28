@@ -26,7 +26,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out byte[] enc_char);
             if (result)
@@ -40,15 +40,15 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(dynamic value, out uint length)
+        public bool TryGetLength(object value, out uint length)
         {
-            length = (uint)Encoding.GetByteCount(new char[] { value });
+            length = (uint)Encoding.GetByteCount(new char[] { (char)value });
             return true;
         }
 
-        public bool TrySerialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, object value)
         {
-            byte[] enc_char = Encoding.GetBytes(new char[] { value });
+            byte[] enc_char = Encoding.GetBytes(new char[] { (char)value });
             return BinarySerializer.TrySerialize(writer, enc_char);
         }
     }

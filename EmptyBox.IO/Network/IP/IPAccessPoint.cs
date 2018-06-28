@@ -13,5 +13,10 @@
             Address = address;
             Port = port;
         }
+
+        public override string ToString()
+        {
+            return Address.ToString() + ':' + Port.ToString();
+        }
     }
 }

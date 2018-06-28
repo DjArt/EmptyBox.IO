@@ -20,7 +20,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
         {
             bool result = false;
             Type generictype0 = type.GenericTypeArguments[0];
@@ -28,8 +28,8 @@ namespace EmptyBox.IO.Serializator.Rules
             value = null;
             try
             {
-                result = BinarySerializer.TryDeserialize(reader, generictype0, out dynamic val0);
-                result &= BinarySerializer.TryDeserialize(reader, generictype1, out dynamic val1);
+                result = BinarySerializer.TryDeserialize(reader, generictype0, out object val0);
+                result &= BinarySerializer.TryDeserialize(reader, generictype1, out object val1);
                 if (result)
                 {
                     value = Activator.CreateInstance(type, new object[] { val0, val1 });

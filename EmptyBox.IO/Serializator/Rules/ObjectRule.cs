@@ -16,7 +16,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return SuitabilityDegree.Assignable;
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
         {
             bool result = true;
             ObjectFlags flag = ObjectFlags.None;
@@ -35,12 +35,12 @@ namespace EmptyBox.IO.Serializator.Rules
                     {
                         foreach (FieldInfo fi in fields)
                         {
-                            result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out dynamic field);
+                            result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out object field);
                             fi.SetValue(obj, field);
                         }
                         foreach (PropertyInfo pi in properties)
                         {
-                            result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out dynamic field);
+                            result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out object field);
                             pi.SetValue(obj, field);
                         }
                         if (result)
@@ -67,11 +67,11 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(dynamic value, out uint length)
+        public bool TryGetLength(object value, out uint length)
         {
             bool result = true;
             ObjectFlags flag = ObjectFlags.None;
-            TypeInfo typeInfo = value?.GetType();
+            TypeInfo typeInfo = ((object)value)?.GetType().GetTypeInfo();
             length = 0;
             if (typeInfo == null)
             {
@@ -110,11 +110,11 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, object value)
         {
             bool result = true;
             ObjectFlags flag = ObjectFlags.None;
-            TypeInfo typeInfo = value?.GetType();
+            TypeInfo typeInfo = value?.GetType().GetTypeInfo();
             if (typeInfo == null)
             {
                 flag = ObjectFlags.IsNull;

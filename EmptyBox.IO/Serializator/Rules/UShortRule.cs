@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
         {
             try
             {
@@ -33,17 +33,17 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryGetLength(dynamic variable, out uint length)
+        public bool TryGetLength(object variable, out uint length)
         {
             length = sizeof(ushort);
             return true;
         }
 
-        public bool TrySerialize(BinaryWriter writer, dynamic variable)
+        public bool TrySerialize(BinaryWriter writer, object variable)
         {
             try
             {
-                writer.Write(variable);
+                writer.Write((ushort)variable);
                 return true;
             }
             catch

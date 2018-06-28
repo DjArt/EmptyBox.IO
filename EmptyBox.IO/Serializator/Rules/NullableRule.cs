@@ -20,7 +20,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags property);
             if (result)
@@ -32,7 +32,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         value = null;
                         break;
                     case ObjectFlags.None:
-                        result &= BinarySerializer.TryDeserialize(reader, type.GetTypeInfo().GenericTypeArguments[0], out dynamic _value);
+                        result &= BinarySerializer.TryDeserialize(reader, type.GetTypeInfo().GenericTypeArguments[0], out object _value);
                         if (result)
                         {
                             value = _value;
@@ -51,7 +51,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(dynamic value, out uint length)
+        public bool TryGetLength(object value, out uint length)
         {
             bool result = BinarySerializer.TryGetLength(ObjectFlags.None, out length);
             if (value != null)
@@ -62,7 +62,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, object value)
         {
             if (value != null)
             {

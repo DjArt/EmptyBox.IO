@@ -7,10 +7,13 @@ namespace Test_EmptyBox.IO.BinarySerializer
     [TestClass]
     public class RulesTests
     {
+        BinarySerializer a = new BinarySerializer();
         [TestMethod]
-        public void BoolRule()
+        public void ArrayRule()
         {
             
+            byte[] serializedArray = new byte[256];
+
         }
     }
 }

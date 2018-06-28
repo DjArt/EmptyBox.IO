@@ -12,7 +12,7 @@ namespace EmptyBox.IO.Interoperability
 
         public static IPAccessPoint ToIPAccessPoint(this IPEndPoint endPoint)
         {
-            return new IPAccessPoint(new IO.Network.IP.IPAddress(endPoint.Address.GetAddressBytes()), new IPPort((ushort)endPoint.Port));
+            return new IPAccessPoint(new Network.IP.IPAddress(endPoint.Address.GetAddressBytes()), new IPPort((ushort)endPoint.Port));
         }
     }
 }

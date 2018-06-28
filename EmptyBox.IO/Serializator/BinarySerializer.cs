@@ -69,7 +69,7 @@ namespace EmptyBox.IO.Serializator
             return result;
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out dynamic value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
         {
             IBinarySerializatorRule rule = Rules.Find(x => x.CheckSuitability(type) == SuitabilityDegree.Equal);
             if (rule != null)

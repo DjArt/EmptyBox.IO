@@ -64,7 +64,7 @@ namespace EmptyBox.IO.Network.IP
             StringBuilder result = new StringBuilder();
             for (int i0 = 0; i0 < _Address.Length; i0++)
             {
-                result.Append(Address[0]);
+                result.Append(Address[i0]);
                 if (i0 + 1 < _Address.Length) result.Append('.');
             }
             return result.ToString();
