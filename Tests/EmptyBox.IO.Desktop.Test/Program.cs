@@ -14,7 +14,14 @@ namespace EmptyBox.IO.Desktop.Test
         public static void Main(string[] args)
         {
             BinarySerializer a = new BinarySerializer(Encoding.UTF32);
-            byte[] test = a.Serialize(new TimeSpan(70000));
+            List<TimeSpan> b = new List<TimeSpan>()
+            {
+                new TimeSpan(8),
+                new TimeSpan(9),
+                new TimeSpan(10),
+            };
+            byte[] c = a.Serialize(b);
+            b = a.Deserialize<List<TimeSpan>>(c);
             ReadKey();
         }
     }
