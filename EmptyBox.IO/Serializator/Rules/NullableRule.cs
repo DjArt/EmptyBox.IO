@@ -56,7 +56,8 @@ namespace EmptyBox.IO.Serializator.Rules
             bool result = BinarySerializer.TryGetLength(ObjectFlags.None, out length);
             if (value != null)
             {
-                result &= BinarySerializer.TryGetLength(value, out uint _length);
+                Type type = value.GetType();
+                result &= BinarySerializer.TryGetLength(type, value, out uint _length);
                 length += _length;
             }
             return result;
@@ -67,7 +68,8 @@ namespace EmptyBox.IO.Serializator.Rules
             if (value != null)
             {
                 bool result = BinarySerializer.TrySerialize(writer, ObjectFlags.None);
-                result &= BinarySerializer.TrySerialize(writer, value);
+                Type type = value.GetType();
+                result &= BinarySerializer.TrySerialize(writer, type, value);
                 return result;
             }
             else

@@ -50,7 +50,7 @@ namespace EmptyBox.IO.Serializator.Rules
                             //Backported from NET.Standard 1.6+
                             //dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetConstructor(new Type[0]).Invoke(new object[0]);
                             dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
-                            for (int i0 = 0; i0 < length; i0++)
+                            for (int i0 = 0; result && i0 < length; i0++)
                             {
                                 result &= BinarySerializer.TryDeserialize(reader, generictype, out dynamic val0);
                                 tmp.Add(val0);
@@ -93,12 +93,13 @@ namespace EmptyBox.IO.Serializator.Rules
                 switch (flag)
                 {
                     case ObjectFlags.None:
+                        Type type = value.GetType().GenericTypeArguments[0];
                         int count = Enumerable.Count(value);
                         result = BinarySerializer.TryGetLength(count, out uint _length);
                         length += _length;
-                        for (int i0 = 0; i0 < count; i0++)
+                        for (int i0 = 0; result && i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TryGetLength(Enumerable.ElementAt(value, i0), out _length);
+                            result &= BinarySerializer.TryGetLength(type, Enumerable.ElementAt(value, i0), out _length);
                             length += _length;
                         }
                         break;
@@ -123,9 +124,9 @@ namespace EmptyBox.IO.Serializator.Rules
                         Type type = value.GetType().GenericTypeArguments[0];
                         int count = Enumerable.Count(value);
                         result = BinarySerializer.TrySerialize(writer, count);
-                        for (int i0 = 0; i0 < count; i0++)
+                        for (int i0 = 0; result && i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TrySerialize(writer, Enumerable.ElementAt(value, i0));
+                            result &= BinarySerializer.TrySerialize(writer, type, Enumerable.ElementAt(value, i0));
                         }
                         break;
                     default:
