@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class NullableRule : IBinarySerializatorRule
+    public class NullableRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -20,7 +20,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags property);
             if (result)
@@ -32,7 +32,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         value = null;
                         break;
                     case ObjectFlags.None:
-                        result &= BinarySerializer.TryDeserialize(reader, type.GetTypeInfo().GenericTypeArguments[0], out object _value);
+                        result &= BinarySerializer.TryDeserialize(reader, type.GetTypeInfo().GenericTypeArguments[0], out object _value, scenario, @case);
                         if (result)
                         {
                             value = _value;
@@ -51,25 +51,25 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(object value, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             bool result = BinarySerializer.TryGetLength(ObjectFlags.None, out length);
             if (value != null)
             {
                 Type type = value.GetType();
-                result &= BinarySerializer.TryGetLength(type, value, out uint _length);
+                result &= BinarySerializer.TryGetLength(type, value, out uint _length, scenario, @case);
                 length += _length;
             }
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, object value)
+        public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
             if (value != null)
             {
                 bool result = BinarySerializer.TrySerialize(writer, ObjectFlags.None);
                 Type type = value.GetType();
-                result &= BinarySerializer.TrySerialize(writer, type, value);
+                result &= BinarySerializer.TrySerialize(writer, type, value, scenario, @case);
                 return result;
             }
             else

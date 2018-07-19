@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class CharRule : IBinarySerializatorRule
+    public class CharRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
         public Encoding Encoding { get; }
@@ -26,7 +26,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out byte[] enc_char);
             if (result)
@@ -40,13 +40,13 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(object value, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             length = (uint)Encoding.GetByteCount(new char[] { (char)value });
             return true;
         }
 
-        public bool TrySerialize(BinaryWriter writer, object value)
+        public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
             byte[] enc_char = Encoding.GetBytes(new char[] { (char)value });
             return BinarySerializer.TrySerialize(writer, enc_char);

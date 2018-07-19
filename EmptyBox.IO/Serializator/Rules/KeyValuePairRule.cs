@@ -4,7 +4,7 @@ using System.IO;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class KeyValuePairRule : IBinarySerializatorRule
+    public class KeyValuePairRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -20,7 +20,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = false;
             Type generictype0 = type.GenericTypeArguments[0];
@@ -28,8 +28,8 @@ namespace EmptyBox.IO.Serializator.Rules
             value = null;
             try
             {
-                result = BinarySerializer.TryDeserialize(reader, generictype0, out object val0);
-                result &= BinarySerializer.TryDeserialize(reader, generictype1, out object val1);
+                result = BinarySerializer.TryDeserialize(reader, generictype0, out object val0, scenario, @case);
+                result &= BinarySerializer.TryDeserialize(reader, generictype1, out object val1, scenario, @case);
                 if (result)
                 {
                     value = Activator.CreateInstance(type, new object[] { val0, val1 });
@@ -42,14 +42,14 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(dynamic value, out uint length)
+        public bool TryGetLength(dynamic value, out uint length, string scenario = null, string @case = null)
         {
             bool result = false;
             length = 0;
             try
             {
-                result = BinarySerializer.TryGetLength(value.Key, out length);
-                result &= BinarySerializer.TryGetLength(value.Value, out uint _length);
+                result = BinarySerializer.TryGetLength(value.Key, out length, scenario, @case);
+                result &= BinarySerializer.TryGetLength(value.Value, out uint _length, scenario, @case);
                 length += _length;
             }
             catch
@@ -59,7 +59,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value, string scenario = null, string @case = null)
         {
             bool result = false;
             try

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class GuidRule : IBinarySerializatorRule
+    public class GuidRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             try
             {
@@ -34,13 +34,13 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryGetLength(object value, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             length = 16;
             return true;
         }
 
-        public bool TrySerialize(BinaryWriter writer, object value)
+        public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
             try
             {

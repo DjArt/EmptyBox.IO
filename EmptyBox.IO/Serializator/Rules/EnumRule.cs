@@ -4,7 +4,7 @@ using System.IO;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class EnumRule : IBinarySerializatorRule
+    public class EnumRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -20,7 +20,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             Type enumtype = Enum.GetUnderlyingType(type);
             bool result = BinarySerializer.TryDeserialize(reader, enumtype, out object _value);
@@ -35,13 +35,13 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(object value, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             Type enumtype = Enum.GetUnderlyingType(value.GetType());
             return BinarySerializer.TryGetLength(enumtype, Convert.ChangeType(value, enumtype), out length);
         }
 
-        public bool TrySerialize(BinaryWriter writer, object value)
+        public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
             Type enumtype = Enum.GetUnderlyingType(value.GetType());
             return BinarySerializer.TrySerialize(writer, enumtype, Convert.ChangeType(value, enumtype));

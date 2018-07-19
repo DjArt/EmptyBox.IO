@@ -43,7 +43,7 @@ namespace EmptyBox.IO.Network
         /// </summary>
         /// <returns>Результат закрытия.</returns>
         Task<SocketOperationStatus> Close();
-
+        
         bool IsActive { get; }
     }
 }

@@ -10,7 +10,7 @@ namespace EmptyBox.IO.Network
         /// </summary>
         IPort Port { get; }
         bool IsActive { get; }
-        event ConnectionReceivedDelegate ConnectionSocketReceived;
+        event ConnectionReceivedDelegate ConnectionReceived;
         Task<SocketOperationStatus> Start();
         Task<SocketOperationStatus> Stop();
     }

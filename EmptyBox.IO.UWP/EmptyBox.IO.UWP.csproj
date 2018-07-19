@@ -118,11 +118,12 @@
     <Compile Include="Network\Bluetooth\BluetoothConnection.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnectionListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\File.cs" />
     <EmbeddedResource Include="Properties\WarBox.IO.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EmptyBox.IO">
-      <Version>0.0.0.21</Version>
+    <PackageReference Include="EmptyBox.ScriptRuntime">
+      <Version>0.0.0.5</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.5</Version>
@@ -132,7 +133,12 @@
     <Folder Include="Access\" />
     <Folder Include="Devices\Audio\" />
     <Folder Include="Network\VPN\" />
-    <Folder Include="Storage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">
+      <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
+      <Name>EmptyBox.IO</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

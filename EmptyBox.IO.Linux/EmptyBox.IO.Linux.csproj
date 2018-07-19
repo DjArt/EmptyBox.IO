@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EmptyBox.IO">
-      <Version>0.0.0.21</Version>
+      <Version>0.0.0.24</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.Platforms">
       <Version>2.1.0</Version>

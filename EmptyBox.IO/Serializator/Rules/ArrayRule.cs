@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class ArrayRule : IBinarySerializatorRule
+    public class ArrayRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -20,7 +20,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags flag);
             if (result)
@@ -60,7 +60,7 @@ namespace EmptyBox.IO.Serializator.Rules
                                 Array array = (Array)value;
                                 for (int i0 = 0; i0 < length; i0++)
                                 {
-                                    result &= BinarySerializer.TryDeserialize(reader, _type, out object _value);
+                                    result &= BinarySerializer.TryDeserialize(reader, _type, out object _value, scenario, @case);
                                     array.SetValue(_value, i0);
                                 }
                             }
@@ -83,7 +83,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(object value, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TryGetLength(flag, out length);
@@ -109,7 +109,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         length += _length;
                         for (int i0 = 0; i0 < array.Length; i0++)
                         {
-                            result &= BinarySerializer.TryGetLength(array.GetValue(i0), out _length);
+                            result &= BinarySerializer.TryGetLength(array.GetValue(i0), out _length, scenario, @case);
                             length += _length;
                         }
                     }
@@ -122,7 +122,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, object value)
+        public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TrySerialize(writer, flag);
@@ -155,7 +155,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         result = BinarySerializer.TrySerialize(writer, array.Length);
                         for (int i0 = 0; i0 < array.Length; i0++)
                         {
-                            result &= BinarySerializer.TrySerialize(writer, array.GetValue(i0));
+                            result &= BinarySerializer.TrySerialize(writer, array.GetValue(i0), scenario, @case);
                         }
                     }
                     break;

@@ -7,7 +7,7 @@ using System.Collections;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class IDictionaryRule : IBinarySerializatorRule
+    public class IDictionaryRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -27,7 +27,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags flag);
             if (result)
@@ -55,8 +55,8 @@ namespace EmptyBox.IO.Serializator.Rules
                             dynamic tmp = typeof(Dictionary<,>).MakeGenericType(generictype0, generictype1).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
                             for (int i0 = 0; i0 < length; i0++)
                             {
-                                result &= BinarySerializer.TryDeserialize(reader, generictype0, out object val0);
-                                result &= BinarySerializer.TryDeserialize(reader, generictype1, out object val1);
+                                result &= BinarySerializer.TryDeserialize(reader, generictype0, out dynamic val0, scenario, @case);
+                                result &= BinarySerializer.TryDeserialize(reader, generictype1, out dynamic val1, scenario, @case);
                                 tmp.Add(val0, val1);
                             }
                             if (result)
@@ -88,7 +88,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(object value, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TryGetLength(flag, out length);
@@ -96,11 +96,12 @@ namespace EmptyBox.IO.Serializator.Rules
             {
                 case ObjectFlags.None:
                     IEnumerable<object> _value = (IEnumerable<object>)value;
+                    Type type = value.GetType().GenericTypeArguments[0];
                     int count = Enumerable.Count(_value);
                     result = BinarySerializer.TryGetLength(count, out length);
                     for (int i0 = 0; i0 < count; i0++)
                     {
-                        result &= BinarySerializer.TryGetLength(Enumerable.ElementAt(_value, i0), out uint _length);
+                        result &= BinarySerializer.TryGetLength(type, Enumerable.ElementAt(_value, i0), out uint _length, scenario, @case);
                         length += _length;
                     }
                     break;
@@ -112,20 +113,19 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, object value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value, string scenario = null, string @case = null)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TrySerialize(writer, flag);
             switch (flag)
             {
                 case ObjectFlags.None:
-                    IEnumerable<object> _value = (IEnumerable<object>)value;
-                    Type type = value.GetType().GetElementType();
-                    int count = Enumerable.Count(_value);
+                    Type type = value.GetType().GenericTypeArguments[0];
+                    int count = Enumerable.Count(value);
                     result = BinarySerializer.TrySerialize(writer, count);
                     for (int i0 = 0; i0 < count; i0++)
                     {
-                        result &= BinarySerializer.TrySerialize(writer, Enumerable.ElementAt(_value, i0));
+                        result &= BinarySerializer.TrySerialize(writer, type, Enumerable.ElementAt(value, i0), scenario, @case);
                     }
                     break;
                 default:

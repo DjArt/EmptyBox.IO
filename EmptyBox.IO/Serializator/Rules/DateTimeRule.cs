@@ -3,7 +3,7 @@ using System.IO;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class DateTimeRule : IBinarySerializatorRule
+    public class DateTimeRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out long data);
             if (result)
@@ -33,14 +33,14 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(object variable, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             return BinarySerializer.TryGetLength(DateTime.Now.ToBinary(), out length);
         }
 
-        public bool TrySerialize(BinaryWriter writer, object variable)
+        public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
-            return TrySerialize(writer, ((DateTime)variable).ToBinary());
+            return TrySerialize(writer, ((DateTime)value).ToBinary());
         }
     }
 }

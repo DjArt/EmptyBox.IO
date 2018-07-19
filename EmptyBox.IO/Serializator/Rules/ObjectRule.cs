@@ -7,7 +7,7 @@ using EmptyBox.ScriptRuntime.Extensions;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class ObjectRule : IBinarySerializatorRule
+    public class ObjectRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -16,7 +16,19 @@ namespace EmptyBox.IO.Serializator.Rules
             return SuitabilityDegree.Assignable;
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        private bool FieldSearcher(FieldInfo info, string scenario, string @case)
+        {
+            IEnumerable<Attribute> attributes = info.GetCustomAttributes();
+            return !info.IsStatic && info.IsPublic && (!attributes.Any(x => x is SerializationEscapeAttribute) || attributes.Any(x => x is SerializationScenarioAttribute _attr && _attr.Scenario == scenario && _attr.Case == @case));
+        }
+
+        private bool PropertySearcher(PropertyInfo info, string scenario = null, string @case = null)
+        {
+            IEnumerable<Attribute> attributes = info.GetCustomAttributes();
+            return info.CanRead && info.CanWrite && (!attributes.Any(x => x is SerializationEscapeAttribute) || attributes.Any(x => x is SerializationScenarioAttribute _attr && _attr.Scenario == scenario && _attr.Case == @case));
+        }
+
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = true;
             ObjectFlags flag = ObjectFlags.None;
@@ -28,19 +40,43 @@ namespace EmptyBox.IO.Serializator.Rules
             {
                 case ObjectFlags.None:
                     object obj = type.GenerateEmptyObject();
-                    IEnumerable<FieldInfo> fields = type.GetTypeInfo().DeclaredFields.Where(x => !x.IsStatic && x.IsPublic);
-                    IEnumerable<PropertyInfo> properties = type.GetTypeInfo().DeclaredProperties.Where(x => x.CanRead && x.CanWrite);
+                    IEnumerable<FieldInfo> fields = type.GetTypeInfo().DeclaredFields.Where(x => FieldSearcher(x, scenario, @case));
+                    IEnumerable<PropertyInfo> properties = type.GetTypeInfo().DeclaredProperties.Where(x => PropertySearcher(x, scenario, @case));
                     result &= BinarySerializer.TryDeserialize(reader, out uint count);
                     if (count == fields.Count() + properties.Count())
                     {
                         foreach (FieldInfo fi in fields)
                         {
-                            result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out object field);
+                            object field;
+                            SerializationScenarioAttribute attr = fi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                            if (attr != null)
+                            {
+                                ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                                MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Unwrap").MakeGenericMethod(attr.WrappedType, fi.FieldType);
+                                result &= BinarySerializer.TryDeserialize(reader, attr.WrappedType, out field);
+                                field = method.Invoke(wrapper, new object[] { field, @case });
+                            }
+                            else
+                            {
+                                result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out field);
+                            }
                             fi.SetValue(obj, field);
                         }
                         foreach (PropertyInfo pi in properties)
                         {
-                            result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out object field);
+                            object field;
+                            SerializationScenarioAttribute attr = pi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                            if (attr != null)
+                            {
+                                ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                                MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Unwrap").MakeGenericMethod(attr.WrappedType, pi.PropertyType);
+                                result &= BinarySerializer.TryDeserialize(reader, attr.WrappedType, out field);
+                                field = method.Invoke(wrapper, new object[] { field, @case });
+                            }
+                            else
+                            {
+                                result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out field);
+                            }
                             pi.SetValue(obj, field);
                         }
                         if (result)
@@ -67,11 +103,11 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(object value, out uint length)
+        public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
             bool result = true;
             ObjectFlags flag = ObjectFlags.None;
-            TypeInfo typeInfo = ((object)value)?.GetType().GetTypeInfo();
+            TypeInfo typeInfo = value?.GetType().GetTypeInfo();
             length = 0;
             if (typeInfo == null)
             {
@@ -87,19 +123,41 @@ namespace EmptyBox.IO.Serializator.Rules
             switch (flag)
             {
                 case ObjectFlags.None:
-                    IEnumerable<FieldInfo> fields = typeInfo.DeclaredFields.Where(x => !x.IsStatic && x.IsPublic);
-                    IEnumerable<PropertyInfo> properties = typeInfo.DeclaredProperties.Where(x => x.CanRead && x.CanWrite);
+                    IEnumerable<FieldInfo> fields = typeInfo.DeclaredFields.Where(x => FieldSearcher(x, scenario, @case));
+                    IEnumerable<PropertyInfo> properties = typeInfo.DeclaredProperties.Where(x => PropertySearcher(x, scenario, @case));
                     uint count = (uint)(fields.Count() + properties.Count());
                     result &= BinarySerializer.TryGetLength(count, out uint _length);
                     length += _length;
                     foreach (FieldInfo fi in fields)
                     {
-                        result &= BinarySerializer.TryGetLength(fi.FieldType, fi.GetValue(value), out _length);
+                        SerializationScenarioAttribute attr = fi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                        if (attr != null)
+                        {
+                            ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                            MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Wrap").MakeGenericMethod(fi.FieldType, attr.WrappedType);
+                            object field = method.Invoke(wrapper, new object[] { fi.GetValue(value), @case });
+                            result &= BinarySerializer.TryGetLength(attr.WrappedType, field, out _length);
+                        }
+                        else
+                        {
+                            result &= BinarySerializer.TryGetLength(fi.FieldType, fi.GetValue(value), out _length);
+                        }
                         length += _length;
                     }
                     foreach (PropertyInfo pi in properties)
                     {
-                        result &= BinarySerializer.TryGetLength(pi.PropertyType, pi.GetValue(value), out _length);
+                        SerializationScenarioAttribute attr = pi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                        if (attr != null)
+                        {
+                            ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                            MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Wrap").MakeGenericMethod(pi.PropertyType, attr.WrappedType);
+                            object field = method.Invoke(wrapper, new object[] { pi.GetValue(value), @case });
+                            result &= BinarySerializer.TryGetLength(attr.WrappedType, field, out _length);
+                        }
+                        else
+                        {
+                            result &= BinarySerializer.TryGetLength(pi.PropertyType, pi.GetValue(value), out _length);
+                        }
                         length += _length;
                     }
                     break;
@@ -110,7 +168,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, object value)
+        public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
             bool result = true;
             ObjectFlags flag = ObjectFlags.None;
@@ -127,17 +185,39 @@ namespace EmptyBox.IO.Serializator.Rules
             switch (flag)
             {
                 case ObjectFlags.None:
-                    IEnumerable<FieldInfo> fields = typeInfo.DeclaredFields.Where(x => !x.IsStatic && x.IsPublic);
-                    IEnumerable<PropertyInfo> properties = typeInfo.DeclaredProperties.Where(x => x.CanRead && x.CanWrite);
+                    IEnumerable<FieldInfo> fields = typeInfo.DeclaredFields.Where(x => FieldSearcher(x, scenario, @case));
+                    IEnumerable<PropertyInfo> properties = typeInfo.DeclaredProperties.Where(x => PropertySearcher(x, scenario, @case));
                     uint count = (uint)(fields.Count() + properties.Count());
                     result &= BinarySerializer.TrySerialize(writer, count);
                     foreach (FieldInfo fi in fields)
                     {
-                        result &= BinarySerializer.TrySerialize(writer, fi.FieldType, fi.GetValue(value));
+                        SerializationScenarioAttribute attr = fi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                        if (attr != null)
+                        {
+                            ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                            MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Wrap").MakeGenericMethod(fi.FieldType, attr.WrappedType);
+                            object field = method.Invoke(wrapper, new object[] { fi.GetValue(value), @case });
+                            result &= BinarySerializer.TrySerialize(writer, attr.WrappedType, field);
+                        }
+                        else
+                        {
+                            result &= BinarySerializer.TrySerialize(writer, fi.FieldType, fi.GetValue(value));
+                        }
                     }
                     foreach (PropertyInfo pi in properties)
                     {
-                        result &= BinarySerializer.TrySerialize(writer, pi.PropertyType, pi.GetValue(value));
+                        SerializationScenarioAttribute attr = pi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                        if (attr != null)
+                        {
+                            ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                            MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Wrap").MakeGenericMethod(pi.PropertyType, attr.WrappedType);
+                            object field = method.Invoke(wrapper, new object[] { pi.GetValue(value), @case });
+                            result &= BinarySerializer.TrySerialize(writer, attr.WrappedType, field);
+                        }
+                        else
+                        {
+                            result &= BinarySerializer.TrySerialize(writer, pi.PropertyType, pi.GetValue(value));
+                        }
                     }
                     break;
                 default:

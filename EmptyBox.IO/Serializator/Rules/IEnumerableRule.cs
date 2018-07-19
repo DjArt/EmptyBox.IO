@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class IEnumerableRule : IBinarySerializatorRule
+    public class IEnumerableRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
@@ -26,7 +26,7 @@ namespace EmptyBox.IO.Serializator.Rules
             }
         }
 
-        public bool TryDeserialize(BinaryReader reader, Type type, out object value)
+        public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
             bool result = BinarySerializer.TryDeserialize(reader, out ObjectFlags flag);
             if (result)
@@ -44,7 +44,8 @@ namespace EmptyBox.IO.Serializator.Rules
                             ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
                         }
                         Type generictype = ienumtype.GenericTypeArguments[0];
-                        value = null; result = BinarySerializer.TryDeserialize(reader, out int length);
+                        value = null;
+                        result = BinarySerializer.TryDeserialize(reader, out int length);
                         if (result)
                         {
                             //Backported from NET.Standard 1.6+
@@ -52,7 +53,7 @@ namespace EmptyBox.IO.Serializator.Rules
                             dynamic tmp = typeof(List<>).MakeGenericType(generictype).GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
                             for (int i0 = 0; result && i0 < length; i0++)
                             {
-                                result &= BinarySerializer.TryDeserialize(reader, generictype, out dynamic val0);
+                                result &= BinarySerializer.TryDeserialize(reader, generictype, out dynamic val0, scenario, @case);
                                 tmp.Add(val0);
                             }
                             if (result)
@@ -84,7 +85,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TryGetLength(dynamic value, out uint length)
+        public bool TryGetLength(dynamic value, out uint length, string scenario = null, string @case = null)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TryGetLength(flag, out length);
@@ -99,7 +100,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         length += _length;
                         for (int i0 = 0; result && i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TryGetLength(type, Enumerable.ElementAt(value, i0), out _length);
+                            result &= BinarySerializer.TryGetLength(type, Enumerable.ElementAt(value, i0), out _length, scenario, @case);
                             length += _length;
                         }
                         break;
@@ -112,7 +113,7 @@ namespace EmptyBox.IO.Serializator.Rules
             return result;
         }
 
-        public bool TrySerialize(BinaryWriter writer, dynamic value)
+        public bool TrySerialize(BinaryWriter writer, dynamic value, string scenario = null, string @case = null)
         {
             ObjectFlags flag = value == null ? ObjectFlags.IsNull : ObjectFlags.None;
             bool result = BinarySerializer.TrySerialize(writer, flag);
@@ -126,7 +127,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         result = BinarySerializer.TrySerialize(writer, count);
                         for (int i0 = 0; result && i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TrySerialize(writer, type, Enumerable.ElementAt(value, i0));
+                            result &= BinarySerializer.TrySerialize(writer, type, Enumerable.ElementAt(value, i0), scenario, @case);
                         }
                         break;
                     default:

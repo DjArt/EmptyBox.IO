@@ -13,7 +13,7 @@ namespace EmptyBox.IO.Network.IP
         private Task _ReceiveLoop;
         
         public bool IsActive { get; protected set; }
-        public event ConnectionReceivedDelegate ConnectionSocketReceived;
+        public event ConnectionReceivedDelegate ConnectionReceived;
         public Socket Socket { get; protected set; }
 
         public IEthernetAdapter ConnectionProvider => throw new NotImplementedException();
@@ -86,7 +86,7 @@ namespace EmptyBox.IO.Network.IP
                     Socket received = Socket.Accept();
                     TCPConnection tcpsocket = new TCPConnection(received, (received.RemoteEndPoint as IPEndPoint).ToIPAccessPoint());
                     await tcpsocket.Open();
-                    ConnectionSocketReceived?.Invoke(this, tcpsocket);
+                    ConnectionReceived?.Invoke(this, tcpsocket);
                 }
                 catch (Exception ex)
                 {
