@@ -93,7 +93,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         #endregion
 
         #region Private functions
-        private async void Watcher_Updated(DeviceWatcher sender, DeviceInformationUpdate args)
+        private void Watcher_Updated(DeviceWatcher sender, DeviceInformationUpdate args)
         {
 
         }

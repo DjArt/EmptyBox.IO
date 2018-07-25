@@ -26,7 +26,7 @@ namespace EmptyBox.IO.Network.Bluetooth
         #region Public objects
         public BluetoothDeviceProvider ConnectionProvider { get; private set; }
         public BluetoothPort Port { get; private set; }
-        public bool IsActive { get; protected set; }
+        public bool IsActive { get; private set; }
         public event ConnectionReceivedDelegate ConnectionSocketReceived;
         #endregion
 
