@@ -25,7 +25,7 @@ namespace EmptyBox.IO.Network.Bluetooth
         public BluetoothDeviceProvider ConnectionProvider { get; private set; }
         public BluetoothPort Port { get; private set; }
         public bool IsActive { get; private set; }
-        public event ConnectionReceivedDelegate ConnectionSocketReceived;
+        public event ConnectionReceivedDelegate ConnectionReceived;
         #endregion
 
         #region Constructors
@@ -50,7 +50,7 @@ namespace EmptyBox.IO.Network.Bluetooth
                     {
                         BluetoothAccessPoint accessPoint = new BluetoothAccessPoint(new BluetoothDevice(socket.RemoteDevice), new BluetoothPort());
                         BluetoothConnection connection = new BluetoothConnection(ConnectionProvider, socket, Port, accessPoint);
-                        ConnectionSocketReceived?.Invoke(this, connection);
+                        ConnectionReceived?.Invoke(this, connection);
                     }
                 }
                 catch (Exception ex)

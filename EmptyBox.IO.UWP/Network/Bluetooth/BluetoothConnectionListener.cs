@@ -26,8 +26,8 @@ namespace EmptyBox.IO.Network.Bluetooth
         #region Public objects
         public BluetoothDeviceProvider ConnectionProvider { get; private set; }
         public BluetoothPort Port { get; private set; }
-        public bool IsActive { get; protected set; }
-        public event ConnectionReceivedDelegate ConnectionSocketReceived;
+        public bool IsActive { get; private set; }
+        public event ConnectionReceivedDelegate ConnectionReceived;
         #endregion
 
         #region Constructors
@@ -48,7 +48,7 @@ namespace EmptyBox.IO.Network.Bluetooth
             if (result.Status == Access.AccessStatus.Success)
             {
                 BluetoothAccessPoint remotehost = new BluetoothAccessPoint(result.Result, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)));
-                ConnectionSocketReceived?.Invoke(this, new BluetoothConnection(ConnectionProvider, args.Socket, Port, remotehost));
+                ConnectionReceived?.Invoke(this, new BluetoothConnection(ConnectionProvider, args.Socket, Port, remotehost));
             }
         }
         #endregion
