@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EmptyBox.IO.Devices.WiFi
+namespace EmptyBox.IO.Network.WiFi
 {
     //TODO Rework
     [Obsolete]

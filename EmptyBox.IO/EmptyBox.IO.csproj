@@ -47,7 +47,7 @@
     <Folder Include="Media\Audio\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\WiFi\Direct\" />
-    <Folder Include="Network\Mobile\" />
+    <Folder Include="Network\Proxy\" />
   </ItemGroup>
 
   <ItemGroup>

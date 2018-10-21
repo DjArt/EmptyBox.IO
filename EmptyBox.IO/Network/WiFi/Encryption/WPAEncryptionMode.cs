@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EmptyBox.IO.Devices.WiFi.Encryption
+namespace EmptyBox.IO.Network.WiFi.Encryption
 {
     [Flags]
     public enum WPAEncryptionMode

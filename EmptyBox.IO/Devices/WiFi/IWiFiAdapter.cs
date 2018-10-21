@@ -1,5 +1,6 @@
 ﻿using EmptyBox.IO.Devices.Ethernet;
 using EmptyBox.IO.Devices.Radio;
+using EmptyBox.IO.Network.WiFi;
 using System.Collections.Generic;
 
 namespace EmptyBox.IO.Devices.WiFi

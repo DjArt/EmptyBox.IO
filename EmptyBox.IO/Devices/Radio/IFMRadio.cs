@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EmptyBox.IO.Devices.FMRadio
+namespace EmptyBox.IO.Devices.Radio
 {
     public interface IFMRadio : IRadio
     {

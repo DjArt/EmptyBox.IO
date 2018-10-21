@@ -1,6 +1,6 @@
-﻿using EmptyBox.IO.Network;
+﻿using EmptyBox.IO.Devices;
 
-namespace EmptyBox.IO.Devices.WiFi
+namespace EmptyBox.IO.Network.WiFi
 {
     public sealed class WiFiNetwork
     {
