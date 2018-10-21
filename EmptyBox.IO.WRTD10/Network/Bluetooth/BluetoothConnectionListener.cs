@@ -51,6 +51,26 @@ namespace EmptyBox.IO.Network.Bluetooth
                 ConnectionReceived?.Invoke(this, new BluetoothConnection(ConnectionProvider, args.Socket, Port, remotehost));
             }
         }
+
+        #region TEST!
+        const uint SERVICE_VERSION_ATTRIBUTE_ID = 0x0300;
+        const byte SERVICE_VERSION_ATTRIBUTE_TYPE = 0x0A;   // UINT32
+        const uint SERVICE_VERSION = 200;
+
+        private void InitializeServiceSdpAttributes(RfcommServiceProvider provider)
+        {
+            var writer = new Windows.Storage.Streams.DataWriter();
+
+            // First write the attribute type
+            writer.WriteByte(SERVICE_VERSION_ATTRIBUTE_TYPE);
+            // Then write the data
+            writer.WriteUInt32(SERVICE_VERSION);
+
+            var data = writer.DetachBuffer();
+            provider.SdpRawAttributes.Add(SERVICE_VERSION_ATTRIBUTE_ID, data);
+        }
+        #endregion
+
         #endregion
 
         #region Public functions
@@ -62,7 +82,8 @@ namespace EmptyBox.IO.Network.Bluetooth
                 try
                 {
                     _ServiceProvider = await RfcommServiceProvider.CreateAsync(Port.ToRfcommServiceID());
-                    await _ConnectionListener.BindServiceNameAsync(Port.ToRfcommServiceID().AsString());
+                    await _ConnectionListener.BindServiceNameAsync(Port.ToRfcommServiceID().AsString(), SocketProtectionLevel.BluetoothEncryptionAllowNullAuthentication);
+                    InitializeServiceSdpAttributes(_ServiceProvider);
                     _ServiceProvider.StartAdvertising(_ConnectionListener);
                     IsActive = true;
                     return SocketOperationStatus.Success;

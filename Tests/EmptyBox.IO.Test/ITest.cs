@@ -8,6 +8,7 @@ namespace EmptyBox.IO.Test
     public interface ITest
     {
         string Description { get; }
+        event EventHandler<string> Log;
         Task<string> Run();
     }
 }

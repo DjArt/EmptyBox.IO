@@ -10,6 +10,8 @@ namespace EmptyBox.IO.Test.Devices.Bluetooth
     {
         public string Description => "Получает список сопряжённых Bluetooth-устройств для адаптера по умолчанию.";
 
+        public event EventHandler<string> Log;
+
         public async Task<string> Run()
         {
             StringBuilder result = new StringBuilder();
@@ -30,6 +32,11 @@ namespace EmptyBox.IO.Test.Devices.Bluetooth
                 result.Append("Bluetooth-адаптера по умолчанию не было найдено.");
             }
             return result.ToString();
+        }
+
+        public override string ToString()
+        {
+            return Description;
         }
     }
 }

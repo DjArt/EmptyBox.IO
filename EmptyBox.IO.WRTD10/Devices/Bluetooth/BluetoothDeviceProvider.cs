@@ -41,6 +41,11 @@ namespace EmptyBox.IO.Devices.Bluetooth
         {
             Adapter = adapter;
             Watcher = DeviceInformation.CreateWatcher(Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelector());
+            Watcher.Added += Watcher_Added;
+            Watcher.EnumerationCompleted += Watcher_EnumerationCompleted;
+            Watcher.Removed += Watcher_Removed;
+            Watcher.Stopped += Watcher_Stopped;
+            Watcher.Updated += Watcher_Updated;
         }
         #endregion
 

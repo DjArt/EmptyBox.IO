@@ -2,5 +2,5 @@
 
 namespace EmptyBox.IO.Devices.Sensors
 {
-    public delegate void MagnetometerValueChanged(IOrientationSensor device, Vector3 value);
+    public delegate void MagnetometerValueChanged(IMagnetometer device, Vector3 value);
 }

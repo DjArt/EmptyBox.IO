@@ -4,5 +4,6 @@ namespace EmptyBox.IO.Devices.NFC
 {
     public interface INFC : IRadio, IDevice
     {
+
     }
 }
