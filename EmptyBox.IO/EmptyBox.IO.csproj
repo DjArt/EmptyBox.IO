@@ -44,7 +44,6 @@
   <ItemGroup>
     <Folder Include="Devices\USB\" />
     <Folder Include="Devices\Serial\" />
-    <Folder Include="Media\Audio\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\WiFi\Direct\" />
     <Folder Include="Network\Proxy\" />

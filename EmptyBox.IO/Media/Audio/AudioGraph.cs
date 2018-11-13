@@ -6,8 +6,6 @@ namespace EmptyBox.IO.Media.Audio
 {
     public class AudioGraph
     {
-
-
         public AudioGraph()
         {
 

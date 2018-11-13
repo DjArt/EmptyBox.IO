@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace EmptyBox.IO.Serializator.Rules
@@ -56,7 +57,7 @@ namespace EmptyBox.IO.Serializator.Rules
                             result = BinarySerializer.TryDeserialize(reader, out uint length);
                             if (result)
                             {
-                                value = Activator.CreateInstance(_type, new object[] { length });
+                                value = type.GetTypeInfo().DeclaredConstructors.First().Invoke(new object[]{ (int)length });
                                 Array array = (Array)value;
                                 for (int i0 = 0; i0 < length; i0++)
                                 {

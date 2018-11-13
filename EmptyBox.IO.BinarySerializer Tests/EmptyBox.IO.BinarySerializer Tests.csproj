@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="DefaultRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EachType.cs" />
     <Compile Include="Scenarios.cs" />
   </ItemGroup>
   <ItemGroup>

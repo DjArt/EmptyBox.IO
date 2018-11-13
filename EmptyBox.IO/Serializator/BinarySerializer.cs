@@ -23,6 +23,7 @@ namespace EmptyBox.IO.Serializator
                 new ByteRule(),
                 new CharRule(encoding),
                 new DateTimeRule(),
+                new DelegateRule(),
                 new DoubleRule(),
                 new EnumRule(),
                 new FloatRule(),
@@ -72,6 +73,27 @@ namespace EmptyBox.IO.Serializator
                 if (!success)
                 {
                     result = default(T);
+                }
+                reader.Dispose();
+                ms.Dispose();
+                return result;
+            }
+        }
+
+        public object Deserialize(Type type, byte[] data, string scenario = null, string @case = null)
+        {
+            if (scenario != null && !Scenarios.Exists(x => x.Name == scenario))
+            {
+                throw new MissingMethodException($"Scenario {scenario} is missing!");
+            }
+            else
+            {
+                MemoryStream ms = new MemoryStream(data);
+                BinaryReader reader = new BinaryReader(ms);
+                bool success = TryDeserialize(reader, type, out object result, scenario, @case);
+                if (!success)
+                {
+                    result = null;
                 }
                 reader.Dispose();
                 ms.Dispose();
@@ -171,7 +193,7 @@ namespace EmptyBox.IO.Serializator
             }
             else
             {
-                return TrySerialize(typeof(T), value, out data, scenario, @case);
+                return TrySerialize(value.GetType(), value, out data, scenario, @case);
             }
         }
 

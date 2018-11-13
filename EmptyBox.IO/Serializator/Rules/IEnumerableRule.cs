@@ -94,13 +94,23 @@ namespace EmptyBox.IO.Serializator.Rules
                 switch (flag)
                 {
                     case ObjectFlags.None:
-                        Type type = value.GetType().GenericTypeArguments[0];
+                        Type type = value.GetType();
+                        Type ienumtype;
+                        if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                        {
+                            ienumtype = type;
+                        }
+                        else
+                        {
+                            ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+                        }
+                        Type generictype = ienumtype.GenericTypeArguments[0];
                         int count = Enumerable.Count(value);
                         result = BinarySerializer.TryGetLength(count, out uint _length);
                         length += _length;
                         for (int i0 = 0; result && i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TryGetLength(type, Enumerable.ElementAt(value, i0), out _length, scenario, @case);
+                            result &= BinarySerializer.TryGetLength(generictype, Enumerable.ElementAt(value, i0), out _length, scenario, @case);
                             length += _length;
                         }
                         break;
@@ -122,12 +132,22 @@ namespace EmptyBox.IO.Serializator.Rules
                 switch (flag)
                 {
                     case ObjectFlags.None:
-                        Type type = value.GetType().GenericTypeArguments[0];
+                        Type type = value.GetType();
+                        Type ienumtype;
+                        if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                        {
+                            ienumtype = type;
+                        }
+                        else
+                        {
+                            ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+                        }
+                        Type generictype = ienumtype.GenericTypeArguments[0];
                         int count = Enumerable.Count(value);
                         result = BinarySerializer.TrySerialize(writer, count);
                         for (int i0 = 0; result && i0 < count; i0++)
                         {
-                            result &= BinarySerializer.TrySerialize(writer, type, Enumerable.ElementAt(value, i0), scenario, @case);
+                            result &= BinarySerializer.TrySerialize(writer, generictype, Enumerable.ElementAt(value, i0), scenario, @case);
                         }
                         break;
                     default:

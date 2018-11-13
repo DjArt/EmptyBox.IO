@@ -1,15 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
-    public class DateTimeRule : ISerializationRule
+    public class DelegateRule : ISerializationRule
     {
         public BinarySerializer BinarySerializer { get; set; }
 
         public SuitabilityDegree CheckSuitability(Type type)
         {
-            if (type == typeof(DateTime))
+            if (typeof(Delegate).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
             {
                 return SuitabilityDegree.Equal;
             }
@@ -21,26 +22,19 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public bool TryDeserialize(BinaryReader reader, Type type, out object value, string scenario = null, string @case = null)
         {
-            bool result = BinarySerializer.TryDeserialize(reader, out long data);
-            if (result)
-            {
-                value = DateTime.FromBinary(data);
-            }
-            else
-            {
-                value = null;
-            }
+            bool result = BinarySerializer.TryDeserialize(reader, out object @null);
+            value = null;
             return result;
         }
 
         public bool TryGetLength(object value, out uint length, string scenario = null, string @case = null)
         {
-            return BinarySerializer.TryGetLength(DateTime.Now.ToBinary(), out length);
+            return BinarySerializer.TryGetLength<object>(null, out length);
         }
 
         public bool TrySerialize(BinaryWriter writer, object value, string scenario = null, string @case = null)
         {
-            return BinarySerializer.TrySerialize(writer, ((DateTime)value).ToBinary());
+            return BinarySerializer.TrySerialize<object>(writer, null);
         }
     }
 }
