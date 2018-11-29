@@ -3,6 +3,7 @@ using System.Text;
 using EmptyBox.IO.Serializator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EmptyBox.ScriptRuntime.Extensions;
+using System.Collections.Generic;
 
 namespace EmptyBox.IO.BinarySerializer_Tests
 {
@@ -70,6 +71,46 @@ namespace EmptyBox.IO.BinarySerializer_Tests
 
             buffer = Serializer.Serialize(data2);
             Assert.IsTrue(data2.SetEqual(Serializer.Deserialize<DateTime[]>(buffer)));
+        }
+
+        [TestMethod]
+        public void ArrayRule_Nullable_DateTime()
+        {
+            byte[] buffer;
+
+            DateTime?[] data0 = null;
+            DateTime?[] data1 = new DateTime?[0];
+            DateTime?[] data2 = new DateTime?[rand.Next(1, 1024)];
+            for (int i0 = 0; i0 < data2.Length; i0++) data2[i0] = new DateTime((long)(rand.NextDouble() * DateTime.MaxValue.Ticks));
+
+            buffer = Serializer.Serialize(data0);
+            Assert.IsTrue(Serializer.Deserialize<DateTime?[]>(buffer) == null);
+
+            buffer = Serializer.Serialize(data1);
+            Assert.IsTrue(data1.SetEqual(Serializer.Deserialize<DateTime?[]>(buffer)));
+
+            buffer = Serializer.Serialize(data2);
+            Assert.IsTrue(data2.SetEqual(Serializer.Deserialize<DateTime?[]>(buffer)));
+        }
+
+        [TestMethod]
+        public void IEnumerableRule_Nullable_DateTime()
+        {
+            byte[] buffer;
+
+            List<DateTime?> data0 = null;
+            List<DateTime?> data1 = new List<DateTime?>(0);
+            List<DateTime?> data2 = new List<DateTime?>(rand.Next(1, 1024));
+            for (int i0 = 0; i0 < data2.Capacity; i0++) data2.Add(new DateTime((long)(rand.NextDouble() * DateTime.MaxValue.Ticks)));
+
+            buffer = Serializer.Serialize(data0);
+            Assert.IsTrue(Serializer.Deserialize<List<DateTime?>>(buffer) == null);
+
+            buffer = Serializer.Serialize(data1);
+            Assert.IsTrue(data1.SetEqual(Serializer.Deserialize<List<DateTime?>>(buffer)));
+
+            buffer = Serializer.Serialize(data2);
+            Assert.IsTrue(data2.SetEqual(Serializer.Deserialize<List<DateTime?>>(buffer)));
         }
     }
 }

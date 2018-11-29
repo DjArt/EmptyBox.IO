@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using EmptyBox.IO.Serializator.Rules;
 
@@ -38,6 +39,7 @@ namespace EmptyBox.IO.Serializator
                 new SByteRule(),
                 new ShortRule(),
                 new StringRule(encoding),
+                new StringBuilderRule(),
                 new TimeSpanRule(),
                 new UIntRule(),
                 new ULongRule(),
@@ -193,7 +195,8 @@ namespace EmptyBox.IO.Serializator
             }
             else
             {
-                return TrySerialize(value.GetType(), value, out data, scenario, @case);
+                Type type = value == null ? typeof(T) : value.GetType();
+                return TrySerialize(type, value, out data, scenario, @case);
             }
         }
 
@@ -241,7 +244,8 @@ namespace EmptyBox.IO.Serializator
             }
             else
             {
-                return TrySerialize(writer, typeof(T), value, scenario, @case);
+                Type type = value == null ? typeof(T) : value.GetType();
+                return TrySerialize(writer, type, value, scenario, @case);
             }
         }
 
@@ -281,7 +285,8 @@ namespace EmptyBox.IO.Serializator
             }
             else
             {
-                return GetLength(typeof(T), value, scenario, @case);
+                Type type = value == null ? typeof(T) : value.GetType();
+                return GetLength(type, value, scenario, @case);
             }
         }
 
@@ -306,7 +311,8 @@ namespace EmptyBox.IO.Serializator
             }
             else
             {
-                return TryGetLength(typeof(T), value, out length, scenario, @case);
+                Type type = value == null ? typeof(T) : value.GetType();
+                return TryGetLength(type, value, out length, scenario, @case);
             }
         }
 

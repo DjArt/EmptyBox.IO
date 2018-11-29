@@ -32,11 +32,11 @@ namespace EmptyBox.IO.BinarySerializer_Tests
             foreach (Type type in assembly.DefinedTypes)
             {
                 if (type == typeof(AppDomainSetup) || type == typeof(ApplicationTrust) || type == typeof(DateTimeFormatInfo) ||
-                    type == typeof(NumberFormatInfo) || type == typeof(ArrayList) || type.Name == "IntSizedArray" ||
+                    type == typeof(NumberFormatInfo) || type.Name == "IntSizedArray" ||
                     type.GetTypeInfo().ImplementedInterfaces.Any(x => x == typeof(IEnumerable)) && type.GetTypeInfo().ImplementedInterfaces.Any(x => x != typeof(IEnumerable<>)) ||
                     type == typeof(SoapTypeAttribute) || type == typeof(SoapMethodAttribute) || type == typeof(SoapPositiveInteger) ||
                     type == typeof(SoapNegativeInteger) || type.Name == "CrossAppDomainChannel" || type == typeof(TransportHeaders) ||
-                    type.Name == "ActivationListener" || type == typeof(StringBuilder))
+                    type.Name == "ActivationListener")
                 {
                     continue;
                 }

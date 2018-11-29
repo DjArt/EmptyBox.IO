@@ -110,7 +110,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         length += _length;
                         for (int i0 = 0; i0 < array.Length; i0++)
                         {
-                            result &= BinarySerializer.TryGetLength(array.GetValue(i0), out _length, scenario, @case);
+                            result &= BinarySerializer.TryGetLength(type, array.GetValue(i0), out _length, scenario, @case);
                             length += _length;
                         }
                     }
@@ -153,10 +153,10 @@ namespace EmptyBox.IO.Serializator.Rules
                     else
                     {
                         Array array = (Array)value;
-                        result = BinarySerializer.TrySerialize(writer, array.Length);
+                        result = BinarySerializer.TrySerialize(writer, (uint)array.Length);
                         for (int i0 = 0; i0 < array.Length; i0++)
                         {
-                            result &= BinarySerializer.TrySerialize(writer, array.GetValue(i0), scenario, @case);
+                            result &= BinarySerializer.TrySerialize(writer, type, array.GetValue(i0), scenario, @case);
                         }
                     }
                     break;

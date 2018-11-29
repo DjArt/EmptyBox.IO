@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Collections;
 
 namespace EmptyBox.IO.Serializator.Rules
 {
@@ -12,11 +13,11 @@ namespace EmptyBox.IO.Serializator.Rules
 
         public SuitabilityDegree CheckSuitability(Type type)
         {
-            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            if (type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>) || type == typeof(IEnumerable))
             {
                 return SuitabilityDegree.Equal;
             }
-            else if (type.GetTypeInfo().ImplementedInterfaces.Any(x => x.IsConstructedGenericType &&  x.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
+            else if (type.GetTypeInfo().ImplementedInterfaces.Any(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>) || x == typeof(IEnumerable)))
             {
                 return SuitabilityDegree.Assignable;
             }
@@ -41,9 +42,9 @@ namespace EmptyBox.IO.Serializator.Rules
                         }
                         else
                         {
-                            ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+                            ienumtype = type.GetTypeInfo().ImplementedInterfaces.FirstOrDefault(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
                         }
-                        Type generictype = ienumtype.GenericTypeArguments[0];
+                        Type generictype = ienumtype == null ? typeof(object) : ienumtype.GenericTypeArguments[0];
                         value = null;
                         result = BinarySerializer.TryDeserialize(reader, out int length);
                         if (result)
@@ -60,7 +61,7 @@ namespace EmptyBox.IO.Serializator.Rules
                             {
                                 //Backported from NET.Standard 1.6+
                                 //ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(generictype) });
-                                ConstructorInfo constructor = type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => x.GetParameters().Count() == 1 && x.GetParameters()[0].ParameterType == typeof(IEnumerable<>).MakeGenericType(generictype));
+                                ConstructorInfo constructor = ienumtype == null ? type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => x.GetParameters().Count() == 1 && x.GetParameters()[0].ParameterType == typeof(IEnumerable)) : type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(x => x.GetParameters().Count() == 1 && x.GetParameters()[0].ParameterType == typeof(IEnumerable<>).MakeGenericType(generictype));
                                 if (constructor != null)
                                 {
                                     value = constructor.Invoke(new object[] { tmp });
@@ -102,7 +103,7 @@ namespace EmptyBox.IO.Serializator.Rules
                         }
                         else
                         {
-                            ienumtype = type.GetTypeInfo().ImplementedInterfaces.First(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+                            ienumtype = type.GetTypeInfo().ImplementedInterfaces.FirstOrDefault(x => x.IsConstructedGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
                         }
                         Type generictype = ienumtype.GenericTypeArguments[0];
                         int count = Enumerable.Count(value);
