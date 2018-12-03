@@ -10,9 +10,9 @@
     <OutputTypeEx>library</OutputTypeEx>
     <StartupObject />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.0.26</Version>
-    <AssemblyVersion>0.0.0.26</AssemblyVersion>
-    <FileVersion>0.0.0.26</FileVersion>
+    <Version>0.0.0.27</Version>
+    <AssemblyVersion>0.0.0.27</AssemblyVersion>
+    <FileVersion>0.0.0.27</FileVersion>
     <Authors>Dj Art</Authors>
     <PackageProjectUrl>https://github.com/DjArt/EmptyBox.IO</PackageProjectUrl>
     <NeutralLanguage>ru</NeutralLanguage>
@@ -36,17 +36,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Devices\Serial\UART\**" />
     <Compile Remove="Network\MAC\**" />
+    <EmbeddedResource Remove="Devices\Serial\UART\**" />
     <EmbeddedResource Remove="Network\MAC\**" />
+    <None Remove="Devices\Serial\UART\**" />
     <None Remove="Network\MAC\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Devices\GPIO\I2C\" />
-    <Folder Include="Devices\Serial\UART\" />
     <Folder Include="Devices\GPIO\SPI\" />
     <Folder Include="Devices\USB\" />
-    <Folder Include="Devices\Serial\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\WiFi\Direct\" />
     <Folder Include="Network\Proxy\" />

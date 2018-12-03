@@ -3,26 +3,16 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using EmptyBox.IO.Interoperability;
 using System.Net;
-using EmptyBox.IO.Devices.Ethernet;
+using EmptyBox.ScriptRuntime.Results;
+using EmptyBox.IO.Network.Help;
 
 namespace EmptyBox.IO.Network.IP
 {
-    public class TCPConnectionListener : IConnectionListener
+    public sealed class TCPConnectionListener : APointedConnectionListener<IPAddress, IPPort, IPAccessPoint, ITCPConnectionProvider>
     {
-
         private Task _ReceiveLoop;
         
-        public bool IsActive { get; protected set; }
-        public event ConnectionReceivedDelegate ConnectionReceived;
-        public Socket Socket { get; protected set; }
-
-        public IEthernetAdapter ConnectionProvider => throw new NotImplementedException();
-
-        public IPPort Port => throw new NotImplementedException();
-
-        IConnectionProvider IConnectionListener.ConnectionProvider => throw new NotImplementedException();
-
-        IPort IConnectionListener.Port => throw new NotImplementedException();
+        public Socket Socket { get; private set; }
 
         public TCPConnectionListener(IPAccessPoint localhost)
         {
@@ -31,7 +21,7 @@ namespace EmptyBox.IO.Network.IP
             Socket.Bind(localhost.ToIPEndPoint());
         }
 
-        public async Task<SocketOperationStatus> Start()
+        public override async Task<VoidResult<SocketOperationStatus>> Start()
         {
             await Task.Yield();
             if (!IsActive)
@@ -41,20 +31,20 @@ namespace EmptyBox.IO.Network.IP
                     Socket.Listen(512);
                     IsActive = true;
                     _ReceiveLoop = Task.Run((Action)ReceiveLoop);
-                    return SocketOperationStatus.Success;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 catch (Exception ex)
                 {
-                    return SocketOperationStatus.UnknownError;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
                 }
             }
             else
             {
-                return SocketOperationStatus.ListenerIsAlreadyStarted;
+                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyStarted, null);
             }
         }
 
-        public async Task<SocketOperationStatus> Stop()
+        public override async Task<VoidResult<SocketOperationStatus>> Stop()
         {
             await Task.Yield();
             if (IsActive)
@@ -63,16 +53,16 @@ namespace EmptyBox.IO.Network.IP
                 {
                     Socket.Listen(0);
                     IsActive = false;
-                    return SocketOperationStatus.Success;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 catch (Exception ex)
                 {
-                    return SocketOperationStatus.UnknownError;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
                 }
             }
             else
             {
-                return SocketOperationStatus.ListenerIsAlreadyClosed;
+                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyClosed, null);
             }
         }
 
@@ -86,7 +76,7 @@ namespace EmptyBox.IO.Network.IP
                     Socket received = Socket.Accept();
                     TCPConnection tcpsocket = new TCPConnection(received, (received.RemoteEndPoint as IPEndPoint).ToIPAccessPoint());
                     await tcpsocket.Open();
-                    ConnectionReceived?.Invoke(this, tcpsocket);
+                    OnConnectionReceive(tcpsocket);
                 }
                 catch (Exception ex)
                 {

@@ -1,6 +1,8 @@
-﻿namespace EmptyBox.IO.Network.Bluetooth
+﻿using EmptyBox.IO.Devices.Bluetooth;
+
+namespace EmptyBox.IO.Network.Bluetooth
 {
-    public interface IBluetoothConnectionProvider : IConnectionProvider
+    public interface IBluetoothConnectionProvider : IPointedConnectionProvider<IBluetoothDevice, BluetoothPort>
     {
         new MACAddress Address { get; }
         IBluetoothConnection CreateConnection(BluetoothAccessPoint accessPoint);

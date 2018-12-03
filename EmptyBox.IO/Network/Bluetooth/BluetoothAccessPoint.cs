@@ -3,11 +3,8 @@ using System.Text;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public struct BluetoothAccessPoint : IAccessPoint
+    public class BluetoothAccessPoint : IAccessPoint<IBluetoothDevice, BluetoothPort>
     {
-        IAddress IAccessPoint.Address => Address;
-        IPort IAccessPoint.Port => Port;
-
         public IBluetoothDevice Address { get; set; }
         public BluetoothPort Port { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace EmptyBox.IO.Network.IP
 {
-    public struct IPPort : IPort
+    public class IPPort : IPort
     {
         public static implicit operator IPPort(ushort value)
         {

@@ -1,8 +1,10 @@
 ﻿namespace EmptyBox.IO.Network
 {
-    public interface IAccessPoint
+    public interface IAccessPoint<out TAddress, out TPort>
+        where TAddress : IAddress
+        where TPort : IPort
     {
-        IAddress Address { get; }
-        IPort Port { get; }
+        TAddress Address { get; }
+        TPort Port { get; }
     }
 }

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace EmptyBox.IO.Network.IP
 {
-    public struct IPAddress : IAddress
+    public class IPAddress : IAddress
     {
         public const byte Length4 = 4;
         public const byte Length6 = 16;

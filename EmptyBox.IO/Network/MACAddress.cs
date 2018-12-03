@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace EmptyBox.IO.Network
 {
-    public struct MACAddress : IAddress
+    public class MACAddress : IAddress, IEquatable<MACAddress>
     {
         private const byte LENGTH = 6;
         private const string FORMAT = "X2";
@@ -124,6 +124,11 @@ namespace EmptyBox.IO.Network
                 result.Append("Unspecified address");
             }
             return result.ToString();
+        }
+
+        public bool Equals(MACAddress other)
+        {
+            return this == other;
         }
     }
 }

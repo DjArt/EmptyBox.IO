@@ -1,49 +1,50 @@
-﻿using System.Threading.Tasks;
+﻿using EmptyBox.ScriptRuntime.Results;
+using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
     /// <summary>
-    /// Представляет методы для работы с протоколом, требующим установку соединения.
+    /// Представляет методы для работы с протоколом без адресации и протоколизации, требующим установку соединения.
     /// </summary>
-    public interface IConnection
+    public interface IConnection : ICommunicationElement
     {
-        /// <summary>
-        /// Событие, уведомляющее о приёме сообщения.
-        /// </summary>
-        event ConnectionMessageReceiveHandler MessageReceived;
         /// <summary>
         /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
-        event ConnectionInterruptHandler ConnectionInterrupt;
+        event ConnectionInterruptHandler ConnectionInterrupted;
+
         /// <summary>
         /// Интерфейс, на котором устанавливается соединение.
         /// </summary>
         IConnectionProvider ConnectionProvider { get; }
+    }
+
+    /// <summary>
+    /// Представляет методы для работы с протоколом без адресации, требующим установку соединения.
+    /// </summary>
+    public interface IConnection<out TPort> : IConnection
+        where TPort : IPort
+    {
         /// <summary>
-        /// Порт на локальной машине.
+        /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
-        IPort Port { get; }
+        new event ConnectionMessageReceiveHandler<TPort> MessageReceived;
         /// <summary>
-        /// Адрес точки, с которой установлено соединение.
+        /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
-        IAccessPoint RemoteHost { get; }
+        new event ConnectionInterruptHandler<TPort> ConnectionInterrupted;
+
         /// <summary>
-        /// Отправляет сообщение точке, с которой установлено соединение.
+        /// Интерфейс, на котором устанавливается соединение.
         /// </summary>
-        /// <param name="data">Передаваемое сообщение.</param>
-        /// <returns>Статус доставки сообщения, если применимо к протоколу.</returns>
-        Task<SocketOperationStatus> Send(byte[] data);
+        new IConnectionProvider<TPort> ConnectionProvider { get; }
         /// <summary>
-        /// Устанавливает соединение с удалённой точкой.
+        /// Локальная точка обмена данных.
         /// </summary>
-        /// <returns>Результат запуска.</returns>
-        Task<SocketOperationStatus> Open();
+        TPort LocalPoint { get; }
         /// <summary>
-        /// Разрывает соединение с удалённой точкой.
+        /// Удалённая точка обмена данных.
         /// </summary>
-        /// <returns>Результат закрытия.</returns>
-        Task<SocketOperationStatus> Close();
-        
-        bool IsActive { get; }
+        TPort RemotePoint { get; }
     }
 }

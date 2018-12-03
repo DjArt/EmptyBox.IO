@@ -2,7 +2,12 @@
 {
     public interface ISocketProvider
     {
-        IAddress Address { get; }
-        ISocket CreateSocket(IPort port);
+        ISocket CreateSocket();
+    }
+
+    public interface ISocketProvider<out TPort> : ISocketProvider
+        where TPort : IPort
+    {
+        ISocket<TPort> CreateSocket(IPort port);
     }
 }

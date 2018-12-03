@@ -1,11 +1,9 @@
-﻿namespace EmptyBox.IO.Network.Bluetooth
+﻿using EmptyBox.IO.Devices.Bluetooth;
+
+namespace EmptyBox.IO.Network.Bluetooth
 {
-    public interface IBluetoothConnectionListener : IConnectionListener
+    public interface IBluetoothConnectionListener : IPointedConnectionListener<IBluetoothDevice, BluetoothPort>
     {
         new IBluetoothConnectionProvider ConnectionProvider { get; }
-        /// <summary>
-        /// Порт на локальной машине.
-        /// </summary>
-        new BluetoothPort Port { get; }
     }
 }

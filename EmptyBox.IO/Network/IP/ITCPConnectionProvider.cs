@@ -1,8 +1,7 @@
 ﻿namespace EmptyBox.IO.Network.IP
 {
-    public interface ITCPConnectionProvider : IConnectionProvider
+    public interface ITCPConnectionProvider : IPointedConnectionProvider<IPAddress, IPPort>
     {
-        new IPAddress Address { get; }
         ITCPConnection CreateConnection(IPAccessPoint accessPoint);
         ITCPConnectionListener CreateConnectionListener(IPPort port);
     }

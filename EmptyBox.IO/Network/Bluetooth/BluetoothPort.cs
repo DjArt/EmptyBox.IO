@@ -2,7 +2,7 @@
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public struct BluetoothPort : IPort
+    public class BluetoothPort : IPort
     {
         public Guid ID { get; private set; }
 

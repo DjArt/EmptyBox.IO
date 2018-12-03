@@ -1,17 +1,40 @@
-﻿using System.Threading.Tasks;
+﻿using EmptyBox.ScriptRuntime.Results;
+using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
     public interface IConnectionListener
     {
-        IConnectionProvider ConnectionProvider { get; }
         /// <summary>
-        /// Порт на локальной машине.
+        /// Уведомляет о входящих соединениях.
         /// </summary>
-        IPort Port { get; }
+        event ConnectionReceiveHandler ConnectionReceived;
+
+        /// <summary>
+        /// Интерфейс, на котором прослушивается соединение.
+        /// </summary>
+        IConnectionProvider ConnectionProvider { get; }
         bool IsActive { get; }
-        event ConnectionReceivedDelegate ConnectionReceived;
-        Task<SocketOperationStatus> Start();
-        Task<SocketOperationStatus> Stop();
+
+        Task<VoidResult<SocketOperationStatus>> Start();
+        Task<VoidResult<SocketOperationStatus>> Stop();
+    }
+
+    public interface IConnectionListener<out TPort> : IConnectionListener
+        where TPort : IPort
+    {
+        /// <summary>
+        /// Уведомляет о входящих соединениях.
+        /// </summary>
+        new event ConnectionReceiveHandler<TPort> ConnectionReceived;
+
+        /// <summary>
+        /// Интерфейс, на котором прослушивается соединение.
+        /// </summary>
+        new IConnectionProvider<TPort> ConnectionProvider { get; }
+        /// <summary>
+        /// Точка прослушивания.
+        /// </summary>
+        TPort ListenerPoint { get; }
     }
 }
