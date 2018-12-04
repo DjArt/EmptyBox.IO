@@ -11,6 +11,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
     {
         MACAddress Address { get; }
         BluetoothClass DeviceClass { get; }
+        BluetoothMode Mode { get; }
         Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached);
     }
 }
