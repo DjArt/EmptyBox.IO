@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EmptyBox.IO.Devices.Serial
 {
-    public interface ISerialPort : IDevice, IConnectionProvider
+    public interface ISerialPort : IDevice, ISocketProvider
     {
         uint BaudRate { get; set; }
         bool BreakSignalState { get; set; }
@@ -21,11 +21,5 @@ namespace EmptyBox.IO.Devices.Serial
         TimeSpan ReadTimeout { get; set; }
         SerialStopBitCount StopBits { get; set; }
         TimeSpan WriteTimeout { get; set; }
-
-        /// <summary>
-        /// Создаёт соединение на данном интерфейсе.
-        /// </summary>
-        /// <returns>Соединение.</returns>
-        new ISerialConnection CreateConnection();
     }
 }
