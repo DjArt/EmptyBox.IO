@@ -4,8 +4,4 @@
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="EmptyBox.IO" Version="0.0.0.25" />
-  </ItemGroup>
-
 </Project>

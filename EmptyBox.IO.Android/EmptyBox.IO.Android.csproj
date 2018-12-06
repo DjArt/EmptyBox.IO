@@ -15,7 +15,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v4.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -37,9 +37,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EmptyBox.IO, Version=0.0.0.25, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EmptyBox.IO.0.0.0.25\lib\netstandard1.4\EmptyBox.IO.dll</HintPath>
-    </Reference>
     <Reference Include="EmptyBox.ScriptRuntime, Version=0.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EmptyBox.ScriptRuntime.0.0.0.5\lib\netstandard1.4\EmptyBox.ScriptRuntime.dll</HintPath>
     </Reference>
@@ -59,7 +56,6 @@
     <Compile Include="Devices\Bluetooth\BluetoothDeviceProvider.cs" />
     <Compile Include="Interoperability\Extensions.cs" />
     <Compile Include="Interoperability\Сompatibility.cs" />
-    <Compile Include="Network\AConnection.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnection.cs" />
     <Compile Include="Network\Bluetooth\BluetoothConnectionListener.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -72,6 +68,12 @@
   <ItemGroup>
     <Folder Include="Access\" />
     <Folder Include="Storage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.IO\EmptyBox.IO.csproj">
+      <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
+      <Name>EmptyBox.IO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />

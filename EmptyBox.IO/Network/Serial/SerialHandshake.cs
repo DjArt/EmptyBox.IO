@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EmptyBox.IO.Devices.Serial
+namespace EmptyBox.IO.Network.Serial
 {
     [Flags]
     public enum SerialHandshake : byte

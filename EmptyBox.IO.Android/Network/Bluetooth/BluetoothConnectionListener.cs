@@ -1,31 +1,22 @@
-﻿using EmptyBox.IO.Devices.Bluetooth;
+﻿using Android.Bluetooth;
+using EmptyBox.IO.Devices.Bluetooth;
 using EmptyBox.IO.Interoperability;
+using EmptyBox.IO.Network.Help;
+using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using BluetoothAdapter = EmptyBox.IO.Devices.Bluetooth.BluetoothAdapter;
+using BluetoothDevice = EmptyBox.IO.Devices.Bluetooth.BluetoothDevice;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public sealed class BluetoothConnectionListener : IBluetoothConnectionListener
+    public sealed class BluetoothConnectionListener : APointedConnectionListener<IBluetoothDevice, BluetoothPort, BluetoothAccessPoint, IBluetoothConnectionProvider>, IBluetoothConnectionListener
     {
-        #region IConnectionProvider interface properties
-        IConnectionProvider IConnectionListener.ConnectionProvider => ConnectionProvider;
-        IPort IConnectionListener.Port => Port;
-        #endregion
-
-        #region IBluetoothConnectionProvider interface properties
-        IBluetoothConnectionProvider IBluetoothConnectionListener.ConnectionProvider => ConnectionProvider;
-        #endregion
+        IBluetoothConnectionProvider IBluetoothConnectionListener.ConnectionProvider => throw new NotImplementedException();
 
         #region Private objects
-        private Android.Bluetooth.BluetoothServerSocket ServerSocket;
-        #endregion
-
-        #region Public objects
-        public BluetoothDeviceProvider ConnectionProvider { get; private set; }
-        public BluetoothPort Port { get; private set; }
-        public bool IsActive { get; private set; }
-        public event ConnectionReceivedDelegate ConnectionReceived;
+        public BluetoothServerSocket ServerSocket;
         #endregion
 
         #region Constructors
@@ -45,12 +36,12 @@ namespace EmptyBox.IO.Network.Bluetooth
             {
                 try
                 {
-                    Android.Bluetooth.BluetoothSocket socket = await ServerSocket.AcceptAsync(1000);
+                    BluetoothSocket socket = await ServerSocket.AcceptAsync(1000);
                     if (socket != null)
                     {
                         BluetoothAccessPoint accessPoint = new BluetoothAccessPoint(new BluetoothDevice(socket.RemoteDevice), new BluetoothPort());
                         BluetoothConnection connection = new BluetoothConnection(ConnectionProvider, socket, Port, accessPoint);
-                        ConnectionReceived?.Invoke(this, connection);
+                        OnConnectionReceive(connection);
                     }
                 }
                 catch (Exception ex)
@@ -62,7 +53,7 @@ namespace EmptyBox.IO.Network.Bluetooth
         #endregion
 
         #region Public functions
-        public async Task<SocketOperationStatus> Start()
+        public override async Task<VoidResult<SocketOperationStatus>> Start()
         {
             await Task.Yield();
             if (!IsActive)
@@ -71,20 +62,20 @@ namespace EmptyBox.IO.Network.Bluetooth
                 {
                     ServerSocket = ConnectionProvider.Adapter.InternalDevice.ListenUsingInsecureRfcommWithServiceRecord("Name?", Port.ToUUID());
                     IsActive = true;
-                    return SocketOperationStatus.Success;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 catch (Exception ex)
                 {
-                    return SocketOperationStatus.UnknownError;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
                 }
             }
             else
             {
-                return SocketOperationStatus.ListenerIsAlreadyStarted;
+                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyStarted, null);
             }
         }
 
-        public async Task<SocketOperationStatus> Stop()
+        public override async Task<VoidResult<SocketOperationStatus>> Stop()
         {
             await Task.Yield();
             if (IsActive)
@@ -93,16 +84,16 @@ namespace EmptyBox.IO.Network.Bluetooth
                 {
                     ServerSocket.Dispose();
                     IsActive = false;
-                    return SocketOperationStatus.Success;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 catch (Exception ex)
                 {
-                    return SocketOperationStatus.UnknownError;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
                 }
             }
             else
             {
-                return SocketOperationStatus.ListenerIsAlreadyClosed;
+                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyClosed, null);
             }
         }
         #endregion
