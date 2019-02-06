@@ -11,7 +11,7 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
-        event ConnectionInterruptHandler ConnectionInterrupted;
+        event ConnectionInterruptHandler<IConnection> ConnectionInterrupted;
 
         /// <summary>
         /// Интерфейс, на котором устанавливается соединение.
@@ -28,11 +28,11 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
-        new event ConnectionMessageReceiveHandler<TPort> MessageReceived;
+        new event MessageReceiveHandler<IConnection<TPort>> MessageReceived;
         /// <summary>
         /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
-        new event ConnectionInterruptHandler<TPort> ConnectionInterrupted;
+        new event ConnectionInterruptHandler<IConnection<TPort>> ConnectionInterrupted;
 
         /// <summary>
         /// Интерфейс, на котором устанавливается соединение.

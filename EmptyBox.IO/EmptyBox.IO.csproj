@@ -25,6 +25,7 @@
 👀Instructions for use available at project repository</PackageReleaseNotes>
     <Copyright />
     <PackageIconUrl>https://raw.githubusercontent.com/DjArt/EmptyBox.IO/master/EmptyBox.IO%20Logo.png</PackageIconUrl>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

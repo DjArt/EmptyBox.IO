@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Devices.GPIO
         {
             try
             {
-                GpioController controller = await GpioController.GetDefaultAsync();
+                GpioController controller = GpioController.GetDefault();
                 if (controller != null)
                 {
                     return new RefResult<GPIOController, AccessStatus>(new GPIOController(controller), AccessStatus.Success, null);
@@ -44,6 +44,7 @@ namespace EmptyBox.IO.Devices.GPIO
         public GpioController InternalDevice { get; private set; }
         public ConnectionStatus ConnectionStatus => ConnectionStatus.Connected;
         public string Name => throw new NotImplementedException();
+        public uint PinCount => (uint)InternalDevice.PinCount;
         #endregion
 
         #region Constructors
@@ -74,7 +75,7 @@ namespace EmptyBox.IO.Devices.GPIO
                 bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
                 if (success)
                 {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin), GPIOPinOpenStatus.PinOpened, null);
+                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, this), GPIOPinOpenStatus.PinOpened, null);
                 }
                 else
                 {
@@ -95,7 +96,7 @@ namespace EmptyBox.IO.Devices.GPIO
                 bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
                 if (success)
                 {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin), GPIOPinOpenStatus.PinOpened, null);
+                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, this), GPIOPinOpenStatus.PinOpened, null);
                 }
                 else
                 {

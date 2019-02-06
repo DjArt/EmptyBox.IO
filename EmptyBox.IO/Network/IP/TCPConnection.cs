@@ -91,7 +91,7 @@ namespace EmptyBox.IO.Network.IP
 
         public override async Task<VoidResult<SocketOperationStatus>> Open()
         {
-            //await Task.Yield();
+            await Task.Yield();
             if (!IsActive)
             {
                 try

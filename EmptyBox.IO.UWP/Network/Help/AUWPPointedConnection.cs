@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EmptyBox.ScriptRuntime.Results;
+using EmptyBox.IO.Network.Help;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,15 +10,14 @@ using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
-namespace EmptyBox.IO.Network
+namespace EmptyBox.IO.Network.Help
 {
-    public abstract class AConnection<TAccessPoint, TPort, TConnectionProvider> : IConnection where TAccessPoint : IAccessPoint where TPort : IPort where TConnectionProvider : IConnectionProvider
+    public abstract class AUWPPointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider> : APointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider>
+        where TAddress : IAddress
+        where TPort : IPort
+        where TAccessPoint : IAccessPoint<TAddress, TPort>
+        where TPointedConnectionProvider : IPointedConnectionProvider<TAddress, TPort>
     {
-        #region IConnection interface properties
-        IConnectionProvider IConnection.ConnectionProvider => ConnectionProvider;
-        IPort IConnection.Port => Port;
-        IAccessPoint IConnection.RemoteHost => RemoteHost;
-        #endregion
 
         #region Protected objects
         protected DataReader Input { get; set; }
@@ -27,13 +28,7 @@ namespace EmptyBox.IO.Network
         #endregion
 
         #region Public objects
-        public event ConnectionMessageReceiveHandler MessageReceived;
-        public event ConnectionInterruptHandler ConnectionInterrupt;
 
-        public TConnectionProvider ConnectionProvider { get; protected set; }
-        public TPort Port { get; protected set; }
-        public TAccessPoint RemoteHost { get; protected set; }
-        public bool IsActive { get; protected set; }
         #endregion
 
         #region Protected abstract functions
@@ -53,7 +48,7 @@ namespace EmptyBox.IO.Network
                     {
                         byte[] buffer = new byte[count];
                         Input.ReadBytes(buffer);
-                        MessageReceived?.Invoke(this, buffer);
+                        OnMessageReceive(buffer);
                     }
                 }
                 catch (Exception ex)
@@ -73,32 +68,32 @@ namespace EmptyBox.IO.Network
         #endregion
 
         #region Public functions
-        public async Task<SocketOperationStatus> Close()
+        public override async Task<VoidResult<SocketOperationStatus>> Close()
         {
             await Task.Yield();
             if (IsActive)
             {
                 try
                 {
-                    ConnectionInterrupt?.Invoke(this);
+                    OnConnectionInterrupt();
                     IsActive = false;
                     ReceiveLoopTask.Wait(100);
                     Stream.Dispose();
                     ReceivedConnection = false;
-                    return SocketOperationStatus.Success;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 catch (Exception ex)
                 {
-                    return SocketOperationStatus.UnknownError;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
                 }
             }
             else
             {
-                return SocketOperationStatus.ConnectionIsAlreadyClosed;
+                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ConnectionIsAlreadyClosed, null);
             }
         }
 
-        public async Task<SocketOperationStatus> Open()
+        public override async Task<VoidResult<SocketOperationStatus>> Open()
         {
             await Task.Yield();
             if (!IsActive)
@@ -108,21 +103,21 @@ namespace EmptyBox.IO.Network
                     if (!ReceivedConnection)
                     {
                         Stream = new StreamSocket();
-                        (HostName Name, string Port) pair = ConvertAccessPoint(RemoteHost);
-                        if (pair.Port != String.Empty)
+                        (HostName Name, string Port) pair = ConvertAccessPoint(RemotePoint);
+                        if (!string.IsNullOrWhiteSpace(pair.Port))
                         {
                             Stream.ConnectAsync(pair.Name, pair.Port).AsTask().Wait();
                             //TODO Port = Stream.Information.LocalPort;
                         }
                         else
                         {
-                            return SocketOperationStatus.ConnectionIsAlreadyClosed;
+                            return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ConnectionIsAlreadyClosed, null);
                         }
                     }
                     Input = new DataReader(Stream.InputStream);
                     Output = new DataWriter(Stream.OutputStream);
                     ReceiveLoopTask = Task.Run((Action)ReceiveLoop);
-                    return SocketOperationStatus.Success;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 catch (Exception ex)
                 {
@@ -130,14 +125,14 @@ namespace EmptyBox.IO.Network
                     switch (SocketError.GetStatus(ex.HResult))
                     {
                         default:
-                            return SocketOperationStatus.UnknownError;
+                            return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, null);
                     }
                 }
             }
-            return SocketOperationStatus.UnknownError;
+            return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, null);
         }
 
-        public async Task<SocketOperationStatus> Send(byte[] data)
+        public override async Task<VoidResult<SocketOperationStatus>> Send(byte[] data)
         {
             await Task.Yield();
             try
@@ -146,16 +141,16 @@ namespace EmptyBox.IO.Network
                 Output.WriteBytes(data);
                 if (await Output.FlushAsync())
                 {
-                    return SocketOperationStatus.Success;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 else
                 {
-                    return SocketOperationStatus.UnknownError;
+                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, null);
                 }
             }
             catch (Exception ex)
             {
-                return SocketOperationStatus.UnknownError;
+                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
             }
         }
         #endregion

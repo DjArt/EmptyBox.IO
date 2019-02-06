@@ -11,7 +11,7 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
-        event MessageReceiveHandler MessageReceived;
+        event MessageReceiveHandler<ICommunicationElement> MessageReceived;
 
         bool IsActive { get; }
 

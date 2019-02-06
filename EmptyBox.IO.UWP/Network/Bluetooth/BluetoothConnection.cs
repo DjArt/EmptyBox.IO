@@ -1,5 +1,6 @@
 ﻿using EmptyBox.IO.Devices.Bluetooth;
 using EmptyBox.IO.Interoperability;
+using EmptyBox.IO.Network.Help;
 using System;
 using System.Threading.Tasks;
 using Windows.Networking;
@@ -8,22 +9,22 @@ using Windows.Storage.Streams;
 
 namespace EmptyBox.IO.Network.Bluetooth
 {
-    public sealed class BluetoothConnection : AConnection<BluetoothAccessPoint, BluetoothPort, BluetoothDeviceProvider>, IBluetoothConnection
+    public sealed class BluetoothConnection : AUWPPointedConnection<IBluetoothDevice, BluetoothPort, BluetoothAccessPoint, BluetoothAdapter>, IBluetoothConnection
     {
         IBluetoothConnectionProvider IBluetoothConnection.ConnectionProvider => ConnectionProvider;
 
-        internal BluetoothConnection(BluetoothDeviceProvider provider, StreamSocket stream, BluetoothPort port, BluetoothAccessPoint remote)
+        internal BluetoothConnection(BluetoothAdapter provider, StreamSocket stream, BluetoothPort port, BluetoothAccessPoint remote)
         {
             Stream = stream;
-            RemoteHost = remote;
-            Port = port;
+            RemotePoint = remote;
+            LocalPoint = new BluetoothAccessPoint(provider, port);
             ConnectionProvider = provider;
             ReceivedConnection = true;
         }
 
-        public BluetoothConnection(BluetoothDeviceProvider provider, BluetoothAccessPoint remote)
+        public BluetoothConnection(BluetoothAdapter provider, BluetoothAccessPoint remote)
         {
-            RemoteHost = remote;
+            RemotePoint = remote;
             ConnectionProvider = provider;
             ReceivedConnection = false;
         }

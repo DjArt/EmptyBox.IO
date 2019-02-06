@@ -20,18 +20,19 @@ namespace EmptyBox.IO.Devices.Bluetooth
 
         #region Public objects
         public string Name => Device.Name;
-        public event DeviceConnectionStatusHandler ConnectionStatusEvent;
         public Windows.Devices.Bluetooth.BluetoothDevice Device { get; private set; }
         public ConnectionStatus ConnectionStatus => Device.ConnectionStatus.ToConnectionStatus();
         public MACAddress Address { get; private set; }
-        public DevicePairStatus PairStatus => throw new NotImplementedException();
+        public DevicePairStatus PairStatus => Device.DeviceInformation.Pairing.IsPaired ? DevicePairStatus.Paired : DevicePairStatus.Unpaired;
         public BluetoothClass DeviceClass => throw new NotImplementedException();
+        public BluetoothMode Mode => BluetoothMode.Unknown;
         #endregion
         
         #region Constructors
         public BluetoothDevice(Windows.Devices.Bluetooth.BluetoothDevice device)
         {
             Device = device;
+            device.ConnectionStatusChanged += Device_ConnectionStatusChanged;
             Address = new MACAddress(Device.BluetoothAddress);
         }
         #endregion
@@ -47,6 +48,11 @@ namespace EmptyBox.IO.Devices.Bluetooth
         private void Close(bool unexcepted)
         {
 
+        }
+
+        private void Device_ConnectionStatusChanged(Windows.Devices.Bluetooth.BluetoothDevice sender, object args)
+        {
+            ConnectionStatusChanged?.Invoke(this, sender.ConnectionStatus.ToConnectionStatus());
         }
         #endregion
 

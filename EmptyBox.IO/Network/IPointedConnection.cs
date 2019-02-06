@@ -15,11 +15,11 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
-        new event PointedConnectionMessageReceiveHandler<TAddress> MessageReceived;
+        new event MessageReceiveHandler<IPointedConnection<TAddress>> MessageReceived;
         /// <summary>
         /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
-        new event PointedConnectionInterruptHandler<TAddress> ConnectionInterrupted;
+        new event ConnectionInterruptHandler<IPointedConnection<TAddress>> ConnectionInterrupted;
 
         /// <summary>
         /// Интерфейс, на котором устанавливается соединение.
@@ -45,11 +45,11 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
-        new event PointedConnectionMessageReceiveHandler<TAddress, TPort> MessageReceived;
+        new event MessageReceiveHandler<IPointedConnection<TAddress, TPort>> MessageReceived;
         /// <summary>
         /// Событие, уведомляющее о закрытии соединения.
         /// </summary>
-        new event PointedConnectionInterruptHandler<TAddress, TPort> ConnectionInterrupted;
+        new event ConnectionInterruptHandler<IPointedConnection<TAddress, TPort>> ConnectionInterrupted;
 
         /// <summary>
         /// Интерфейс, на котором устанавливается соединение.

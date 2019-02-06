@@ -13,6 +13,8 @@ namespace EmptyBox.IO.Devices.GPIO
 {
     public sealed class GPIOPin : IGPIOPin
     {
+        IGPIOController IGPIOPin.Controller => Controller;
+
         #region Public events
         public event GPIOPinValueChanged ValueChanged;
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
@@ -24,23 +26,36 @@ namespace EmptyBox.IO.Devices.GPIO
         public IEnumerable<GPIOPinMode> SupportedModes => throw new NotImplementedException();
         public GPIOPinSharingMode SharingMode => throw new NotImplementedException();
         public GPIOPinSharingMode OpenMode => throw new NotImplementedException();
-        public ConnectionStatus ConnectionStatus => throw new NotImplementedException();
+        public ConnectionStatus ConnectionStatus => ConnectionStatus.Connected;
         public string Name => PinNumber.ToString();
         public GpioPin InternalDevice { get; private set; }
+        public GPIOController Controller { get; private set; }
+        public bool EventChecking { get; set; }
         #endregion
 
         #region Constructors
-        public GPIOPin(GpioPin internalDevice)
+        internal GPIOPin(GpioPin internalDevice, GPIOController controller)
         {
+            Controller = controller;
+            Controller.ConnectionStatusChanged += Controller_ConnectionStatusChanged;
             InternalDevice = internalDevice;
+            EventChecking = false;
             InternalDevice.ValueChanged += InternalDevice_ValueChanged;
         }
         #endregion
 
         #region Private functions
+        private void Controller_ConnectionStatusChanged(IDevice device, ConnectionStatus status)
+        {
+            ConnectionStatusChanged?.Invoke(this, status);
+        }
+
         private void InternalDevice_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
         {
-            ValueChanged?.Invoke(this, args.Edge.ToGPIOPinEdge());
+            if (!EventChecking || args.Edge == GpioPinEdge.FallingEdge && sender.Read() == GpioPinValue.Low || args.Edge == GpioPinEdge.RisingEdge && sender.Read() == GpioPinValue.High)
+            {
+                ValueChanged?.Invoke(this, args.Edge.ToGPIOPinEdge());
+            }
         }
         #endregion
 
@@ -50,65 +65,10 @@ namespace EmptyBox.IO.Devices.GPIO
             throw new NotImplementedException();
         }
 
-        public async Task<ValResult<GPIOPinMode, AccessStatus>> GetMode()
-        {
-            await Task.Yield();
-            try
-            {
-                return new ValResult<GPIOPinMode, AccessStatus>(InternalDevice.GetDriveMode().ToGPIOPinMode(), AccessStatus.Success, null);
-            }
-            catch (Exception ex)
-            {
-                return new ValResult<GPIOPinMode, AccessStatus>(null, AccessStatus.UnknownError, ex);
-            }
-        }
-
-        public async Task<ValResult<GPIOPinValue, AccessStatus>> GetValue()
-        {
-            await Task.Yield();
-            try
-            {
-                return new ValResult<GPIOPinValue, AccessStatus>(InternalDevice.Read().ToGPIOPinValue(), AccessStatus.Success, null);
-            }
-            catch (Exception ex)
-            {
-                return new ValResult<GPIOPinValue, AccessStatus>(null, AccessStatus.UnknownError, ex);
-            }
-        }
-
-        public async Task<VoidResult<AccessStatus>> SetMode(GPIOPinMode mode)
-        {
-            await Task.Yield();
-            try
-            {
-                InternalDevice.SetDriveMode(mode.ToGpioPinDriveMode());
-                return new VoidResult<AccessStatus>(AccessStatus.Success, null);
-            }
-            catch (Exception ex)
-            {
-                return new VoidResult<AccessStatus>(AccessStatus.UnknownError, ex);
-            }
-        }
-
-        public async Task<VoidResult<AccessStatus>> SetValue(GPIOPinValue value)
-        {
-            await Task.Yield();
-            try
-            {
-                InternalDevice.Write(value.ToGpioPinValue());
-                return new VoidResult<AccessStatus>(AccessStatus.Success, null);
-            }
-            catch (Exception ex)
-            {
-                return new VoidResult<AccessStatus>(AccessStatus.Success, ex);
-            }
-        }
-
-        public async Task<ValResult<GPIOPinEdge, AccessStatus>> SupportedEventModes()
-        {
-            await Task.Yield();
-            return new ValResult<GPIOPinEdge, AccessStatus>(GPIOPinEdge.FallingEdge | GPIOPinEdge.RisingEdge, AccessStatus.Success, null);
-        }
+        public GPIOPinMode GetMode() => InternalDevice.GetDriveMode().ToGPIOPinMode();
+        public GPIOPinValue GetValue() => InternalDevice.Read().ToGPIOPinValue();
+        public void SetMode(GPIOPinMode mode) => InternalDevice.SetDriveMode(mode.ToGpioPinDriveMode());
+        public void SetValue(GPIOPinValue value) => InternalDevice.Write(value.ToGpioPinValue());
         #endregion
     }
 }

@@ -10,8 +10,8 @@ namespace EmptyBox.IO.Network.Help
     {
         IPointedConnectionProvider<TAddress> IPointedConnection<TAddress>.ConnectionProvider => ConnectionProvider;
 
-        public new event PointedConnectionMessageReceiveHandler<TAddress> MessageReceived;
-        public new event PointedConnectionInterruptHandler<TAddress> ConnectionInterrupted;
+        public new event MessageReceiveHandler<IPointedConnection<TAddress>> MessageReceived;
+        public new event ConnectionInterruptHandler<IPointedConnection<TAddress>> ConnectionInterrupted;
 
         public TAddress LocalPoint { get; protected set; }
         public TAddress RemotePoint { get; protected set; }
@@ -39,26 +39,23 @@ namespace EmptyBox.IO.Network.Help
         IAccessPoint<TAddress, TPort> IPointedConnection<TAddress, TPort>.LocalPoint => LocalPoint;
         IAccessPoint<TAddress, TPort> IPointedConnection<TAddress, TPort>.RemotePoint => RemotePoint;
 
-        event ConnectionMessageReceiveHandler<TPort> IConnection<TPort>.MessageReceived
+        event MessageReceiveHandler<IConnection<TPort>> IConnection<TPort>.MessageReceived
         {
-            add => _MessageReceived += value;
-            remove => _MessageReceived -= value;
+            add => MessageReceived += value;
+            remove => MessageReceived -= value;
         }
-        event ConnectionInterruptHandler<TPort> IConnection<TPort>.ConnectionInterrupted
+        event ConnectionInterruptHandler<IConnection<TPort>> IConnection<TPort>.ConnectionInterrupted
         {
-            add => _ConnectionInterrupted += value;
-            remove => _ConnectionInterrupted -= value;
+            add => ConnectionInterrupted += value;
+            remove => ConnectionInterrupted -= value;
         }
 
         IConnectionProvider<TPort> IConnection<TPort>.ConnectionProvider => ConnectionProvider;
         TPort IConnection<TPort>.LocalPoint => LocalPoint.Port;
         TPort IConnection<TPort>.RemotePoint => RemotePoint.Port;
 
-        private event ConnectionInterruptHandler<TPort> _ConnectionInterrupted;
-        private event ConnectionMessageReceiveHandler<TPort> _MessageReceived;
-
-        public new event PointedConnectionMessageReceiveHandler<TAddress, TPort> MessageReceived;
-        public new event PointedConnectionInterruptHandler<TAddress, TPort> ConnectionInterrupted;
+        public new event MessageReceiveHandler<IPointedConnection<TAddress, TPort>> MessageReceived;
+        public new event ConnectionInterruptHandler<IPointedConnection<TAddress, TPort>> ConnectionInterrupted;
 
         private TAccessPoint _LocalPoint;
         private TAccessPoint _RemotePoint;
@@ -85,14 +82,12 @@ namespace EmptyBox.IO.Network.Help
         protected override void OnConnectionInterrupt()
         {
             ConnectionInterrupted?.Invoke(this);
-            _ConnectionInterrupted?.Invoke(this);
             base.OnConnectionInterrupt();
         }
 
         protected override void OnMessageReceive(byte[] message)
         {
             MessageReceived?.Invoke(this, message);
-            _MessageReceived?.Invoke(this, message);
             base.OnMessageReceive(message);
         }
     }

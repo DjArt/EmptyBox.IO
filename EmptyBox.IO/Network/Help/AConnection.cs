@@ -9,10 +9,16 @@ namespace EmptyBox.IO.Network.Help
     public abstract class AConnection<TConnectionProvider> : IConnection
         where TConnectionProvider : IConnectionProvider
     {
+        event MessageReceiveHandler<ICommunicationElement> ICommunicationElement.MessageReceived
+        {
+            add => MessageReceived += value;
+            remove => MessageReceived -= value;
+        }
+
         IConnectionProvider IConnection.ConnectionProvider => ConnectionProvider;
 
-        public event ConnectionInterruptHandler ConnectionInterrupted;
-        public event MessageReceiveHandler MessageReceived;
+        public event ConnectionInterruptHandler<IConnection> ConnectionInterrupted;
+        public event MessageReceiveHandler<IConnection> MessageReceived;
 
         public virtual TConnectionProvider ConnectionProvider { get; protected set; }
         public virtual bool IsActive { get; protected set; }
@@ -32,14 +38,15 @@ namespace EmptyBox.IO.Network.Help
         public abstract Task<VoidResult<SocketOperationStatus>> Send(byte[] data);
     }
 
-    public abstract class AConnection<TPort, TConnectionProvider> : AConnection<TConnectionProvider>, IConnection<TPort>
+    public abstract class AConnection<TPort, TConnectionProvider, TInherited> : AConnection<TConnectionProvider>, IConnection<TPort>
         where TPort : IPort
         where TConnectionProvider : IConnectionProvider<TPort>
+        where TInherited : AConnection<TPort, TConnectionProvider, TInherited>
     {
         IConnectionProvider<TPort> IConnection<TPort>.ConnectionProvider => ConnectionProvider;
 
-        public new event ConnectionMessageReceiveHandler<TPort> MessageReceived;
-        public new event ConnectionInterruptHandler<TPort> ConnectionInterrupted;
+        public new event MessageReceiveHandler<IConnection<TPort>> MessageReceived;
+        public new event ConnectionInterruptHandler<IConnection<TPort>> ConnectionInterrupted;
 
         public TPort LocalPoint { get; protected set; }
         public TPort RemotePoint { get; protected set; }

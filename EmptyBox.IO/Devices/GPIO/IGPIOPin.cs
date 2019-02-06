@@ -11,15 +11,16 @@ namespace EmptyBox.IO.Devices.GPIO
         event GPIOPinValueChanged ValueChanged;
         
         TimeSpan DebounceTime { get; set; }
+        bool EventChecking { get; set; }
         uint PinNumber { get; }
         IEnumerable<GPIOPinMode> SupportedModes { get; }
         GPIOPinSharingMode SharingMode { get; }
         GPIOPinSharingMode OpenMode { get; }
+        IGPIOController Controller { get; }
 
-        Task<VoidResult<AccessStatus>> SetValue(GPIOPinValue value);
-        Task<ValResult<GPIOPinValue, AccessStatus>> GetValue();
-        Task<VoidResult<AccessStatus>> SetMode(GPIOPinMode mode);
-        Task<ValResult<GPIOPinMode, AccessStatus>> GetMode();
-        Task<ValResult<GPIOPinEdge, AccessStatus>> SupportedEventModes();
+        void SetValue(GPIOPinValue value);
+        GPIOPinValue GetValue();
+        void SetMode(GPIOPinMode mode);
+        GPIOPinMode GetMode();
     }
 }
