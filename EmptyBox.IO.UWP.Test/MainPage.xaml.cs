@@ -28,9 +28,41 @@ namespace EmptyBox.IO.UWP.Test
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        IGPIOController ctrl;
+        IPWMController ctrl2;
+        IPWMPin pin;
+        Task T;
+
         public MainPage()
         {
             this.InitializeComponent();
+            Test();
+        }
+
+        async Task Test()
+        {
+            ctrl = (await GPIOController.GetDefault()).Result;
+            ctrl2 = new SoftwarePWMController(ctrl);
+            ctrl2.Frequency = 1;
+            pin = (await ctrl2.OpenPin(26)).Result;
+            pin.DutyCycle = 0.5;
+            pin.Start();
+            T = Task.Run(() =>
+            {
+                Task.Delay(2000).Wait();
+                //double j = -0.000001;
+                while (ctrl2.Frequency < 1000)
+                {
+                    //if (j + pin.DutyCycle > 1 || j + pin.DutyCycle < 0)
+                    //{
+                    //    j *= -1;
+                    //}
+                    //pin.DutyCycle += j;
+                    //Task.Delay(10).Wait();
+                    ctrl2.Frequency++;
+                    Task.Delay(10).Wait();
+                }
+            });
         }
     }
 }

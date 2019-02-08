@@ -25,8 +25,11 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
             get => _DutyCycle;
             set
             {
-                _DutyCycle = value;
-                _UpdateRequiredFrequency();
+                if (value != _DutyCycle)
+                {
+                    _DutyCycle = value;
+                    _UpdateDutyCycle();
+                }
             }
         }
         public uint PinNumber => Pin.PinNumber;
@@ -46,11 +49,17 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
             Pin.ConnectionStatusChanged += Pin_ConnectionStatusChanged;
         }
 
-        private void _UpdateRequiredFrequency()
+        internal void UpdateRequiredFrequency()
         {
             double activeApproximation = Controller.Frequency * _DutyCycle;
             double inactiveApproximation = Controller.Frequency * (1 - _DutyCycle);
-            RequiredFrequency = inactiveApproximation == 0 ? 1 : activeApproximation / inactiveApproximation;
+            RequiredFrequency = inactiveApproximation == 0 ? double.MaxValue : activeApproximation / inactiveApproximation;
+            
+        }
+
+        private void _UpdateDutyCycle()
+        {
+            UpdateRequiredFrequency();
             ActiveCounter = (ulong)(10 * RequiredFrequency);
             InactiveCounter = 1;
         }

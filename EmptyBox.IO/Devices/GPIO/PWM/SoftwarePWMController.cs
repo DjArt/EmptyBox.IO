@@ -15,6 +15,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         private Task _Loop;
         private CancellationTokenSource _TokenSource;
         private double _Freqency;
+        private double _Wait;
 
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
 
@@ -28,7 +29,8 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
                 if (value >= MinFrequency && value <= MaxFrequency)
                 {
                     _Freqency = value;
-                    _Pins.ForEach(x => x.DutyCycle = x.DutyCycle);
+                    _Wait = Stopwatch.Frequency / Math.Pow(Frequency, 2);
+                    _Pins.ForEach(x => x.UpdateRequiredFrequency());
                 }
                 else
                 {
@@ -98,7 +100,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
             if (_TokenSource == null)
             {
                 _TokenSource = new CancellationTokenSource();
-                _Loop = Loop(_TokenSource.Token);
+                _Loop = Task.Run(() => Loop(_TokenSource.Token));
             }
         }
 
@@ -115,19 +117,21 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         {
             await Task.Yield();
             Stopwatch a = new Stopwatch();
-            double wait = Stopwatch.Frequency / Math.Pow(Frequency, 2);
             a.Start();
             while (!token.IsCancellationRequested)
             {
+                List<SoftwarePWMPin> pins = _Pins.FindAll(x => x.IsActive);
                 long curr = a.ElapsedTicks;
-                while (curr < wait)
+                long prev = curr;
+                while (curr < _Wait && curr - prev < _Wait - curr)
                 {
+                    prev = curr;
                     curr = a.ElapsedTicks;
                 }
-                List<SoftwarePWMPin> pins = _Pins.FindAll(x => x.IsActive);
+                a.Restart();
                 foreach (SoftwarePWMPin pin in pins)
                 {
-                    if (pin.RequiredFrequency >= pin.CurrentFrequency)
+                    if (pin.RequiredFrequency > pin.CurrentFrequency)
                     {
                         pin.Pin.SetValue(pin.InvertedPolarity ? GPIOPinValue.Low : GPIOPinValue.High);
                         pin.ActiveCounter++;
@@ -138,7 +142,6 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
                         pin.InactiveCounter++;
                     }
                 }
-                a.Restart();
             }
         }
     }
