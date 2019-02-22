@@ -17,6 +17,8 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         private double _Freqency;
         private double _Wait;
 
+        IDevice IDevice.Parent => Parent;
+
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
 
         public double MaxFrequency => 1000;
@@ -38,17 +40,17 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
                 }
             }
         }
-        public uint PinCount => GPIOController.PinCount;
-        public ConnectionStatus ConnectionStatus => GPIOController.ConnectionStatus;
+        public uint PinCount => Parent.PinCount;
+        public ConnectionStatus ConnectionStatus => Parent.ConnectionStatus;
         public string Name => "Software PWM";
-        public IGPIOController GPIOController { get; }
+        public IGPIOController Parent { get; }
 
         public SoftwarePWMController(IGPIOController controller)
         {
             _Pins = new List<SoftwarePWMPin>();
-            GPIOController = controller;
+            Parent = controller;
             Frequency = MinFrequency;
-            GPIOController.ConnectionStatusChanged += GPIOController_ConnectionStatusChanged;
+            Parent.ConnectionStatusChanged += GPIOController_ConnectionStatusChanged;
         }
 
         private void GPIOController_ConnectionStatusChanged(IDevice device, ConnectionStatus status)
@@ -63,7 +65,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
 
         public async Task<RefResult<IPWMPin, GPIOPinOpenStatus>> OpenPin(uint number)
         {
-            var pin = await GPIOController.OpenPin(number, GPIOPinSharingMode.Exclusive);
+            var pin = await Parent.OpenPin(number, GPIOPinSharingMode.Exclusive);
             if (pin.Status == GPIOPinOpenStatus.PinOpened)
             {
                 SoftwarePWMPin _pin = new SoftwarePWMPin(this, pin.Result);

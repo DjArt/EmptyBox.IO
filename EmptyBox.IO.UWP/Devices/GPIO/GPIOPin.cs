@@ -13,7 +13,9 @@ namespace EmptyBox.IO.Devices.GPIO
 {
     public sealed class GPIOPin : IGPIOPin
     {
-        IGPIOController IGPIOPin.Controller => Controller;
+        IDevice IDevice.Parent => Parent;
+
+        IGPIOController IGPIOPin.Parent => Parent;
 
         #region Public events
         public event GPIOPinValueChanged ValueChanged;
@@ -28,16 +30,16 @@ namespace EmptyBox.IO.Devices.GPIO
         public GPIOPinSharingMode OpenMode => throw new NotImplementedException();
         public ConnectionStatus ConnectionStatus => ConnectionStatus.Connected;
         public string Name => PinNumber.ToString();
-        public GpioPin InternalDevice { get; private set; }
-        public GPIOController Controller { get; private set; }
+        public GpioPin InternalDevice { get; }
+        public GPIOController Parent { get; }
         public bool EventChecking { get; set; }
         #endregion
 
         #region Constructors
         internal GPIOPin(GpioPin internalDevice, GPIOController controller)
         {
-            Controller = controller;
-            Controller.ConnectionStatusChanged += Controller_ConnectionStatusChanged;
+            Parent = controller;
+            Parent.ConnectionStatusChanged += Controller_ConnectionStatusChanged;
             InternalDevice = internalDevice;
             EventChecking = false;
             InternalDevice.ValueChanged += InternalDevice_ValueChanged;

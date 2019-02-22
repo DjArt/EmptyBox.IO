@@ -13,29 +13,6 @@ namespace EmptyBox.IO.Devices.GPIO
 {
     public sealed class GPIOController : IGPIOController
     {
-        #region Static public functions
-        [StandardRealization]
-        public static async Task<RefResult<GPIOController, AccessStatus>> GetDefault()
-        {
-            try
-            {
-                GpioController controller = GpioController.GetDefault();
-                if (controller != null)
-                {
-                    return new RefResult<GPIOController, AccessStatus>(new GPIOController(controller), AccessStatus.Success, null);
-                }
-                else
-                {
-                    return new RefResult<GPIOController, AccessStatus>(null, AccessStatus.NotAvailable, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                return new RefResult<GPIOController, AccessStatus>(null, AccessStatus.UnknownError, ex);
-            }
-        }
-        #endregion
-
         #region Public events
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
         #endregion
@@ -45,6 +22,8 @@ namespace EmptyBox.IO.Devices.GPIO
         public ConnectionStatus ConnectionStatus => ConnectionStatus.Connected;
         public string Name => throw new NotImplementedException();
         public uint PinCount => (uint)InternalDevice.PinCount;
+
+        public IDevice Parent => throw new NotImplementedException();
         #endregion
 
         #region Constructors

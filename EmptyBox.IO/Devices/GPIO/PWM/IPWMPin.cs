@@ -9,7 +9,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         double DutyCycle { get; set; }
         uint PinNumber { get; }
         bool InvertedPolarity { get; set; }
-        IPWMController Controller { get; }
+        new IPWMController Parent { get; }
 
         void Start();
         void Stop();

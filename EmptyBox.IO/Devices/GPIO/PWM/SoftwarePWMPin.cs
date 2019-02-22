@@ -16,7 +16,8 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         internal double RequiredFrequency { get; private set; }
         internal double CurrentFrequency => (double)ActiveCounter / InactiveCounter;
 
-        IPWMController IPWMPin.Controller => Controller;
+        IDevice IDevice.Parent => Parent;
+        IPWMController IPWMPin.Parent => Parent;
 
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
 
@@ -38,21 +39,21 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         public ConnectionStatus ConnectionStatus => Pin.ConnectionStatus;
         public string Name => Pin.Name;
         public IGPIOPin Pin { get; }
-        public SoftwarePWMController Controller { get; }
+        public SoftwarePWMController Parent { get; }
 
         public SoftwarePWMPin(SoftwarePWMController controller, IGPIOPin pin)
         {
             InvertedPolarity = false;
             IsActive = false;
-            Controller = controller;
+            Parent = controller;
             Pin = pin;
             Pin.ConnectionStatusChanged += Pin_ConnectionStatusChanged;
         }
 
         internal void UpdateRequiredFrequency()
         {
-            double activeApproximation = Controller.Frequency * _DutyCycle;
-            double inactiveApproximation = Controller.Frequency * (1 - _DutyCycle);
+            double activeApproximation = Parent.Frequency * _DutyCycle;
+            double inactiveApproximation = Parent.Frequency * (1 - _DutyCycle);
             RequiredFrequency = inactiveApproximation == 0 ? double.MaxValue : activeApproximation / inactiveApproximation;
             
         }

@@ -16,7 +16,7 @@ namespace EmptyBox.IO.Devices.GPIO
         IEnumerable<GPIOPinMode> SupportedModes { get; }
         GPIOPinSharingMode SharingMode { get; }
         GPIOPinSharingMode OpenMode { get; }
-        IGPIOController Controller { get; }
+        new IGPIOController Parent { get; }
 
         void SetValue(GPIOPinValue value);
         GPIOPinValue GetValue();
