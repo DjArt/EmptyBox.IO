@@ -31,7 +31,7 @@ namespace EmptyBox.IO.Network.Bluetooth
 
         protected override (HostName Name, string Port) ConvertAccessPoint(BluetoothAccessPoint point)
         {
-            return (point.Address.Address.ToHostName(), point.ToServiceIDString().Result);
+            return (point.Address.HardwareAddress.ToHostName(), point.ToServiceIDString().Result);
         }
     }
 }
