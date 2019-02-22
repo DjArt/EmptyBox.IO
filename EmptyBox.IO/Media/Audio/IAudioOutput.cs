@@ -4,7 +4,8 @@ using System.Text;
 
 namespace EmptyBox.IO.Media.Audio
 {
-    public interface IAudioOutput
+    public interface IAudioOutput : IDisposable
     {
+        void ProcessChunk(IAudioChunk chunk);
     }
 }

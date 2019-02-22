@@ -4,7 +4,8 @@ using System.Text;
 
 namespace EmptyBox.IO.Media.Audio
 {
-    public interface IAudioInput
+    public interface IAudioInput : IDisposable
     {
+        
     }
 }

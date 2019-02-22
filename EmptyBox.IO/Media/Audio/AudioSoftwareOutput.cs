@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EmptyBox.IO.Media.Audio
 {
-    public interface IAudioSoftwareInput : IAudioInput
-    {
-    }
+    //public sealed class AudioSoftwareOutput : IAudioOutput
+    //{
+    //}
 }
