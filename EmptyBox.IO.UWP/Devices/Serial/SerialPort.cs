@@ -15,6 +15,8 @@ namespace EmptyBox.IO.Devices.Serial
         public ConnectionStatus ConnectionStatus => throw new NotImplementedException();
         public string Name { get; private set; }
 
+        public IDevice Parent => throw new NotImplementedException();
+
         internal SerialPort()
         {
 

@@ -14,5 +14,17 @@ namespace EmptyBox.IO.Interoperability
         {
             return new IPAccessPoint(new Network.IP.IPAddress(endPoint.Address.GetAddressBytes()), new IPPort((ushort)endPoint.Port));
         }
+
+        public static uint? ToUInt(this int? value)
+        {
+            if (value.HasValue)
+            {
+                return (uint)value.Value;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

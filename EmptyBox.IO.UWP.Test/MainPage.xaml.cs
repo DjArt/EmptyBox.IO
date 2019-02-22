@@ -18,6 +18,10 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 using EmptyBox.IO.Devices;
+using EmptyBox.IO.Test.Devices.Bluetooth;
+using EmptyBox.IO.Devices.Enumeration;
+using EmptyBox.IO.Devices.Bluetooth;
+using Windows.UI.Core;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -28,41 +32,29 @@ namespace EmptyBox.IO.UWP.Test
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        IGPIOController ctrl;
-        IPWMController ctrl2;
-        IPWMPin pin;
-        Task T;
-
         public MainPage()
         {
             this.InitializeComponent();
-            Test();
+            tb.Text = "";
         }
 
-        async Task Test()
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            ctrl = (await GPIOController.GetDefault()).Result;
-            ctrl2 = new SoftwarePWMController(ctrl);
-            ctrl2.Frequency = 1;
-            pin = (await ctrl2.OpenPin(26)).Result;
-            pin.DutyCycle = 0.5;
-            pin.Start();
-            T = Task.Run(() =>
-            {
-                Task.Delay(2000).Wait();
-                //double j = -0.000001;
-                while (ctrl2.Frequency < 1000)
-                {
-                    //if (j + pin.DutyCycle > 1 || j + pin.DutyCycle < 0)
-                    //{
-                    //    j *= -1;
-                    //}
-                    //pin.DutyCycle += j;
-                    //Task.Delay(10).Wait();
-                    ctrl2.Frequency++;
-                    Task.Delay(10).Wait();
-                }
-            });
+            IDeviceEnumerator enumerator = DeviceEnumeratorProvider.Get();
+            IBluetoothAdapter adapter = await enumerator.GetDefault<IBluetoothAdapter>();
+            adapter.DeviceFound += Adapter_DeviceFound;
+            adapter.DeviceLost += Adapter_DeviceLost;
+            await adapter.StartWatcher();
+        }
+
+        private async void Adapter_DeviceLost(IDeviceProvider<IBluetoothDevice> provider, IBluetoothDevice device)
+        {
+            await tb.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => tb.Text += "Device lost: " + device.ToString()  + " " + device.DeviceClass + '\n');
+        }
+
+        private async void Adapter_DeviceFound(IDeviceProvider<IBluetoothDevice> provider, IBluetoothDevice device)
+        {
+            await tb.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => tb.Text += "Device found: " + device.ToString() + " " + device.DeviceClass + '\n');
         }
     }
 }

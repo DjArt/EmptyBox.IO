@@ -1,4 +1,5 @@
 ﻿using EmptyBox.IO.Devices.Bluetooth;
+using EmptyBox.IO.Devices.Enumeration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,15 +16,16 @@ namespace EmptyBox.IO.Test.Devices.Bluetooth
         public async Task<string> Run()
         {
             StringBuilder result = new StringBuilder();
-            IBluetoothAdapter @default = (await BluetoothAdapterProvider.GetDefault()).Result;
+            IDeviceEnumerator enumerator = DeviceEnumeratorProvider.Get();
+            IBluetoothAdapter @default = await enumerator.GetDefault<IBluetoothAdapter>();
             if (@default != null)
             {
-                result.AppendFormat("Найден Bluetooth-адаптер по умолчанию: {0}({1})", @default.Name, @default.DeviceProvider.Address);
+                result.AppendFormat("Найден Bluetooth-адаптер по умолчанию: {0}({1})", @default.Name, @default.Address);
                 result.AppendLine();
-                IEnumerable<IBluetoothDevice> devices = await @default.DeviceProvider.Find();
+                IEnumerable<IBluetoothDevice> devices = await @default.Find();
                 foreach (IBluetoothDevice device in devices)
                 {
-                    result.AppendFormat("Найдено Bluetooth-устроство: {0}({1})", device.Name, device.Address);
+                    result.AppendFormat("Найдено Bluetooth-устроство: {0}({1})", device.Name, device.HardwareAddress);
                     result.AppendLine();
                 }
             }

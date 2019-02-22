@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EmptyBox.IO.Access;
 using EmptyBox.IO.Devices.Bluetooth;
+using EmptyBox.IO.Devices.Enumeration;
 
 namespace EmptyBox.IO.Test.Devices.Bluetooth
 {
@@ -16,20 +17,9 @@ namespace EmptyBox.IO.Test.Devices.Bluetooth
         public async Task<string> Run()
         {
             StringBuilder result = new StringBuilder();
-            var res = await BluetoothAdapterProvider.GetDefault();
-            switch (res.Status)
-            {
-                case AccessStatus.Success:
-                    IBluetoothAdapter @default = res.Result;
-                    result.AppendFormat("Найден Bluetooth-адаптер по умолчанию: {0}({1})", @default.Name, @default.DeviceProvider.Address);
-                    break;
-                case AccessStatus.UnknownError:
-                    result.AppendFormat("Ошибка: {0}", res.Exception);
-                    break;
-                default:
-                    result.AppendFormat("Ошибка {0}: {1}", res.Status, res.Exception);
-                    break;
-            }
+            IDeviceEnumerator enumerator = DeviceEnumeratorProvider.Get();
+            IBluetoothAdapter @default = await enumerator.GetDefault<IBluetoothAdapter>();
+            result.AppendFormat("Найден Bluetooth-адаптер по умолчанию: {0}({1})", @default?.Name, @default?.Address);
             return result.ToString();
         }
 

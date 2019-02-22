@@ -173,6 +173,10 @@
       <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
       <Name>EmptyBox.IO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tests\EmptyBox.IO.Test\EmptyBox.IO.Test.csproj">
+      <Project>{d8e67dfc-dcbd-4441-9254-4054fed1d63f}</Project>
+      <Name>EmptyBox.IO.Test</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="WindowsDesktop, Version=10.0.17763.0">

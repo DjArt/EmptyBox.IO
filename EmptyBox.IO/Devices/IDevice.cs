@@ -8,5 +8,6 @@ namespace EmptyBox.IO.Devices
 
         ConnectionStatus ConnectionStatus { get; }
         string Name { get; }
+        IDevice Parent { get; }
     }
 }

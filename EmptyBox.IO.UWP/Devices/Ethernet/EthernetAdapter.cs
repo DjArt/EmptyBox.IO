@@ -30,6 +30,8 @@ namespace EmptyBox.IO.Devices.Ethernet
 
         public IANAInterfaceType IANAInterfaceType => throw new NotImplementedException();
 
+        public IDevice Parent => throw new NotImplementedException();
+
         internal EthernetAdapter(NetworkAdapter internalAdapter)
         {
             async void Initialization()
