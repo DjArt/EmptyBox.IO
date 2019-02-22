@@ -15,16 +15,22 @@ namespace EmptyBox.IO.Devices.Bluetooth
 {
     public sealed class BluetoothAdapter : IBluetoothAdapter
     {
-        #region Static public functions
-        [StandardRealization]
-        public static async Task<BluetoothAdapter> GetDefault() => new BluetoothAdapter(await Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync());
-        #endregion
+        private const string BLUETOOTH_LE_GUID = "{BB7BB05E-5972-42B5-94FC-76EAA7084D49}";
+        private const string BLUETOOTH_GUID = "{E0CBF06C-CD8B-4647-BB8A-263B43F0F974}";
+        private const string c0 = "System.Devices.DevObjectType:=5";
+        private const string c1 = "System.Devices.Aep.ProtocolId:=";
+        private const string query = c0 + " AND (" + c1 + "\"" + BLUETOOTH_GUID + "\" OR " + c1 + "\"" + BLUETOOTH_LE_GUID + "\")";
+        private const string query1 = c0 + " AND " + c1 + "\"" + BLUETOOTH_GUID + "\"";
+        private const string query2 = c0 + " AND " + c1 + "\"" + BLUETOOTH_LE_GUID + "\"";
 
         #region Private objects
+        private List<BluetoothDevice> _Devices;
         private DeviceWatcher _Watcher;
         #endregion
 
         IBluetoothDevice IPointedConnectionProvider<IBluetoothDevice>.Address => this;
+
+        IBluetoothAdapter IBluetoothDevice.Parent => null;
 
         #region Public events
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
@@ -33,49 +39,83 @@ namespace EmptyBox.IO.Devices.Bluetooth
         #endregion
 
         #region Public objects
-        public Windows.Devices.Bluetooth.BluetoothAdapter InternalAdapter { get; set; }
-        public Windows.Devices.Radios.Radio InternalRadio { get; set; }
-        public RadioStatus RadioStatus => InternalRadio.State.ToRadioStatus();
+        public Windows.Devices.Bluetooth.BluetoothAdapter InternalAdapter { get; }
+        public Windows.Devices.Radios.Radio InternalRadio { get; }
+        public RadioStatus RadioStatus => InternalRadio == null ? RadioStatus.Unknown : InternalRadio.State.ToRadioStatus();
         public ConnectionStatus ConnectionStatus { get; private set; }
-        public MACAddress Address { get; private set; }
-        public string Name { get; private set; }
+        public string Name => InternalRadio?.Name;
         public bool IsStarted { get; private set; }
         public BluetoothClass DeviceClass => throw new NotImplementedException();
         public BluetoothMode Mode { get; }
         public DevicePairStatus PairStatus => DevicePairStatus.Unknown;
+        public IDevice Parent => throw new NotImplementedException();
+        public MACAddress HardwareAddress { get; }
 
         #endregion
 
         #region Constructors
         internal BluetoothAdapter(Windows.Devices.Bluetooth.BluetoothAdapter adapter)
         {
-            async void Initialization()
-            {
-                try
-                {
-                    InternalRadio = await InternalAdapter.GetRadioAsync();
-                }
-                catch
-                {
-                    InternalRadio = null;
-                }
-            }
-
             InternalAdapter = adapter;
-            Task init = Task.Run((Action)Initialization);
-            Address = new MACAddress(InternalAdapter.BluetoothAddress);
+            Task<Windows.Devices.Radios.Radio> initRadio = InternalAdapter.GetRadioAsync().AsTask();
+            _Devices = new List<BluetoothDevice>();
+            HardwareAddress = new MACAddress(InternalAdapter.BluetoothAddress);
             Mode |= InternalAdapter.IsClassicSupported ? BluetoothMode.Standard : BluetoothMode.Unknown;
             Mode |= InternalAdapter.IsLowEnergySupported ? BluetoothMode.LowEnergy : BluetoothMode.Unknown;
-            _Watcher = DeviceInformation.CreateWatcher(Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelector());
+            _Watcher = DeviceInformation.CreateWatcher(query);
             _Watcher.Added += _Watcher_Added;
             _Watcher.EnumerationCompleted += _Watcher_EnumerationCompleted;
             _Watcher.Removed += _Watcher_Removed;
             _Watcher.Stopped += _Watcher_Stopped;
             _Watcher.Updated += _Watcher_Updated;
-            init.Wait();
-            if (InternalRadio != null)
+            initRadio.Wait();
+            if (!initRadio.IsFaulted)
             {
-                Name = InternalRadio.Name;
+                InternalRadio = initRadio.Result;
+            }
+        }
+
+        private async Task<BluetoothDevice> _CreateDevice(string id)
+        {
+            if (id.StartsWith("BluetoothLE"))
+            {
+                Windows.Devices.Bluetooth.BluetoothLEDevice @internal = await Windows.Devices.Bluetooth.BluetoothLEDevice.FromIdAsync(id);
+                BluetoothDevice device = _Devices.Find(x => x.HardwareAddress == new MACAddress(@internal.BluetoothAddress));
+                if (device != null)
+                {
+                    if (device.LEDevice == null)
+                    {
+                        device.LEDevice = @internal;
+                    }
+                }
+                else
+                {
+                    device = new BluetoothDevice(this, @internal);
+                    _Devices.Add(device);
+                }
+                return device;
+            }
+            else if (id.StartsWith("Bluetooth"))
+            {
+                Windows.Devices.Bluetooth.BluetoothDevice @internal = await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(id);
+                BluetoothDevice device = _Devices.Find(x => x.HardwareAddress == new MACAddress(@internal.BluetoothAddress));
+                if (device != null)
+                {
+                    if (device.Device == null)
+                    {
+                        device.Device = @internal;
+                    }
+                }
+                else
+                {
+                    device = new BluetoothDevice(this, @internal);
+                    _Devices.Add(device);
+                }
+                return device;
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -93,7 +133,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         {
             try
             {
-                DeviceLost?.Invoke(this, new BluetoothDevice(await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(args.Id)));
+                DeviceLost?.Invoke(this, await _CreateDevice(args.Id));
             }
             catch
             {
@@ -103,14 +143,14 @@ namespace EmptyBox.IO.Devices.Bluetooth
 
         private void _Watcher_EnumerationCompleted(DeviceWatcher sender, object args)
         {
-            throw new NotImplementedException();
+
         }
 
         private async void _Watcher_Added(DeviceWatcher sender, DeviceInformation args)
         {
             try
             {
-                DeviceFound?.Invoke(this, new BluetoothDevice(await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(args.Id)));
+                DeviceFound?.Invoke(this, await _CreateDevice(args.Id));
             }
             catch
             {
@@ -226,7 +266,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         {
             try
             {
-                IBluetoothDevice device = (await Find()).FirstOrDefault(x => x.Address == address);
+                IBluetoothDevice device = (await Find()).FirstOrDefault(x => x.HardwareAddress == address);
                 return new RefResult<IBluetoothDevice, AccessStatus>(device, AccessStatus.Success, null);
             }
             catch (Exception ex)
@@ -251,8 +291,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
             List<IBluetoothDevice> result = new List<IBluetoothDevice>();
             foreach (DeviceInformation device in devices)
             {
-                var tmp0 = await Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(device.Id);
-                result.Add(new BluetoothDevice(tmp0));
+                result.Add(await _CreateDevice(device.Id));
             }
             return result;
         }
