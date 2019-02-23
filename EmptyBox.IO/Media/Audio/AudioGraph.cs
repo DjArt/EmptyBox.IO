@@ -11,11 +11,6 @@ namespace EmptyBox.IO.Media.Audio
 
         }
 
-        public AudioLink Link(IAudioOutput output, IAudioInput input)
-        {
-            return new AudioLink(output, input);
-        }
-
         public void Start()
         {
 
