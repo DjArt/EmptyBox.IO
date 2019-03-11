@@ -39,7 +39,7 @@ namespace EmptyBox.IO.Serializator.Rules
             switch (flag)
             {
                 case ObjectFlags.None:
-                    object obj = type.GenerateEmptyObject();
+                    object obj = type.GetDefault();
                     IEnumerable<FieldInfo> fields = type.GetTypeInfo().DeclaredFields.Where(x => FieldSearcher(x, scenario, @case));
                     IEnumerable<PropertyInfo> properties = type.GetTypeInfo().DeclaredProperties.Where(x => PropertySearcher(x, scenario, @case));
                     result &= BinarySerializer.TryDeserialize(reader, out uint count);
