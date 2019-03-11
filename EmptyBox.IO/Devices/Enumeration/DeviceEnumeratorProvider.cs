@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Devices.Enumeration
                     Type type = asm.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Devices.Enumeration.DeviceEnumerator");
                     return (IDeviceEnumerator)type.GetTypeInfo().DeclaredConstructors.ElementAt(0).Invoke(new object[0]);
                 }
-                catch (Exception ex)
+                catch
                 {
                     return null;
                 }
