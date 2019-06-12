@@ -8,7 +8,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ApplicationIcon />
     <OutputTypeEx>library</OutputTypeEx>
-    <StartupObject />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.0.32-alpha</Version>
     <AssemblyVersion>0.0.0.32</AssemblyVersion>
@@ -25,7 +24,8 @@
 👀Instructions for use available at project repository</PackageReleaseNotes>
     <Copyright />
     <PackageIconUrl>https://raw.githubusercontent.com/DjArt/EmptyBox.IO/master/EmptyBox.IO%20Logo.png</PackageIconUrl>
-    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -34,18 +34,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Devices\Serial\UART\**" />
-    <Compile Remove="Network\MAC\**" />
-    <EmbeddedResource Remove="Devices\Serial\UART\**" />
-    <EmbeddedResource Remove="Network\MAC\**" />
-    <None Remove="Devices\Serial\UART\**" />
-    <None Remove="Network\MAC\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Devices\GPIO\I2C\" />

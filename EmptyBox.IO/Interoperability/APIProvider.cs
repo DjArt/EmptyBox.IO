@@ -22,7 +22,7 @@ namespace EmptyBox.IO.Interoperability
                 Type type = assembly.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Interoperability.Сompatibility");
                 if (type != null)
                 {
-                    return (bool)type.GetTypeInfo().DeclaredMethods.First(x => x.GetCustomAttributes().Any(y => y.GetType() == typeof(StandardRealizationAttribute)) && x.Name == "IsCompatible").Invoke(null, new object[0]);
+                    return (bool)type.GetTypeInfo().DeclaredMethods.First(x => x.Name == "IsCompatible").Invoke(null, new object[0]);
                 }
                 else
                 {
@@ -101,24 +101,6 @@ namespace EmptyBox.IO.Interoperability
                     {
                         Assembly windows = Assembly.Load(new AssemblyName("EmptyBox.IO.Windows"));
                         if (IsCompatible(windows)) Cache.Add(windows);
-                    }
-                    catch
-                    {
-
-                    }
-                    try
-                    {
-                        Assembly wrtd10 = Assembly.Load(new AssemblyName("EmptyBox.IO.WRTD10"));
-                        if (IsCompatible(wrtd10)) Cache.Add(wrtd10);
-                    }
-                    catch
-                    {
-
-                    }
-                    try
-                    {
-                        Assembly wrtd81 = Assembly.Load(new AssemblyName("EmptyBox.IO.WRTD81"));
-                        if (IsCompatible(wrtd81)) Cache.Add(wrtd81);
                     }
                     catch
                     {

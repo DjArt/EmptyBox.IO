@@ -1,18 +1,20 @@
-﻿using EmptyBox.IO.Devices;
-using Windows.Devices.Bluetooth;
-using EmptyBox.IO.Devices.Radio;
-using Windows.Devices.Radios;
-using Windows.Devices.Enumeration;
-using Windows.Devices.Bluetooth.Rfcomm;
-using EmptyBox.IO.Network.Bluetooth;
-using EmptyBox.IO.Network;
-using Windows.Networking;
+﻿using EmptyBox.IO.Access;
+using EmptyBox.IO.Devices;
 using EmptyBox.IO.Devices.Bluetooth;
-using System.Threading.Tasks;
-using System;
-using EmptyBox.IO.Access;
 using EmptyBox.IO.Devices.GPIO;
+using EmptyBox.IO.Devices.Radio;
+using EmptyBox.IO.Network;
+using EmptyBox.IO.Network.Bluetooth;
+using EmptyBox.IO.Network.Serial;
+using System;
+using System.Threading.Tasks;
+using Windows.Devices.Bluetooth;
+using Windows.Devices.Bluetooth.Rfcomm;
+using Windows.Devices.Enumeration;
 using Windows.Devices.Gpio;
+using Windows.Devices.Radios;
+using Windows.Networking;
+using Windows.Devices.SerialCommunication;
 
 namespace EmptyBox.IO.Interoperability
 {
@@ -120,7 +122,7 @@ namespace EmptyBox.IO.Interoperability
                     return AccessStatus.UnknownError;
             }
         }
-        
+
         public static DeviceAccessStatus ToDeviceAccessStatus(this AccessStatus status)
         {
             switch (status)
@@ -278,26 +280,52 @@ namespace EmptyBox.IO.Interoperability
 
         public static GPIOPinValue ToGPIOPinValue(this GpioPinValue value)
         {
-            switch (value)
-            {
-                default:
-                case GpioPinValue.Low:
-                    return GPIOPinValue.Low;
-                case GpioPinValue.High:
-                    return GPIOPinValue.High;
-            }
+            return (GPIOPinValue)value;
         }
 
         public static GpioPinValue ToGpioPinValue(this GPIOPinValue value)
         {
-            switch (value)
-            {
-                default:
-                case GPIOPinValue.Low:
-                    return GpioPinValue.Low;
-                case GPIOPinValue.High:
-                    return GpioPinValue.High;
-            }
+            return (GpioPinValue)value;
+        }
+
+        public static Network.Serial.SerialHandshake ToSerialHandshake(this Windows.Devices.SerialCommunication.SerialHandshake value)
+        {
+            return (Network.Serial.SerialHandshake)value;
+        }
+
+        public static Network.Serial.SerialParity ToSerialParity(this Windows.Devices.SerialCommunication.SerialParity value)
+        {
+            return (Network.Serial.SerialParity)value;
+        }
+
+        public static Network.Serial.SerialPinChange ToSerialPinChange(this Windows.Devices.SerialCommunication.SerialPinChange value)
+        {
+            return (Network.Serial.SerialPinChange)value;
+        }
+
+        public static Network.Serial.SerialStopBitCount ToSerialStopBitCount(this Windows.Devices.SerialCommunication.SerialStopBitCount value)
+        {
+            return (Network.Serial.SerialStopBitCount)value;
+        }
+
+        public static Windows.Devices.SerialCommunication.SerialHandshake ToSerialHandshake(this Network.Serial.SerialHandshake value)
+        {
+            return (Windows.Devices.SerialCommunication.SerialHandshake)value;
+        }
+
+        public static Windows.Devices.SerialCommunication.SerialParity ToSerialParity(this Network.Serial.SerialParity value)
+        {
+            return (Windows.Devices.SerialCommunication.SerialParity)value;
+        }
+
+        public static Windows.Devices.SerialCommunication.SerialPinChange ToSerialPinChange(this Network.Serial.SerialPinChange value)
+        {
+            return (Windows.Devices.SerialCommunication.SerialPinChange)value;
+        }
+
+        public static Windows.Devices.SerialCommunication.SerialStopBitCount ToSerialStopBitCount(this Network.Serial.SerialStopBitCount value)
+        {
+            return (Windows.Devices.SerialCommunication.SerialStopBitCount)value;
         }
     }
 }
