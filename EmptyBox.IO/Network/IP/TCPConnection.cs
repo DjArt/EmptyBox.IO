@@ -100,10 +100,10 @@ namespace EmptyBox.IO.Network.IP
                     {
                         Socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
                         Socket.Connect(RemotePoint.ToIPEndPoint());
-                        LocalPoint = (Socket.LocalEndPoint as System.Net.IPEndPoint).ToIPAccessPoint();
+                        LocalPoint = (Socket.LocalEndPoint as IPEndPoint).ToIPAccessPoint();
                     }
                     IsActive = true;
-                    _ReceiveLoopTask = Task.Run((Action)ReceiveLoop);
+                    _ReceiveLoopTask = Task.Run(ReceiveLoop);
                     return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
                 }
                 catch (Exception ex)
