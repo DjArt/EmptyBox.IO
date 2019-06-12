@@ -17,7 +17,7 @@ namespace EmptyBox.IO.Network.Help
         public virtual TSocketProvider SocketProvider { get; protected set; }
 
 
-        protected virtual void OnMessageReceived(byte[] message)
+        protected virtual void OnMessageReceive(byte[] message)
         {
             MessageReceived?.Invoke(this, message);
         }
@@ -40,7 +40,7 @@ namespace EmptyBox.IO.Network.Help
         protected void OnMessageReceived(TPort sender, byte[] message)
         {
             MessageReceived?.Invoke(this, sender, message);
-            base.OnMessageReceived(message);
+            base.OnMessageReceive(message);
         }
 
         public override Task<VoidResult<SocketOperationStatus>> Send(byte[] data) => throw new NotSupportedException();

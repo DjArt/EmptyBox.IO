@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Network.Help
         protected void OnMessageReceived(TAddress sender, byte[] message)
         {
             MessageReceived?.Invoke(this, sender, message);
-            base.OnMessageReceived(message);
+            base.OnMessageReceive(message);
         }
 
         public override Task<VoidResult<SocketOperationStatus>> Send(byte[] data) => throw new NotSupportedException();
@@ -64,7 +64,7 @@ namespace EmptyBox.IO.Network.Help
         {
             MessageReceived?.Invoke(this, sender, message);
             _MessageReceived?.Invoke(this, sender.Port, message);
-            base.OnMessageReceived(message);
+            base.OnMessageReceive(message);
         }
 
         public override Task<VoidResult<SocketOperationStatus>> Send(IAddress receiver, byte[] data) => throw new NotSupportedException();
