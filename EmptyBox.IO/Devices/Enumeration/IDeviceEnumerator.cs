@@ -7,6 +7,8 @@ namespace EmptyBox.IO.Devices.Enumeration
 {
     public interface IDeviceEnumerator
     {
+        event DeviceConnectionStatusHandler ConnectionStatusChanged;
+
         Task<IDevice> GetRoot();
         Task<TDevice> GetDefault<TDevice>()
             where TDevice : class, IDevice;
