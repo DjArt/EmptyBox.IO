@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Storage
 {
-    public interface IFolder : IMovableStorageItem
+    public interface IFolder : IStorageItem
     {
         Task<RefResult<IEnumerable<IStorageItem>, AccessStatus>> GetItems();
         Task<RefResult<IFolder, AccessStatus>> CreateFolder(string name);

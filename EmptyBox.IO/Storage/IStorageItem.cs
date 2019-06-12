@@ -13,5 +13,8 @@ namespace EmptyBox.IO.Storage
         DateTime DateModified { get; }
 
         Task<VoidResult<AccessStatus>> Rename(string name);
+        Task<VoidResult<AccessStatus>> MoveTo(IFolder folder);
+        Task<VoidResult<AccessStatus>> CopyTo(IFolder folder);
+        Task<VoidResult<AccessStatus>> Delete();
     }
 }

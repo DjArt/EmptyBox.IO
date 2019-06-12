@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Storage
 {
-    public interface IFile : IMovableStorageItem
+    public interface IFile : IStorageItem
     {
         ulong Size { get; }
 
