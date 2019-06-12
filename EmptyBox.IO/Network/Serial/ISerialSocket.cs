@@ -10,7 +10,7 @@ namespace EmptyBox.IO.Network.Serial
         bool BreakSignalState { get; set; }
         bool CarrierDetectState { get; }
         bool ClearToSendState { get; }
-        ushort DataBits { get; }
+        ushort DataBits { get; set; }
         bool DataSetReadyState { get; }
         SerialHandshake Handshake { get; set; }
         bool IsDataTerminalReadyEnabled { get; set; }

@@ -36,6 +36,12 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
             Parent = controller;
             InternalDevice = @internal;
             PinNumber = pinNumber;
+            Parent.ConnectionStatusChanged += Parent_ConnectionStatusChanged;
+        }
+
+        private void Parent_ConnectionStatusChanged(IDevice device, ConnectionStatus status)
+        {
+            ConnectionStatusChanged?.Invoke(this, status);
         }
 
         public void Dispose()
