@@ -22,6 +22,7 @@ using EmptyBox.IO.Test.Devices.Bluetooth;
 using EmptyBox.IO.Devices.Enumeration;
 using EmptyBox.IO.Devices.Bluetooth;
 using Windows.UI.Core;
+using EmptyBox.IO.Network.Bluetooth;
 
 // Документацию по шаблону элемента "Пустая страница" см. по адресу https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x419
 
@@ -49,12 +50,11 @@ namespace EmptyBox.IO.UWP.Test
 
         private async void Adapter_DeviceLost(IDeviceProvider<IBluetoothDevice> provider, IBluetoothDevice device)
         {
-            await tb.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => tb.Text += "Device lost: " + device.ToString()  + " " + device.DeviceClass + '\n');
         }
 
         private async void Adapter_DeviceFound(IDeviceProvider<IBluetoothDevice> provider, IBluetoothDevice device)
         {
-            await tb.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => tb.Text += "Device found: " + device.ToString() + " " + device.DeviceClass + '\n');
+
         }
     }
 }
