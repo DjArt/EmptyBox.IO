@@ -6,6 +6,6 @@ namespace EmptyBox.IO.Media.Audio
 {
     public interface IAudioOutput : IDisposable
     {
-        void ProcessChunk(IAudioChunk chunk);
+
     }
 }
