@@ -117,13 +117,12 @@ namespace EmptyBox.IO.Devices.Bluetooth
             Close(false);
         }
 
-        public async Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        public async Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetRFCOMMServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
         {
             try
             {
                 RfcommDeviceServicesResult services = await Device.GetRfcommServicesAsync(cacheMode.ToBluetoothCacheMode());
-                IEnumerable<BluetoothAccessPoint> result = services.Services.Select(x => new BluetoothAccessPoint(this, x.ServiceId.ToBluetoothPort())).ToList();
-                GattDeviceServicesResult gattServices = await LEDevice.GetGattServicesAsync();
+                IEnumerable<BluetoothAccessPoint> result = services.Services.Select(x => new BluetoothAccessPoint(this, x.ServiceId.ToBluetoothPort(), BluetoothAccessPointType.RFCOMM)).ToList();
                 return new RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>(result, AccessStatus.Success, null);
             }
             catch (Exception ex)
@@ -140,6 +139,11 @@ namespace EmptyBox.IO.Devices.Bluetooth
             result.Append(HardwareAddress);
             result.Append(')');
             return result.ToString();
+        }
+
+        public Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetGATTServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

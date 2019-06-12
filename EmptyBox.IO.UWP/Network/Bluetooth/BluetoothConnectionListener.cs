@@ -73,7 +73,7 @@ namespace EmptyBox.IO.Network.Bluetooth
         public BluetoothConnectionListener(BluetoothAdapter adapter, BluetoothPort port)
         {
             ConnectionProvider = adapter;
-            ListenerPoint = new BluetoothAccessPoint(adapter, port);
+            ListenerPoint = new BluetoothAccessPoint(adapter, port, BluetoothAccessPointType.RFCOMM);
             IsActive = false;
             _ConnectionListener = new StreamSocketListener();
             _ConnectionListener.ConnectionReceived += _ConnectionListener_ConnectionReceived;
@@ -86,7 +86,7 @@ namespace EmptyBox.IO.Network.Bluetooth
             var result = await ConnectionProvider.TryGetFromMAC(args.Socket.Information.RemoteHostName.ToMACAddress());
             if (result.Status == AccessStatus.Success)
             {
-                BluetoothAccessPoint remotehost = new BluetoothAccessPoint(result.Result, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)));
+                BluetoothAccessPoint remotehost = new BluetoothAccessPoint(result.Result, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)), BluetoothAccessPointType.RFCOMM);
                 BluetoothConnection connection = new BluetoothConnection(ConnectionProvider, args.Socket, ListenerPoint.Port, remotehost);
                 ConnectionReceived?.Invoke(this, connection);
                 _ConnectionReceived0?.Invoke(this, connection);

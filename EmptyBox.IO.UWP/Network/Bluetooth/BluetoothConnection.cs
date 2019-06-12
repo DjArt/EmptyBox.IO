@@ -17,7 +17,7 @@ namespace EmptyBox.IO.Network.Bluetooth
         {
             Stream = stream;
             RemotePoint = remote;
-            LocalPoint = new BluetoothAccessPoint(provider, port);
+            LocalPoint = new BluetoothAccessPoint(provider, port, BluetoothAccessPointType.RFCOMM);
             ConnectionProvider = provider;
             ReceivedConnection = true;
         }

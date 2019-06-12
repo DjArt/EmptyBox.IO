@@ -14,6 +14,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         BluetoothMode Mode { get; }
         new IBluetoothAdapter Parent { get; }
 
-        Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached);
+        Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetRFCOMMServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached);
+        Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetGATTServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached);
     }
 }

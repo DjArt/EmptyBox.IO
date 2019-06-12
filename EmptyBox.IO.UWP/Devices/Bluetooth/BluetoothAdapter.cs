@@ -10,6 +10,7 @@ using EmptyBox.IO.Network.Bluetooth;
 using System.Collections.Generic;
 using Windows.Devices.Enumeration;
 using System.Linq;
+using EmptyBox.IO.Devices.Enumeration;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -68,10 +69,20 @@ namespace EmptyBox.IO.Devices.Bluetooth
             _Watcher.Removed += _Watcher_Removed;
             _Watcher.Stopped += _Watcher_Stopped;
             _Watcher.Updated += _Watcher_Updated;
+            DeviceEnumerator.ConnectionStatusChangedByID += DeviceEnumerator_ConnectionStatusChangedByID;
             initRadio.Wait();
             if (!initRadio.IsFaulted)
             {
                 InternalRadio = initRadio.Result;
+            }
+        }
+
+        private void DeviceEnumerator_ConnectionStatusChangedByID(string sender, ConnectionStatus args)
+        {
+            if (sender == InternalAdapter.DeviceId && ConnectionStatus != args)
+            {
+                ConnectionStatus = args;
+                ConnectionStatusChanged?.Invoke(this, ConnectionStatus);
             }
         }
 
@@ -312,9 +323,14 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return new VoidResult<AccessStatus>(AccessStatus.Success, null);
         }
 
-        public Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        public Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetRFCOMMServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
         {
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
+        }
+
+        public Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetGATTServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        {
+            throw new PlatformNotSupportedException();
         }
         #endregion
     }
