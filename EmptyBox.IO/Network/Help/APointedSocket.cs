@@ -16,7 +16,7 @@ namespace EmptyBox.IO.Network.Help
 
         public TAddress LocalPoint { get; protected set; }
 
-        protected void OnMessageReceived(TAddress sender, byte[] message)
+        protected virtual void OnMessageReceive(TAddress sender, byte[] message)
         {
             MessageReceived?.Invoke(this, sender, message);
             base.OnMessageReceive(message);
@@ -60,7 +60,7 @@ namespace EmptyBox.IO.Network.Help
             }
         }
 
-        protected void OnMessageReceived(TAccessPoint sender, byte[] message)
+        protected virtual void OnMessageReceive(TAccessPoint sender, byte[] message)
         {
             MessageReceived?.Invoke(this, sender, message);
             _MessageReceived?.Invoke(this, sender.Port, message);

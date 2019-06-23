@@ -37,7 +37,7 @@ namespace EmptyBox.IO.Network.Help
 
         public TPort LocalPoint { get; protected set; }
 
-        protected void OnMessageReceived(TPort sender, byte[] message)
+        protected virtual void OnMessageReceive(TPort sender, byte[] message)
         {
             MessageReceived?.Invoke(this, sender, message);
             base.OnMessageReceive(message);

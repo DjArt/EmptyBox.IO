@@ -1,5 +1,4 @@
-﻿#nullable enable
-using EmptyBox.ScriptRuntime.Results;
+﻿using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.IO;
