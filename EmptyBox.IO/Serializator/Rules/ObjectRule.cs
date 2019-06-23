@@ -39,59 +39,66 @@ namespace EmptyBox.IO.Serializator.Rules
             switch (flag)
             {
                 case ObjectFlags.None:
-                    object obj = type.GetDefault();
-                    IEnumerable<FieldInfo> fields = type.GetTypeInfo().DeclaredFields.Where(x => FieldSearcher(x, scenario, @case));
-                    IEnumerable<PropertyInfo> properties = type.GetTypeInfo().DeclaredProperties.Where(x => PropertySearcher(x, scenario, @case));
-                    result &= BinarySerializer.TryDeserialize(reader, out uint count);
-                    if (count == fields.Count() + properties.Count())
+                    try
                     {
-                        foreach (FieldInfo fi in fields)
+                        object obj = Activator.CreateInstance(type);
+                        IEnumerable<FieldInfo> fields = type.GetTypeInfo().DeclaredFields.Where(x => FieldSearcher(x, scenario, @case));
+                        IEnumerable<PropertyInfo> properties = type.GetTypeInfo().DeclaredProperties.Where(x => PropertySearcher(x, scenario, @case));
+                        result &= BinarySerializer.TryDeserialize(reader, out uint count);
+                        if (count == fields.Count() + properties.Count())
                         {
-                            object field;
-                            SerializationScenarioAttribute attr = fi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
-                            if (attr != null)
+                            foreach (FieldInfo fi in fields)
                             {
-                                ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
-                                MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Unwrap").MakeGenericMethod(attr.WrappedType, fi.FieldType);
-                                result &= BinarySerializer.TryDeserialize(reader, attr.WrappedType, out field);
-                                field = method.Invoke(wrapper, new object[] { field, @case });
+                                object field;
+                                SerializationScenarioAttribute attr = fi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                                if (attr != null)
+                                {
+                                    ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                                    MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Unwrap").MakeGenericMethod(attr.WrappedType, fi.FieldType);
+                                    result &= BinarySerializer.TryDeserialize(reader, attr.WrappedType, out field);
+                                    field = method.Invoke(wrapper, new object[] { field, @case });
+                                }
+                                else
+                                {
+                                    result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out field);
+                                }
+                                fi.SetValue(obj, field);
+                            }
+                            foreach (PropertyInfo pi in properties)
+                            {
+                                object field;
+                                SerializationScenarioAttribute attr = pi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
+                                if (attr != null)
+                                {
+                                    ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
+                                    MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Unwrap").MakeGenericMethod(attr.WrappedType, pi.PropertyType);
+                                    result &= BinarySerializer.TryDeserialize(reader, attr.WrappedType, out field);
+                                    field = method.Invoke(wrapper, new object[] { field, @case });
+                                }
+                                else
+                                {
+                                    result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out field);
+                                }
+                                pi.SetValue(obj, field);
+                            }
+                            if (result)
+                            {
+                                value = obj;
                             }
                             else
                             {
-                                result &= BinarySerializer.TryDeserialize(reader, fi.FieldType, out field);
+                                value = null;
                             }
-                            fi.SetValue(obj, field);
-                        }
-                        foreach (PropertyInfo pi in properties)
-                        {
-                            object field;
-                            SerializationScenarioAttribute attr = pi.GetCustomAttributes<SerializationScenarioAttribute>().FirstOrDefault(x => x.Scenario == scenario && x.Case == @case);
-                            if (attr != null)
-                            {
-                                ISerializationScenario wrapper = BinarySerializer.Scenarios.Find(x => x.Name == scenario);
-                                MethodInfo method = wrapper.GetType().GetTypeInfo().GetDeclaredMethod("Unwrap").MakeGenericMethod(attr.WrappedType, pi.PropertyType);
-                                result &= BinarySerializer.TryDeserialize(reader, attr.WrappedType, out field);
-                                field = method.Invoke(wrapper, new object[] { field, @case });
-                            }
-                            else
-                            {
-                                result &= BinarySerializer.TryDeserialize(reader, pi.PropertyType, out field);
-                            }
-                            pi.SetValue(obj, field);
-                        }
-                        if (result)
-                        {
-                            value = obj;
                         }
                         else
                         {
                             value = null;
+                            result = false;
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        value = null;
-                        result = false;
+                        throw ex;
                     }
                     break;
                 default:

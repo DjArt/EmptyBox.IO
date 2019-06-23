@@ -26,7 +26,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/DjArt/EmptyBox.IO/master/EmptyBox.IO%20Logo.png</PackageIconUrl>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
-    <PackageLicenseExpression>?</PackageLicenseExpression>
+    <PackageLicenseExpression></PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
