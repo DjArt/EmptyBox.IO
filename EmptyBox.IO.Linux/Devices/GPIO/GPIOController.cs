@@ -29,7 +29,6 @@ namespace EmptyBox.IO.Devices.GPIO
         #endregion
 
         #region Static public functions
-        [StandardRealization]
         public static async Task<RefResult<GPIOController, AccessStatus>> GetDefault()
         {
             await Task.Yield();

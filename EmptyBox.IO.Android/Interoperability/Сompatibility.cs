@@ -8,7 +8,6 @@ namespace EmptyBox.IO.Interoperability
 {
     public static class Сompatibility
     {
-        [StandardRealization]
         public static bool IsCompatible()
         {
             try
