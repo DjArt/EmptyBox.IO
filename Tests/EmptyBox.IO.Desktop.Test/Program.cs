@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EmptyBox.Collections.Generic;
 using static System.Console;
 
 namespace EmptyBox.IO.Desktop.Test
@@ -13,16 +14,7 @@ namespace EmptyBox.IO.Desktop.Test
     {
         public static void Main(string[] args)
         {
-            BinarySerializer a = new BinarySerializer(Encoding.UTF32);
-            List<TimeSpan?> b = new List<TimeSpan?>()
-            {
-                new TimeSpan(8),
-                new TimeSpan(9),
-                new TimeSpan(10),
-                null, null
-            };
-            byte[] c = a.Serialize(b);
-            var f = a.Deserialize<List<TimeSpan?>>(c);
+            BinarySearchTreeNode<int> a = new BinarySearchTreeNode<int>() { 123, 33, 22, 43, 13 };
             ReadKey();
         }
     }

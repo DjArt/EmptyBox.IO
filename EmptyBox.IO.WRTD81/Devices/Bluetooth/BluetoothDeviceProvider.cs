@@ -30,8 +30,8 @@ namespace EmptyBox.IO.Devices.Bluetooth
         #endregion
 
         #region Public events
-        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceFound;
-        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceLost;
+        public event DeviceSearcherEventHandler<IBluetoothDevice> DeviceFound;
+        public event DeviceSearcherEventHandler<IBluetoothDevice> DeviceLost;
         #endregion
 
         #region Public objects

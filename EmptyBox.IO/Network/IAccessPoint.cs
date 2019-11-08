@@ -1,6 +1,8 @@
-﻿namespace EmptyBox.IO.Network
+﻿using System;
+
+namespace EmptyBox.IO.Network
 {
-    public interface IAccessPoint<out TAddress, out TPort>
+    public interface IAccessPoint<out TAddress, out TPort> : IEquatable<IAccessPoint<IAddress, IPort>>
         where TAddress : IAddress
         where TPort : IPort
     {
