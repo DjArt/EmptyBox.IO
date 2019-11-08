@@ -14,7 +14,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
     public sealed class BluetoothAdapter : IBluetoothAdapter
     {
         #region Static public functions
-        [StandardRealization]
         public static async Task<BluetoothAdapter> GetDefault() => new BluetoothAdapter(Android.Bluetooth.BluetoothAdapter.DefaultAdapter);
         #endregion
 
