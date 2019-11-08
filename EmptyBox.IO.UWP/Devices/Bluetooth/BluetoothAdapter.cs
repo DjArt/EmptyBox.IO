@@ -6,11 +6,10 @@ using EmptyBox.IO.Network;
 using EmptyBox.IO.Access;
 using EmptyBox.ScriptRuntime;
 using EmptyBox.ScriptRuntime.Results;
+using EmptyBox.Collections.Generic;
+using EmptyBox.Collections.ObjectModel;
 using EmptyBox.IO.Network.Bluetooth;
 using System.Collections.Generic;
-using Windows.Devices.Enumeration;
-using System.Linq;
-using EmptyBox.IO.Devices.Enumeration;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -24,19 +23,13 @@ namespace EmptyBox.IO.Devices.Bluetooth
         private const string query1 = c0 + " AND " + c1 + "\"" + BLUETOOTH_GUID + "\"";
         private const string query2 = c0 + " AND " + c1 + "\"" + BLUETOOTH_LE_GUID + "\"";
 
-        #region Private objects
-        private List<BluetoothDevice> _Devices;
-        private DeviceWatcher _Watcher;
-        #endregion
-
-        IBluetoothDevice IPointedConnectionProvider<IBluetoothDevice>.Address => this;
-
-        IBluetoothAdapter IBluetoothDevice.Parent => null;
-
         #region Public events
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
-        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceFound;
-        public event DeviceProviderEventHandler<IBluetoothDevice> DeviceLost;
+        public event DeviceSearcherEventHandler<IBluetoothDevice> DeviceFound;
+        public event DeviceSearcherEventHandler<IBluetoothDevice> DeviceLost;
+        public event ItemChangeHandler<IBluetoothDevice> ItemAdded;
+        public event ItemChangeHandler<IBluetoothDevice> ItemRemoved;
+        public event ItemChangeHandler<IBluetoothDevice> ItemChanged;
         #endregion
 
         #region Public objects
@@ -44,14 +37,28 @@ namespace EmptyBox.IO.Devices.Bluetooth
         public Windows.Devices.Radios.Radio InternalRadio { get; }
         public RadioStatus RadioStatus => InternalRadio == null ? RadioStatus.Unknown : InternalRadio.State.ToRadioStatus();
         public ConnectionStatus ConnectionStatus { get; private set; }
-        public string Name => InternalRadio?.Name;
-        public bool IsStarted { get; private set; }
-        public BluetoothClass DeviceClass => throw new NotImplementedException();
-        public BluetoothMode Mode { get; }
-        public DevicePairStatus PairStatus => DevicePairStatus.Unknown;
-        public IDevice Parent => throw new NotImplementedException();
-        public MACAddress HardwareAddress { get; }
+        public MACAddress Address { get; private set; }
+        public string Name { get; private set; }
 
+        IBluetoothDevice IPointedConnectionProvider<IBluetoothDevice>.Address => this;
+
+        public bool SearcherIsActive => throw new NotImplementedException();
+
+        public ITreeNode<IBluetoothDevice> Parent => throw new NotImplementedException();
+
+        public IEnumerable<ITreeNode<IBluetoothDevice>> Items => throw new NotImplementedException();
+
+        public BluetoothClass DeviceClass => throw new NotImplementedException();
+
+        public BluetoothMode Mode => throw new NotImplementedException();
+
+        public DevicePairStatus PairStatus => throw new NotImplementedException();
+
+        public string Path => throw new NotImplementedException();
+
+        ITreeNode<IDevice> ITreeNode<IDevice>.Parent => throw new NotImplementedException();
+
+        IEnumerable<ITreeNode<IDevice>> ITreeNode<IDevice>.Items => throw new NotImplementedException();
         #endregion
 
         #region Constructors
@@ -166,6 +173,45 @@ namespace EmptyBox.IO.Devices.Bluetooth
             catch
             {
 
+            }
+        }
+
+        event ItemChangeHandler<IDevice> IObservableTreeNode<IDevice>.ItemAdded
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        event ItemChangeHandler<IDevice> IObservableTreeNode<IDevice>.ItemRemoved
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        event ItemChangeHandler<IDevice> IObservableTreeNode<IDevice>.ItemChanged
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
             }
         }
         #endregion

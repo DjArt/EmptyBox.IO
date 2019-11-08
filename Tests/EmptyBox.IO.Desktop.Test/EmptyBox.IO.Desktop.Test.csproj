@@ -56,6 +56,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EmptyBox.Collections\EmptyBox.Collections.csproj">
+      <Project>{947177e6-450f-473e-81ec-3bb0359c2a2c}</Project>
+      <Name>EmptyBox.Collections</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EmptyBox.IO\EmptyBox.IO.csproj">
       <Project>{3a006777-4668-4011-b6db-eb1303f62c90}</Project>
       <Name>EmptyBox.IO</Name>

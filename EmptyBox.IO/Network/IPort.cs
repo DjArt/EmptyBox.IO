@@ -1,6 +1,8 @@
-﻿namespace EmptyBox.IO.Network
+﻿using System;
+
+namespace EmptyBox.IO.Network
 {
-    public interface IPort
+    public interface IPort : IEquatable<IPort>
     {
 
     }

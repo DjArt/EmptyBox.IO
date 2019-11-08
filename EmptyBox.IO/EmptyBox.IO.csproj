@@ -42,7 +42,7 @@
   <ItemGroup>
     <Folder Include="Devices\GPIO\I2C\" />
     <Folder Include="Devices\GPIO\SPI\" />
-    <Folder Include="Devices\USB\" />
+    <Folder Include="Devices\PnP\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\WiFi\Direct\" />
     <Folder Include="Network\Proxy\" />
@@ -53,6 +53,10 @@
     <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.8-alpha" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0-preview2.19523.17" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.6.0-preview5.19224.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmptyBox.Collections\EmptyBox.Collections.csproj" />
   </ItemGroup>
 
 </Project>

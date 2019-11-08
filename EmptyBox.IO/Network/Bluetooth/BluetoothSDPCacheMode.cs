@@ -1,4 +1,4 @@
-﻿namespace EmptyBox.IO.Devices.Bluetooth
+﻿namespace EmptyBox.IO.Network.Bluetooth
 {
     public enum BluetoothSDPCacheMode
     {
