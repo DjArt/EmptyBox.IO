@@ -1,11 +1,12 @@
-﻿using EmptyBox.IO.Network.IP;
+﻿using EmptyBox.IO.Network;
+using EmptyBox.IO.Network.IP;
 using System.Net;
 
 namespace EmptyBox.IO.Interoperability
 {
     public static class Extensions
     {
-        public static IPEndPoint ToIPEndPoint(this IPAccessPoint accessPoint)
+        public static IPEndPoint ToIPEndPoint(this IAccessPoint<Network.IP.IPAddress, IPPort> accessPoint)
         {
             return new IPEndPoint(new System.Net.IPAddress(accessPoint.Address.Address), accessPoint.Port.Value);
         }
