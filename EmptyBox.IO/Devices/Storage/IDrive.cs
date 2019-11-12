@@ -1,6 +1,5 @@
 ﻿using EmptyBox.IO.Access;
 using EmptyBox.IO.Storage.FileSystems;
-using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +12,6 @@ namespace EmptyBox.IO.Devices.Storage
         ulong Space { get; }
         DriveType Type { get; }
 
-        Task<RefResult<IEnumerable<IFileSystem>, AccessStatus>> GetFileSystems();
+        Task<IEnumerable<IFileSystem>> GetFileSystems();
     }
 }

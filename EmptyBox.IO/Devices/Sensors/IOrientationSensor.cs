@@ -1,5 +1,4 @@
 ﻿using EmptyBox.IO.Access;
-using EmptyBox.ScriptRuntime.Results;
 using System.Numerics;
 using System.Threading.Tasks;
 
@@ -9,6 +8,6 @@ namespace EmptyBox.IO.Devices.Sensors
     {
         event OrientationChanged OrientationChanged;
 
-        Task<ValResult<Vector4, AccessStatus>> GetValue();
+        Task<Vector4> GetValue();
     }
 }

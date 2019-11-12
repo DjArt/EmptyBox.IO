@@ -1,5 +1,4 @@
 ﻿using EmptyBox.IO.Access;
-using EmptyBox.ScriptRuntime.Results;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,8 +6,8 @@ namespace EmptyBox.IO.Storage
 {
     public interface IFolder : IStorageItem
     {
-        Task<RefResult<IEnumerable<IStorageItem>, AccessStatus>> GetItems();
-        Task<RefResult<IFolder, AccessStatus>> CreateFolder(string name);
-        Task<RefResult<IFile, AccessStatus>> CreateFile(string name);
+        Task<IEnumerable<IStorageItem>> GetItems();
+        Task<IFolder> CreateFolder(string name);
+        Task<IFile> CreateFile(string name);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using EmptyBox.IO.Access;
-using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Threading.Tasks;
 
@@ -12,9 +11,9 @@ namespace EmptyBox.IO.Storage
         DateTime DateCreated { get; }
         DateTime DateModified { get; }
 
-        Task<VoidResult<AccessStatus>> Rename(string name);
-        Task<VoidResult<AccessStatus>> MoveTo(IFolder folder);
-        Task<VoidResult<AccessStatus>> CopyTo(IFolder folder);
-        Task<VoidResult<AccessStatus>> Delete();
+        Task<bool> Rename(string name);
+        Task<bool> MoveTo(IFolder folder);
+        Task<bool> CopyTo(IFolder folder);
+        Task<bool> Delete();
     }
 }

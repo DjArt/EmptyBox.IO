@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +12,6 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         double Frequency { get; set; }
         uint PinCount { get; }
 
-        Task<RefResult<IPWMPin, GPIOPinOpenStatus>> OpenPin(uint number);
+        Task<IPWMPin> OpenPin(uint number);
     }
 }

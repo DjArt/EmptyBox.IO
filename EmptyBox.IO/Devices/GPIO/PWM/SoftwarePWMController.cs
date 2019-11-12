@@ -5,19 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Devices.GPIO.PWM
 {
     public sealed class SoftwarePWMController : IPWMController
     {
         private List<SoftwarePWMPin> _Pins;
-        private Task _Loop;
-        private CancellationTokenSource _TokenSource;
+        private Task? _Loop;
+        private CancellationTokenSource? _TokenSource;
         private double _Freqency;
         private double _Wait;
 
-        IDevice IDevice.Parent => Parent;
+        //IDevice IDevice.Parent => Parent;
 
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
 
@@ -63,21 +62,14 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
             _Pins.ForEach(x => x.Dispose());
         }
 
-        public async Task<RefResult<IPWMPin, GPIOPinOpenStatus>> OpenPin(uint number)
+        public async Task<IPWMPin> OpenPin(uint number)
         {
-            var pin = await Parent.OpenPin(number, GPIOPinSharingMode.Exclusive);
-            if (pin.Status == GPIOPinOpenStatus.PinOpened)
-            {
-                SoftwarePWMPin _pin = new SoftwarePWMPin(this, pin.Result);
-                _Pins.Add(_pin);
-                _pin.PinStatusChanged += _pin_PinStatusChanged;
-                _pin.PinClosed += _pin_PinClosed;
-                return new RefResult<IPWMPin, GPIOPinOpenStatus>(_pin, GPIOPinOpenStatus.PinOpened, null);
-            }
-            else
-            {
-                return new RefResult<IPWMPin, GPIOPinOpenStatus>(null, pin.Status, pin.Exception);
-            }
+            IGPIOPin pin = await Parent.OpenPin(number, GPIOPinSharingMode.Exclusive);
+            SoftwarePWMPin _pin = new SoftwarePWMPin(this, pin);
+            _Pins.Add(_pin);
+            _pin.PinStatusChanged += _pin_PinStatusChanged;
+            _pin.PinClosed += _pin_PinClosed;
+            return _pin;
         }
 
         private void _pin_PinClosed(SoftwarePWMPin obj)

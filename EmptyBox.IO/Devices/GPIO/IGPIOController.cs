@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices.GPIO
 {
@@ -7,7 +6,7 @@ namespace EmptyBox.IO.Devices.GPIO
     {
         uint PinCount { get; }
 
-        Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> OpenPin(uint number);
-        Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> OpenPin(uint number, GPIOPinSharingMode shareMode);
+        Task<IGPIOPin> OpenPin(uint number);
+        Task<IGPIOPin> OpenPin(uint number, GPIOPinSharingMode shareMode);
     }
 }

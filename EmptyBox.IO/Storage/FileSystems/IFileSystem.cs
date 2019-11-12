@@ -1,6 +1,5 @@
 ﻿using EmptyBox.IO.Access;
 using EmptyBox.IO.Devices.Storage;
-using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +12,6 @@ namespace EmptyBox.IO.Storage.FileSystems
         ulong Space { get; }
         IDrive Drive { get; }
 
-        Task<RefResult<IFolder, AccessStatus>> GetRoot();
+        Task<IFolder> GetRoot();
     }
 }
