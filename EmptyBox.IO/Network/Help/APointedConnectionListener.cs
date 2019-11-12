@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Network.Help
 {
@@ -23,10 +22,9 @@ namespace EmptyBox.IO.Network.Help
         }
     }
 
-    public abstract class APointedConnectionListener<TAddress, TPort, TAccessPoint, TPointedConnectionProvider> : APointedConnectionListener<TAddress, TPointedConnectionProvider>, IPointedConnectionListener<TAddress, TPort>
+    public abstract class APointedConnectionListener<TAddress, TPort, TPointedConnectionProvider> : APointedConnectionListener<TAddress, TPointedConnectionProvider>, IPointedConnectionListener<TAddress, TPort>
         where TAddress : IAddress
         where TPort : IPort
-        where TAccessPoint : IAccessPoint<TAddress, TPort>
         where TPointedConnectionProvider : IPointedConnectionProvider<TAddress, TPort>
     {
         event ConnectionReceiveHandler<TPort> IConnectionListener<TPort>.ConnectionReceived
@@ -45,9 +43,9 @@ namespace EmptyBox.IO.Network.Help
 
         public new event PointedConnectionReceiveHandler<TAddress, TPort> ConnectionReceived;
 
-        private TAccessPoint _ListenerPoint;
+        private IAccessPoint<TAddress, TPort> _ListenerPoint;
 
-        public new TAccessPoint ListenerPoint
+        public new IAccessPoint<TAddress, TPort> ListenerPoint
         {
             get => _ListenerPoint;
             set

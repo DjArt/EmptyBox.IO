@@ -3,14 +3,13 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using EmptyBox.IO.Interoperability;
 using System.Net;
-using EmptyBox.ScriptRuntime.Results;
 using EmptyBox.IO.Network.Help;
 
 namespace EmptyBox.IO.Network.IP
 {
-    public sealed class TCPConnectionListener : APointedConnectionListener<IPAddress, IPPort, IPAccessPoint, ITCPConnectionProvider>
+    public sealed class TCPConnectionListener : APointedConnectionListener<IPAddress, IPPort, ITCPConnectionProvider>
     {
-        private Task _ReceiveLoop;
+        private Task? _ReceiveLoop;
         
         public Socket Socket { get; private set; }
 
@@ -21,48 +20,34 @@ namespace EmptyBox.IO.Network.IP
             Socket.Bind(localhost.ToIPEndPoint());
         }
 
-        public override async Task<VoidResult<SocketOperationStatus>> Start()
+        public override async Task<bool> Start()
         {
             await Task.Yield();
             if (!IsActive)
             {
-                try
-                {
-                    Socket.Listen(512);
-                    IsActive = true;
-                    _ReceiveLoop = Task.Run((Action)ReceiveLoop);
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                Socket.Listen(512);
+                IsActive = true;
+                _ReceiveLoop = Task.Run(ReceiveLoop);
+                return true;
             }
             else
             {
-                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyStarted, null);
+                return false;
             }
         }
 
-        public override async Task<VoidResult<SocketOperationStatus>> Stop()
+        public override async Task<bool> Stop()
         {
             await Task.Yield();
             if (IsActive)
             {
-                try
-                {
-                    Socket.Listen(0);
-                    IsActive = false;
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                Socket.Listen(0);
+                IsActive = false;
+                return true;
             }
             else
             {
-                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyClosed, null);
+                return false;
             }
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Network.Help
 {
@@ -22,9 +21,9 @@ namespace EmptyBox.IO.Network.Help
             MessageReceived?.Invoke(this, message);
         }
 
-        public abstract Task<VoidResult<SocketOperationStatus>> Close();
-        public abstract Task<VoidResult<SocketOperationStatus>> Open();
-        public abstract Task<VoidResult<SocketOperationStatus>> Send(byte[] data);
+        public abstract Task<bool> Close();
+        public abstract Task<bool> Open();
+        public abstract Task<bool> Send(byte[] data);
     }
 
     public abstract class ASocket<TPort, TSocketProvider> : ASocket<TSocketProvider>, ISocket<TPort>
@@ -33,7 +32,7 @@ namespace EmptyBox.IO.Network.Help
     {
         ISocketProvider<TPort> ISocket<TPort>.SocketProvider => SocketProvider;
 
-        public new event SocketMessageReceiveHandler<TPort> MessageReceived;
+        public new event SocketMessageReceiveHandler<TPort>? MessageReceived;
 
         public TPort LocalPoint { get; protected set; }
 
@@ -43,7 +42,7 @@ namespace EmptyBox.IO.Network.Help
             base.OnMessageReceive(message);
         }
 
-        public override Task<VoidResult<SocketOperationStatus>> Send(byte[] data) => throw new NotSupportedException();
-        public abstract Task<VoidResult<SocketOperationStatus>> Send(IPort receiver, byte[] data);
+        public override Task<bool> Send(byte[] data) => throw new NotSupportedException();
+        public abstract Task<bool> Send(IPort receiver, byte[] data);
     }
 }

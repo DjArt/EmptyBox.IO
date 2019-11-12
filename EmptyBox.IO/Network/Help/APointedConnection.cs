@@ -29,10 +29,9 @@ namespace EmptyBox.IO.Network.Help
         }
     }
 
-    public abstract class APointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider> : APointedConnection<TAddress, TPointedConnectionProvider>, IPointedConnection<TAddress, TPort>
+    public abstract class APointedConnection<TAddress, TPort, TPointedConnectionProvider> : APointedConnection<TAddress, TPointedConnectionProvider>, IPointedConnection<TAddress, TPort>
         where TAddress : IAddress
         where TPort : IPort
-        where TAccessPoint : IAccessPoint<TAddress, TPort>
         where TPointedConnectionProvider : IPointedConnectionProvider<TAddress, TPort>
     {
         IPointedConnectionProvider<TAddress, TPort> IPointedConnection<TAddress, TPort>.ConnectionProvider => ConnectionProvider;
@@ -57,10 +56,10 @@ namespace EmptyBox.IO.Network.Help
         public new event MessageReceiveHandler<IPointedConnection<TAddress, TPort>> MessageReceived;
         public new event ConnectionInterruptHandler<IPointedConnection<TAddress, TPort>> ConnectionInterrupted;
 
-        private TAccessPoint _LocalPoint;
-        private TAccessPoint _RemotePoint;
+        private IAccessPoint<TAddress, TPort> _LocalPoint;
+        private IAccessPoint<TAddress, TPort> _RemotePoint;
 
-        public new TAccessPoint LocalPoint
+        public new IAccessPoint<TAddress, TPort> LocalPoint
         {
             get => _LocalPoint;
             set
@@ -69,7 +68,7 @@ namespace EmptyBox.IO.Network.Help
                 base.LocalPoint = _LocalPoint.Address;
             }
         }
-        public new TAccessPoint RemotePoint
+        public new IAccessPoint<TAddress, TPort> RemotePoint
         {
             get => _RemotePoint;
             set

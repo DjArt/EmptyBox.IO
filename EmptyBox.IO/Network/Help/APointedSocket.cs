@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Network.Help
 {
@@ -22,14 +21,13 @@ namespace EmptyBox.IO.Network.Help
             base.OnMessageReceive(message);
         }
 
-        public override Task<VoidResult<SocketOperationStatus>> Send(byte[] data) => throw new NotSupportedException();
-        public abstract Task<VoidResult<SocketOperationStatus>> Send(IAddress receiver, byte[] data);
+        public override Task<bool> Send(byte[] data) => throw new NotSupportedException();
+        public abstract Task<bool> Send(IAddress receiver, byte[] data);
     }
 
-    public abstract class APointedSocket<TAddress, TPort, TAccessPoint, TPointedSocketProvider> : APointedSocket<TAddress, TPointedSocketProvider>, IPointedSocket<TAddress, TPort>
+    public abstract class APointedSocket<TAddress, TPort, TPointedSocketProvider> : APointedSocket<TAddress, TPointedSocketProvider>, IPointedSocket<TAddress, TPort>
         where TAddress : IAddress
         where TPort : IPort
-        where TAccessPoint : IAccessPoint<TAddress, TPort>
         where TPointedSocketProvider : IPointedSocketProvider<TAddress, TPort>
     {
         IAccessPoint<TAddress, TPort> IPointedSocket<TAddress, TPort>.LocalPoint => LocalPoint;
@@ -48,9 +46,9 @@ namespace EmptyBox.IO.Network.Help
 
         public new event PointedSocketMessageReceiveHandler<TAddress, TPort> MessageReceived;
 
-        private TAccessPoint _LocalPoint;
+        private IAccessPoint<TAddress, TPort> _LocalPoint;
 
-        public new TAccessPoint LocalPoint
+        public new IAccessPoint<TAddress, TPort> LocalPoint
         {
             get => _LocalPoint;
             set
@@ -60,15 +58,15 @@ namespace EmptyBox.IO.Network.Help
             }
         }
 
-        protected virtual void OnMessageReceive(TAccessPoint sender, byte[] message)
+        protected virtual void OnMessageReceive(IAccessPoint<TAddress, TPort> sender, byte[] message)
         {
             MessageReceived?.Invoke(this, sender, message);
             _MessageReceived?.Invoke(this, sender.Port, message);
             base.OnMessageReceive(message);
         }
 
-        public override Task<VoidResult<SocketOperationStatus>> Send(IAddress receiver, byte[] data) => throw new NotSupportedException();
-        public virtual Task<VoidResult<SocketOperationStatus>> Send(IPort receiver, byte[] data) => throw new NotSupportedException();
-        public abstract Task<VoidResult<SocketOperationStatus>> Send(IAccessPoint<IAddress, IPort> receiver, byte[] data);
+        public override Task<bool> Send(IAddress receiver, byte[] data) => throw new NotSupportedException();
+        public virtual Task<bool> Send(IPort receiver, byte[] data) => throw new NotSupportedException();
+        public abstract Task<bool> Send(IAccessPoint<IAddress, IPort> receiver, byte[] data);
     }
 }

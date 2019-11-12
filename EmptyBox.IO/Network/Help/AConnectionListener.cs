@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Network.Help
 {
@@ -21,8 +20,8 @@ namespace EmptyBox.IO.Network.Help
             ConnectionReceived?.Invoke(this, connection);
         }
 
-        public abstract Task<VoidResult<SocketOperationStatus>> Start();
-        public abstract Task<VoidResult<SocketOperationStatus>> Stop();
+        public abstract Task<bool> Start();
+        public abstract Task<bool> Stop();
     }
 
     public abstract class AConnectionListener<TPort, TConnectionProvider> : AConnectionListener<TConnectionProvider>, IConnectionListener<TPort>

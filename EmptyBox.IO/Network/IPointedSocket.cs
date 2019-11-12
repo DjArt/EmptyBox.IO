@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
@@ -28,7 +27,7 @@ namespace EmptyBox.IO.Network
         /// </summary>
         /// <param name="data">Передаваемое сообщение.</param>
         /// <returns>Статус доставки сообщения, если применимо к протоколу.</returns>
-        Task<VoidResult<SocketOperationStatus>> Send(IAddress receiver, byte[] data);
+        Task<bool> Send(IAddress receiver, byte[] data);
     }
 
     public interface IPointedSocket<out TAddress, out TPort> : IPointedSocket<TAddress>, ISocket<TPort>
@@ -54,6 +53,6 @@ namespace EmptyBox.IO.Network
         /// </summary>
         /// <param name="data">Передаваемое сообщение.</param>
         /// <returns>Статус доставки сообщения, если применимо к протоколу.</returns>
-        Task<VoidResult<SocketOperationStatus>> Send(IAccessPoint<IAddress, IPort> receiver, byte[] data);
+        Task<bool> Send(IAccessPoint<IAddress, IPort> receiver, byte[] data);
     }
 }

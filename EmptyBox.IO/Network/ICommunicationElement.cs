@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,16 +19,16 @@ namespace EmptyBox.IO.Network
         /// </summary>
         /// <param name="data">Передаваемое сообщение.</param>
         /// <returns>Статус доставки сообщения, если применимо к протоколу.</returns>
-        Task<VoidResult<SocketOperationStatus>> Send(byte[] data);
+        Task<bool> Send(byte[] data);
         /// <summary>
         /// Начинает обмен сообщениями.
         /// </summary>
         /// <returns>Результат запуска.</returns>
-        Task<VoidResult<SocketOperationStatus>> Open();
+        Task<bool> Open();
         /// <summary>
         /// Завершает обмен сообщениями.
         /// </summary>
         /// <returns>Результат закрытия.</returns>
-        Task<VoidResult<SocketOperationStatus>> Close();
+        Task<bool> Close();
     }
 }

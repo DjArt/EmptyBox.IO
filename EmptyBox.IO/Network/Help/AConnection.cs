@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using EmptyBox.ScriptRuntime.Results;
 
 namespace EmptyBox.IO.Network.Help
 {
@@ -33,15 +32,14 @@ namespace EmptyBox.IO.Network.Help
             MessageReceived?.Invoke(this, message);
         }
 
-        public abstract Task<VoidResult<SocketOperationStatus>> Close();
-        public abstract Task<VoidResult<SocketOperationStatus>> Open();
-        public abstract Task<VoidResult<SocketOperationStatus>> Send(byte[] data);
+        public abstract Task<bool> Close();
+        public abstract Task<bool> Open();
+        public abstract Task<bool> Send(byte[] data);
     }
 
-    public abstract class AConnection<TPort, TConnectionProvider, TInherited> : AConnection<TConnectionProvider>, IConnection<TPort>
+    public abstract class AConnection<TPort, TConnectionProvider> : AConnection<TConnectionProvider>, IConnection<TPort>
         where TPort : IPort
         where TConnectionProvider : IConnectionProvider<TPort>
-        where TInherited : AConnection<TPort, TConnectionProvider, TInherited>
     {
         IConnectionProvider<TPort> IConnection<TPort>.ConnectionProvider => ConnectionProvider;
 

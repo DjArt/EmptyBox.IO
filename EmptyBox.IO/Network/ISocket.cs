@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
@@ -36,6 +35,6 @@ namespace EmptyBox.IO.Network
         /// </summary>
         /// <param name="data">Передаваемое сообщение.</param>
         /// <returns>Статус доставки сообщения, если применимо к протоколу.</returns>
-        Task<VoidResult<SocketOperationStatus>> Send(IPort receiver, byte[] data);
+        Task<bool> Send(IPort receiver, byte[] data);
     }
 }

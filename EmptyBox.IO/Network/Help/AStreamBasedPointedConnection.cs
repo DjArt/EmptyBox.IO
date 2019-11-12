@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network.Help
 {
-    public abstract class AStreamBasedPointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider> : APointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider>, IStreamBasedConnection
+    public abstract class AStreamBasedPointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider> : APointedConnection<TAddress, TPort, TPointedConnectionProvider>, IStreamBasedConnection
         where TAddress : IAddress
         where TPort : IPort
         where TAccessPoint : IAccessPoint<TAddress, TPort>
@@ -60,71 +59,49 @@ namespace EmptyBox.IO.Network.Help
         #endregion
 
         #region Public functions
-        public override async Task<VoidResult<SocketOperationStatus>> Close()
+        public override async Task<bool> Close()
         {
             await Task.Yield();
             if (IsActive)
             {
-                try
-                {
-                    OnConnectionInterrupt();
-                    IsActive = false;
-                    ReceiveLoopTask.Wait(100);
-                    Input.Dispose();
-                    Output.Dispose();
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                OnConnectionInterrupt();
+                IsActive = false;
+                ReceiveLoopTask.Wait(100);
+                Input.Dispose();
+                Output.Dispose();
+                return true;
             }
             else
             {
-                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ConnectionIsAlreadyClosed, null);
+                return false;
             }
         }
 
-        public override async Task<VoidResult<SocketOperationStatus>> Open()
+        public override async Task<bool> Open()
         {
             await Task.Yield();
             if (!IsActive)
             {
-                try
-                {
-                    GetStreams(out Stream? input, out Stream? output);
-                    Input = input;
-                    Output = output;
-                    ReceiveLoopTask = Task.Run(ReceiveLoop);
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                GetStreams(out Stream? input, out Stream? output);
+                Input = input;
+                Output = output;
+                ReceiveLoopTask = Task.Run(ReceiveLoop);
+                return true;
             }
-            return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, null);
+            return false;
         }
 
-        public override async Task<VoidResult<SocketOperationStatus>> Send(byte[] data)
+        public override async Task<bool> Send(byte[] data)
         {
             await Task.Yield();
             if (IsActive)
             {
-                try
-                {
-                    Output.Write(data, 0, data.Length);
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                Output.Write(data, 0, data.Length);
+                return true;
             }
             else
             {
-                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ConnectionIsClosed, null);
+                return false;
             }
         }
         #endregion

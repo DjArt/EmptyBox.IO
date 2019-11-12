@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
@@ -16,8 +15,8 @@ namespace EmptyBox.IO.Network
         IConnectionProvider ConnectionProvider { get; }
         bool IsActive { get; }
 
-        Task<VoidResult<SocketOperationStatus>> Start();
-        Task<VoidResult<SocketOperationStatus>> Stop();
+        Task<bool> Start();
+        Task<bool> Stop();
     }
 
     public interface IConnectionListener<out TPort> : IConnectionListener

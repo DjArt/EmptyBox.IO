@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network
 {
