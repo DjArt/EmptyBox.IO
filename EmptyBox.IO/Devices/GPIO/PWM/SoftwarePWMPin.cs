@@ -16,7 +16,6 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         internal double RequiredFrequency { get; private set; }
         internal double CurrentFrequency => (double)ActiveCounter / InactiveCounter;
 
-        IDevice IDevice.Parent => Parent;
         IPWMController IPWMPin.Parent => Parent;
 
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
