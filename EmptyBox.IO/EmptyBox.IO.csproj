@@ -43,6 +43,7 @@
     <Folder Include="Devices\GPIO\I2C\" />
     <Folder Include="Devices\GPIO\SPI\" />
     <Folder Include="Devices\PnP\" />
+    <Folder Include="Network\Bluetooth\LowEnergy\" />
     <Folder Include="Network\VPN\" />
     <Folder Include="Network\WiFi\Direct\" />
     <Folder Include="Network\Proxy\" />
