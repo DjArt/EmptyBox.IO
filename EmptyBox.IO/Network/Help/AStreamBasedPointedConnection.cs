@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Network.Help
 {
-    public abstract class AStreamBasedPointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider> : APointedConnection<TAddress, TPort, TPointedConnectionProvider>, IStreamBasedConnection
+    public abstract class AStreamBasedPointedConnection<TAddress, TPort, TPointedConnectionProvider> : APointedConnection<TAddress, TPort, TPointedConnectionProvider>, IStreamBasedConnection
         where TAddress : IAddress
         where TPort : IPort
-        where TAccessPoint : IAccessPoint<TAddress, TPort>
         where TPointedConnectionProvider : IPointedConnectionProvider<TAddress, TPort>
     {
 
