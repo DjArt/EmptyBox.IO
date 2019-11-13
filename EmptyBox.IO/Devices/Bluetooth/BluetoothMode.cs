@@ -8,7 +8,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
     public enum BluetoothMode : byte
     {
         Unknown = 0b000,
-        Standard = 0b001,
+        Classic = 0b001,
         LowEnergy = 0b010,
         AMP = 0b100,
     }
