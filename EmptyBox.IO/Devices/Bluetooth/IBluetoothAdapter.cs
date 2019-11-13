@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
-    public interface IBluetoothAdapter : IRadio, IPointedConnectionProvider<IBluetoothDevice, BluetoothPort>, IDeviceSearcher<IBluetoothDevice>, IBluetoothDevice
+    public interface IBluetoothAdapter : IRadio, IBluetoothConnectionProvider, IDeviceSearcher<IBluetoothDevice>, IBluetoothDevice
     {
         Task<IBluetoothDevice> TryGetFromMAC(MACAddress address);
     }
