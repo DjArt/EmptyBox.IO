@@ -2,34 +2,34 @@
 using System;
 using System.Text;
 
-namespace EmptyBox.IO.Network.Bluetooth
+namespace EmptyBox.IO.Network.Bluetooth.Classic
 {
-    public sealed class BluetoothAccessPoint : IAccessPoint<IBluetoothDevice, BluetoothPort>
+    public sealed class BluetoothClassicAccessPoint : IBluetoothAccessPoint<BluetoothPort>
     {
         public IBluetoothDevice Address { get; private set; }
         public BluetoothPort Port { get; private set; }
-        public BluetoothMode Mode { get; private set; }
+        public BluetoothMode Mode => BluetoothMode.Classic;
+        public BluetoothProtocol Protocol { get; private set; }
 
-        public BluetoothAccessPoint(IBluetoothDevice address, BluetoothPort port, BluetoothMode mode)
+        public BluetoothClassicAccessPoint(IBluetoothDevice address, BluetoothPort port)
         {
             Address = address;
             Port = port;
-            Mode = mode;
         }
 
-        public static bool operator ==(BluetoothAccessPoint x, BluetoothAccessPoint y)
+        public static bool operator ==(BluetoothClassicAccessPoint x, BluetoothClassicAccessPoint y)
         {
             return x.Address == y.Address && x.Port == y.Port && x.Mode == y.Mode;
         }
 
-        public static bool operator !=(BluetoothAccessPoint x, BluetoothAccessPoint y)
+        public static bool operator !=(BluetoothClassicAccessPoint x, BluetoothClassicAccessPoint y)
         {
             return !(x == y);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is BluetoothAccessPoint point)
+            if (obj is BluetoothClassicAccessPoint point)
             {
                 return this == point;
             }
@@ -57,7 +57,7 @@ namespace EmptyBox.IO.Network.Bluetooth
 
         public bool Equals(IAccessPoint<IAddress, IPort> other)
         {
-            if (other is BluetoothAccessPoint point)
+            if (other is BluetoothClassicAccessPoint point)
             {
                 return this == point;
             }
