@@ -65,9 +65,9 @@ namespace EmptyBox.IO.Network.Help
             {
                 OnConnectionInterrupt();
                 IsActive = false;
-                ReceiveLoopTask.Wait(100);
-                Input.Dispose();
-                Output.Dispose();
+                ReceiveLoopTask?.Wait(100);
+                Input?.Dispose();
+                Output?.Dispose();
                 return true;
             }
             else
@@ -95,7 +95,7 @@ namespace EmptyBox.IO.Network.Help
             await Task.Yield();
             if (IsActive)
             {
-                Output.Write(data, 0, data.Length);
+                Output?.Write(data, 0, data.Length);
                 return true;
             }
             else

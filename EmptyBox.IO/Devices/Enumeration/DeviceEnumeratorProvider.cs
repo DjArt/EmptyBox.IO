@@ -9,7 +9,7 @@ namespace EmptyBox.IO.Devices.Enumeration
 {
     public static class DeviceEnumeratorProvider
     {
-        public static IDeviceEnumerator Get()
+        public static IDeviceEnumerator? Get()
         {
             List<Assembly> libs = APIProvider.GetСompatibleAssembly();
             foreach (Assembly asm in libs)

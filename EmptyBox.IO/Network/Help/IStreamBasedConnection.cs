@@ -7,7 +7,7 @@ namespace EmptyBox.IO.Network.Help
 {
     public interface IStreamBasedConnection
     {
-        Stream Input { get; }
-        Stream Output { get; }
+        Stream? Input { get; }
+        Stream? Output { get; }
     }
 }
