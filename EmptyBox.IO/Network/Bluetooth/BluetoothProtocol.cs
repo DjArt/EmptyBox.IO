@@ -6,6 +6,7 @@ namespace EmptyBox.IO.Network.Bluetooth
 {
     public enum BluetoothProtocol : ushort
     {
+        Unknown = 0x0000,
         SDP = 0x0001,
         UDP = 0x0002,
         RFCOMM = 0x0003,
