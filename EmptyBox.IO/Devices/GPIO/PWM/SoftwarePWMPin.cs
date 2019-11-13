@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EmptyBox.Collections.Generic;
 
 namespace EmptyBox.IO.Devices.GPIO.PWM
 {
@@ -16,6 +17,8 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         internal double RequiredFrequency { get; private set; }
         internal double CurrentFrequency => (double)ActiveCounter / InactiveCounter;
 
+        IEnumerable<ITreeNode<IPWMPin>>? ITreeNode<IPWMPin>.Items => null;
+        IEnumerable<ITreeNode<IDevice>>? ITreeNode<IDevice>.Items => null;
         IPWMController IPWMPin.Parent => Parent;
 
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;

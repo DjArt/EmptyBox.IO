@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EmptyBox.Collections.Generic;
+using EmptyBox.Collections.ObjectModel;
 
 namespace EmptyBox.IO.Devices.GPIO.PWM
 {
@@ -17,9 +20,15 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         private double _Wait;
 
         //IDevice IDevice.Parent => Parent;
+        
+        IEnumerable<ITreeNode<IDevice>> ITreeNode<IDevice>.Items => Items;
+        IEnumerable<ITreeNode<IPWMPin>> ITreeNode<IPWMPin>.Items => Items;
 
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
+        public event ObservableTreeNodeItemChangeHandler<IPWMPin> ItemAdded;
+        public event ObservableTreeNodeItemChangeHandler<IPWMPin> ItemRemoved;
 
+        public ReadOnlyCollection<SoftwarePWMPin> Items => _Pins.AsReadOnly();
         public double MaxFrequency => 1000;
         public double MinFrequency => 40;
         public double Frequency
@@ -69,12 +78,14 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
             _Pins.Add(_pin);
             _pin.PinStatusChanged += _pin_PinStatusChanged;
             _pin.PinClosed += _pin_PinClosed;
+            ItemAdded?.Invoke(null, this, _pin);
             return _pin;
         }
 
         private void _pin_PinClosed(SoftwarePWMPin obj)
         {
             _Pins.Remove(obj);
+            ItemRemoved?.Invoke(null, this, obj);
         }
 
         private void _pin_PinStatusChanged()

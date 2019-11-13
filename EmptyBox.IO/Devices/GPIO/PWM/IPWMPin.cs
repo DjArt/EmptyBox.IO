@@ -1,10 +1,11 @@
-﻿using System;
+﻿using EmptyBox.Collections.Generic;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace EmptyBox.IO.Devices.GPIO.PWM
 {
-    public interface IPWMPin : IDevice
+    public interface IPWMPin : IDevice, ITreeNode<IPWMPin>
     {
         double DutyCycle { get; set; }
         uint PinNumber { get; }

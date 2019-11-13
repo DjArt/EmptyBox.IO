@@ -1,11 +1,11 @@
 ﻿using EmptyBox.Collections.Generic;
-//using EmptyBox.Collections.ObjectModel;
+using EmptyBox.Collections.ObjectModel;
 using System;
 using System.Collections.Generic;
 
 namespace EmptyBox.IO.Devices
 {
-    public interface IDevice// : IObservableTreeNode<IDevice>, IDisposable
+    public interface IDevice : ITreeNode<IDevice>, IDisposable
     {
         event DeviceConnectionStatusHandler ConnectionStatusChanged;
 

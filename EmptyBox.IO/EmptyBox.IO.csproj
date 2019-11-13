@@ -50,9 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EmptyBox.Collections" Version="0.0.0.2-alpha" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0-preview2.19523.17" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.6.0-preview5.19224.8" />
+    <PackageReference Include="EmptyBox.Collections" Version="0.0.0.4-alpha" />
+    <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.8-alpha" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
