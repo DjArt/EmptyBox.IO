@@ -1,7 +1,7 @@
 ﻿using EmptyBox.IO.Access;
 using EmptyBox.IO.Devices.Bluetooth;
 using EmptyBox.IO.Interoperability;
-using EmptyBox.ScriptRuntime.Results;
+using EmptyBox.IO.Network.Bluetooth.Classic;
 using System;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.Rfcomm;
@@ -65,7 +65,7 @@ namespace EmptyBox.IO.Network.Bluetooth
 
         #region Public objects
         public BluetoothAdapter ConnectionProvider { get; }
-        public BluetoothAccessPoint ListenerPoint { get; }
+        public BluetoothClassicAccessPoint ListenerPoint { get; }
         public bool IsActive { get; private set; }
         #endregion
 
@@ -73,7 +73,7 @@ namespace EmptyBox.IO.Network.Bluetooth
         public BluetoothConnectionListener(BluetoothAdapter adapter, BluetoothPort port)
         {
             ConnectionProvider = adapter;
-            ListenerPoint = new BluetoothAccessPoint(adapter, port, BluetoothAccessPointType.RFCOMM);
+            ListenerPoint = new BluetoothClassicAccessPoint(adapter, port);
             IsActive = false;
             _ConnectionListener = new StreamSocketListener();
             _ConnectionListener.ConnectionReceived += _ConnectionListener_ConnectionReceived;
@@ -83,10 +83,10 @@ namespace EmptyBox.IO.Network.Bluetooth
         #region Private functions
         private async void _ConnectionListener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            var result = await ConnectionProvider.TryGetFromMAC(args.Socket.Information.RemoteHostName.ToMACAddress());
-            if (result.Status == AccessStatus.Success)
+            IBluetoothDevice device = await ConnectionProvider.TryGetFromMAC(args.Socket.Information.RemoteHostName.ToMACAddress());
+            if (device != null)
             {
-                BluetoothAccessPoint remotehost = new BluetoothAccessPoint(result.Result, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)), BluetoothAccessPointType.RFCOMM);
+                BluetoothClassicAccessPoint remotehost = new BluetoothClassicAccessPoint(device, new BluetoothPort(Guid.Parse(args.Socket.Information.RemoteServiceName)));
                 BluetoothConnection connection = new BluetoothConnection(ConnectionProvider, args.Socket, ListenerPoint.Port, remotehost);
                 ConnectionReceived?.Invoke(this, connection);
                 _ConnectionReceived0?.Invoke(this, connection);
@@ -97,49 +97,36 @@ namespace EmptyBox.IO.Network.Bluetooth
         #endregion
 
         #region Public functions
-        public async Task<VoidResult<SocketOperationStatus>> Start()
+        public async Task<bool> Start()
         {
             await Task.Yield();
             if (!IsActive)
             {
-                try
-                {
-                    _ServiceProvider = await RfcommServiceProvider.CreateAsync(ListenerPoint.Port.ToRfcommServiceID());
-                    await _ConnectionListener.BindServiceNameAsync(ListenerPoint.Port.ToRfcommServiceID().AsString());
-                    _ServiceProvider.StartAdvertising(_ConnectionListener);
-                    IsActive = true;
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                _ServiceProvider = await RfcommServiceProvider.CreateAsync(ListenerPoint.Port.ToRfcommServiceID());
+                await _ConnectionListener.BindServiceNameAsync(ListenerPoint.Port.ToRfcommServiceID().AsString());
+                _ServiceProvider.StartAdvertising(_ConnectionListener);
+                IsActive = true;
+                return true;
             }
             else
             {
-                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyStarted, null);
+                return false;
             }
         }
 
-        public async Task<VoidResult<SocketOperationStatus>> Stop()
+        public async Task<bool> Stop()
         {
             await Task.Yield();
             if (IsActive)
             {
-                try
-                {
-                    _ServiceProvider.StopAdvertising();
-                    IsActive = false;
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                _ServiceProvider.StopAdvertising();
+                IsActive = false;
+                return true;
             }
             else
             {
-                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ListenerIsAlreadyClosed, null);
+                return false;
+
             }
         }
         #endregion

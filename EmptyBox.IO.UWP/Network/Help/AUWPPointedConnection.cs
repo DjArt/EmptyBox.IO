@@ -1,5 +1,4 @@
-﻿using EmptyBox.ScriptRuntime.Results;
-using EmptyBox.IO.Network.Help;
+﻿using EmptyBox.IO.Network.Help;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,10 +11,9 @@ using Windows.Storage.Streams;
 
 namespace EmptyBox.IO.Network.Help
 {
-    public abstract class AUWPPointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider> : AStreamBasedPointedConnection<TAddress, TPort, TAccessPoint, TPointedConnectionProvider>
+    public abstract class AUWPPointedConnection<TAddress, TPort, TPointedConnectionProvider> : AStreamBasedPointedConnection<TAddress, TPort, TPointedConnectionProvider>
         where TAddress : IAddress
         where TPort : IPort
-        where TAccessPoint : IAccessPoint<TAddress, TPort>
         where TPointedConnectionProvider : IPointedConnectionProvider<TAddress, TPort>
     {
 
@@ -29,7 +27,7 @@ namespace EmptyBox.IO.Network.Help
         #endregion
 
         #region Protected abstract functions
-        protected abstract (HostName Name, string Port) ConvertAccessPoint(TAccessPoint point);
+        protected abstract (HostName Name, string Port) ConvertAccessPoint(IAccessPoint<TAddress, TPort> point);
         #endregion
 
         #region Protected functions
@@ -37,7 +35,7 @@ namespace EmptyBox.IO.Network.Help
         #endregion
 
         #region Public functions
-        public override async Task<VoidResult<SocketOperationStatus>> Close()
+        public override async Task<bool> Close()
         {
             return await base.Close();
         }

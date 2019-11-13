@@ -1,7 +1,6 @@
 ﻿using EmptyBox.IO.Devices.Serial;
 using EmptyBox.IO.Interoperability;
 using EmptyBox.IO.Network.Help;
-using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,44 +70,37 @@ namespace EmptyBox.IO.Network.Serial
             }
         }
 
-        public override async Task<VoidResult<SocketOperationStatus>> Close()
+        public override async Task<bool> Close()
         {
             await Task.Yield();
             IsActive = false;
             ReceiveLoopTask.Wait(100);
             Input.Dispose();
             Output.Dispose();
-            return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Unknown, null);
+            return true;
         }
 
-        public override async Task<VoidResult<SocketOperationStatus>> Open()
+        public override async Task<bool> Open()
         {
             await Task.Yield();
             IsActive = true;
             Input = new DataReader(SerialDevice.InputStream);
             Output = new DataWriter(SerialDevice.OutputStream);
             ReceiveLoopTask = Task.Run(ReceiveLoop);
-            return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Unknown, null);
+            return true;
         }
 
-        public override async Task<VoidResult<SocketOperationStatus>> Send(byte[] data)
+        public override async Task<bool> Send(byte[] data)
         {
             if (IsActive)
             {
-                try
-                {
-                    Output.WriteBytes(data);
-                    await SerialDevice.OutputStream.FlushAsync();
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.Success, null);
-                }
-                catch (Exception ex)
-                {
-                    return new VoidResult<SocketOperationStatus>(SocketOperationStatus.UnknownError, ex);
-                }
+                Output.WriteBytes(data);
+                await SerialDevice.OutputStream.FlushAsync();
+                return true;
             }
             else
             {
-                return new VoidResult<SocketOperationStatus>(SocketOperationStatus.ConnectionIsClosed, null);
+                return false;
             }
         }
     }

@@ -166,7 +166,7 @@ namespace EmptyBox.IO.Interoperability
             }
         }
 
-        public static async Task<string> ToServiceIDString(this BluetoothAccessPoint accesspoint)
+        public static async Task<string> ToServiceIDString(this IAccessPoint<IBluetoothDevice, BluetoothPort> accesspoint)
         {
             DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(RfcommDeviceService.GetDeviceSelector(accesspoint.Port.ToRfcommServiceID()));
             foreach (DeviceInformation device in devices)

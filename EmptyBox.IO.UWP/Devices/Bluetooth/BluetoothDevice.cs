@@ -6,17 +6,16 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
-using EmptyBox.ScriptRuntime;
 using EmptyBox.IO.Access;
-using EmptyBox.ScriptRuntime.Results;
 using System.Text;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using EmptyBox.IO.Network.Bluetooth.Classic;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
     public sealed class BluetoothDevice : IBluetoothDevice
     {
-        IDevice IDevice.Parent => Parent;
+        //IDevice IDevice.Parent => Parent;
 
         IBluetoothAdapter IBluetoothDevice.Parent => Parent;
 
@@ -35,7 +34,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
             internal set
             {
                 _Device = value;
-                Mode |= _Device != null ? BluetoothMode.Standard : BluetoothMode.Unknown;
+                Mode |= _Device != null ? BluetoothMode.Classic : BluetoothMode.Unknown;
             }
         }
         public Windows.Devices.Bluetooth.BluetoothLEDevice LEDevice
@@ -117,18 +116,11 @@ namespace EmptyBox.IO.Devices.Bluetooth
             Close(false);
         }
 
-        public async Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetRFCOMMServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        public async Task<IEnumerable<BluetoothClassicAccessPoint>> GetClassicServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
         {
-            try
-            {
-                RfcommDeviceServicesResult services = await Device.GetRfcommServicesAsync(cacheMode.ToBluetoothCacheMode());
-                IEnumerable<BluetoothAccessPoint> result = services.Services.Select(x => new BluetoothAccessPoint(this, x.ServiceId.ToBluetoothPort(), BluetoothAccessPointType.RFCOMM)).ToList();
-                return new RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>(result, AccessStatus.Success, null);
-            }
-            catch (Exception ex)
-            {
-                return new RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>(null, AccessStatus.UnknownError, ex);
-            }
+            RfcommDeviceServicesResult services = await Device.GetRfcommServicesAsync(cacheMode.ToBluetoothCacheMode());
+            IEnumerable<BluetoothClassicAccessPoint> result = services.Services.Select(x => new BluetoothClassicAccessPoint(this, x.ServiceId.ToBluetoothPort())).ToList();
+            return result;
         }
 
         public override string ToString()
@@ -141,10 +133,15 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return result.ToString();
         }
 
-        public Task<RefResult<IEnumerable<BluetoothAccessPoint>, AccessStatus>> GetGATTServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        public bool Equals(IAddress other)
         {
-            throw new NotImplementedException();
+            return this == other;
         }
+
+        //public Task<IEnumerable<BluetoothClassicAccessPoint>> GetGATTServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
+        //{
+        //    throw new NotImplementedException();
+        //}
         #endregion
     }
 }

@@ -11,7 +11,6 @@ using Windows.Media.Audio;
 
 using EmptyBox.IO.Access;
 using EmptyBox.IO.Media.Audio;
-using EmptyBox.ScriptRuntime.Results;
 using AudioGraph = Windows.Media.Audio.AudioGraph;
 using System.IO;
 using EmptyBox.IO.Devices.Enumeration;

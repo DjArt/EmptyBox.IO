@@ -5,15 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using EmptyBox.IO.Access;
 using EmptyBox.IO.Interoperability;
-using EmptyBox.ScriptRuntime;
-using EmptyBox.ScriptRuntime.Results;
 using Windows.Devices.Gpio;
 
 namespace EmptyBox.IO.Devices.GPIO
 {
     public sealed class GPIOPin : IGPIOPin
     {
-        IDevice IDevice.Parent => Parent;
+        //IDevice IDevice.Parent => Parent;
 
         IGPIOController IGPIOPin.Parent => Parent;
 

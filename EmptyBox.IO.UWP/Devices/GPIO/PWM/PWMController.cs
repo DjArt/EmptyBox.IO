@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EmptyBox.ScriptRuntime.Results;
 using Windows.Devices.Pwm;
 
 namespace EmptyBox.IO.Devices.GPIO.PWM
@@ -35,11 +34,11 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
             throw new NotImplementedException();
         }
 
-        public async Task<RefResult<IPWMPin, GPIOPinOpenStatus>> OpenPin(uint number)
+        public async Task<IPWMPin> OpenPin(uint number)
         {
             await Task.Yield();
             PwmPin pin = InternalDevice.OpenPin((int)number);
-            return new RefResult<IPWMPin, GPIOPinOpenStatus>(new PWMPin(this, pin, number), GPIOPinOpenStatus.PinOpened, null);
+            return new PWMPin(this, pin, number);
         }
     }
 }

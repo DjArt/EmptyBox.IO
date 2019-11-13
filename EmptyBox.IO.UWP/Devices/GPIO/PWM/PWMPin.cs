@@ -9,7 +9,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
 {
     public sealed class PWMPin : IPWMPin
     {
-        IDevice IDevice.Parent => Parent;
+        //IDevice IDevice.Parent => Parent;
 
         IPWMController IPWMPin.Parent => Parent;
 

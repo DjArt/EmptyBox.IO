@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EmptyBox.IO.Access;
-using EmptyBox.ScriptRuntime.Results;
 using Windows.Storage;
 
 namespace EmptyBox.IO.Storage
@@ -22,17 +21,17 @@ namespace EmptyBox.IO.Storage
 
         public DateTime DateModified => throw new NotImplementedException();
 
-        public Task<VoidResult<AccessStatus>> CopyTo(IFolder folder)
+        public Task<bool> CopyTo(IFolder folder)
         {
             throw new NotImplementedException();
         }
 
-        public Task<VoidResult<AccessStatus>> Delete()
+        public Task<bool> Delete()
         {
             throw new NotImplementedException();
         }
 
-        public Task<VoidResult<AccessStatus>> MoveTo(IFolder folder)
+        public Task<bool> MoveTo(IFolder folder)
         {
             throw new NotImplementedException();
         }
@@ -42,7 +41,7 @@ namespace EmptyBox.IO.Storage
             throw new NotImplementedException();
         }
 
-        public Task<VoidResult<AccessStatus>> Rename(string name)
+        public Task<bool> Rename(string name)
         {
             throw new NotImplementedException();
         }

@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using EmptyBox.IO.Access;
 using EmptyBox.IO.Interoperability;
-using EmptyBox.ScriptRuntime;
-using EmptyBox.ScriptRuntime.Results;
 using Windows.Devices.Gpio;
 
 namespace EmptyBox.IO.Devices.GPIO
@@ -46,45 +44,31 @@ namespace EmptyBox.IO.Devices.GPIO
             Close(false);
         }
 
-        public async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> OpenPin(uint number)
+        public async Task<IGPIOPin> OpenPin(uint number)
         {
             await Task.Yield();
-            try
+            bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
+            if (success)
             {
-                bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
-                if (success)
-                {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, this), GPIOPinOpenStatus.PinOpened, null);
-                }
-                else
-                {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.UnknownError, null);
-                }
+                return new GPIOPin(pin, this);
             }
-            catch (Exception ex)
+            else
             {
-                return new RefResult<IGPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.UnknownError, ex);
+                return null;
             }
         }
 
-        public async Task<RefResult<IGPIOPin, GPIOPinOpenStatus>> OpenPin(uint number, GPIOPinSharingMode shareMode)
+        public async Task<IGPIOPin> OpenPin(uint number, GPIOPinSharingMode shareMode)
         {
             await Task.Yield();
-            try
+            bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
+            if (success)
             {
-                bool success = InternalDevice.TryOpenPin((int)number, GpioSharingMode.Exclusive, out GpioPin pin, out GpioOpenStatus status);
-                if (success)
-                {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(new GPIOPin(pin, this), GPIOPinOpenStatus.PinOpened, null);
-                }
-                else
-                {
-                    return new RefResult<IGPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.UnknownError, null);
-                }
+                return new GPIOPin(pin, this);
             }
-            catch (Exception ex)
+            else
             {
-                return new RefResult<IGPIOPin, GPIOPinOpenStatus>(null, GPIOPinOpenStatus.UnknownError, ex);
+                return null;
             }
         }
         #endregion
