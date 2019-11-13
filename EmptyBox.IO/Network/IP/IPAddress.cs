@@ -36,23 +36,15 @@ namespace EmptyBox.IO.Network.IP
 
         public static implicit operator IPAddress(System.Net.IPAddress address)
         {
-            if (address == null)
-            {
-                return null;
-            }
-            else
-            {
-                return new IPAddress(address.GetAddressBytes());
-            }
+            return new IPAddress(address.GetAddressBytes());
         }
 
         public static IPAddress Parse(string value)
         {
-            TryParse(value, out IPAddress result);
-            return result;
+            return System.Net.IPAddress.Parse(value);
         }
 
-        public static bool TryParse(string value, out IPAddress address)
+        public static bool TryParse(string value, out IPAddress? address)
         {
             bool result = System.Net.IPAddress.TryParse(value, out System.Net.IPAddress tmp);
             if (result)
