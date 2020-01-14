@@ -12,7 +12,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
         MACAddress HardwareAddress { get; }
         BluetoothClass DeviceClass { get; }
         BluetoothMode Mode { get; }
-        new IBluetoothAdapter Parent { get; }
+        IBluetoothAdapter Parent { get; }
 
         Task<IEnumerable<BluetoothClassicAccessPoint>> GetClassicServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached);
         //Task<IEnumerable<BluetoothRFCOMMAccessPoint>> GetGATTServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached);

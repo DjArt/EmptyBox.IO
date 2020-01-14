@@ -7,7 +7,7 @@ namespace EmptyBox.IO.Devices.GPIO.ADC
     public interface IADCChannel : IDevice
     {
         uint ChannelNumber { get; }
-        new IADCController Parent { get; }
+        IADCController Parent { get; }
 
         double ReadRatio();
         int ReadValue();
