@@ -37,9 +37,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EmptyBox.ScriptRuntime, Version=0.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EmptyBox.ScriptRuntime.0.0.0.5\lib\netstandard1.4\EmptyBox.ScriptRuntime.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.IO.Compression" />

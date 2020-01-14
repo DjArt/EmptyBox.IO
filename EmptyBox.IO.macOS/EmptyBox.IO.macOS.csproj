@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.Platforms">
-      <Version>2.2.0</Version>
+      <Version>3.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Win32.Primitives">
       <Version>4.3.0</Version>
@@ -80,7 +80,7 @@
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Diagnostics.DiagnosticSource">
-      <Version>4.5.1</Version>
+      <Version>4.6.0</Version>
     </PackageReference>
     <PackageReference Include="System.Diagnostics.Tools">
       <Version>4.3.0</Version>
@@ -113,7 +113,7 @@
       <Version>4.3.4</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Primitives">
-      <Version>4.3.0</Version>
+      <Version>4.3.1</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Sockets">
       <Version>4.3.0</Version>
@@ -134,7 +134,7 @@
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Runtime.Extensions">
-      <Version>4.3.0</Version>
+      <Version>4.3.1</Version>
     </PackageReference>
     <PackageReference Include="System.Runtime.Handles">
       <Version>4.3.0</Version>
@@ -161,7 +161,7 @@
       <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="System.Text.RegularExpressions">
-      <Version>4.3.0</Version>
+      <Version>4.3.1</Version>
     </PackageReference>
     <PackageReference Include="System.Threading">
       <Version>4.3.0</Version>
