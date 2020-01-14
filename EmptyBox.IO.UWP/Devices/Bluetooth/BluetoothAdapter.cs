@@ -4,12 +4,13 @@ using EmptyBox.IO.Interoperability;
 using System.Threading.Tasks;
 using EmptyBox.IO.Network;
 using EmptyBox.IO.Access;
-using EmptyBox.Collections.Generic;
 using EmptyBox.IO.Network.Bluetooth;
 using System.Collections.Generic;
 using Windows.Devices.Enumeration;
 using EmptyBox.IO.Devices.Enumeration;
 using EmptyBox.IO.Network.Bluetooth.Classic;
+using EmptyBox.ScriptRuntime.Results;
+using System.Linq;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -32,9 +33,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
         public event DeviceSearcherEventHandler<IBluetoothDevice> DeviceFound;
         public event DeviceSearcherEventHandler<IBluetoothDevice> DeviceLost;
-        //public event TreeItemChangeHandler<IBluetoothDevice> ItemAdded;
-        //public event ItemChangeHandler<IBluetoothDevice> ItemRemoved;
-        //public event ItemChangeHandler<IBluetoothDevice> ItemChanged;
         #endregion
 
         #region Public objects
@@ -56,15 +54,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
 
         IBluetoothAdapter IBluetoothDevice.Parent => throw new NotImplementedException();
 
-        //public ITreeNode<IBluetoothDevice> Parent => throw new NotImplementedException();
-
-        //public IEnumerable<ITreeNode<IBluetoothDevice>> Items => throw new NotImplementedException();
-
-        //public string Path => throw new NotImplementedException();
-
-        //ITreeNode<IDevice> ITreeNode<IDevice>.Parent => throw new NotImplementedException();
-
-        //IEnumerable<ITreeNode<IDevice>> ITreeNode<IDevice>.Items => throw new NotImplementedException();
         #endregion
 
         #region Constructors
@@ -181,45 +170,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
 
             }
         }
-
-        //event TreeItemChangeHandler<IDevice> IObservableTreeNode<IDevice>.ItemAdded
-        //{
-        //    add
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    remove
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        //event ItemChangeHandler<IDevice> IObservableTreeNode<IDevice>.ItemRemoved
-        //{
-        //    add
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    remove
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-
-        //event ItemChangeHandler<IDevice> IObservableTreeNode<IDevice>.ItemChanged
-        //{
-        //    add
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    remove
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
         #endregion
 
         #region Destructor
@@ -308,10 +258,10 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return (await InternalRadio.SetStateAsync(state.ToRadioState())).ToAccessStatus();
         }
 
-        //public async Task<IBluetoothDevice> TryGetFromMAC(MACAddress address)
-        //{
-        //    return (await Find()).FirstOrDefault(x => x.HardwareAddress == address);
-        //}
+        public async Task<IBluetoothDevice> TryGetFromMAC(MACAddress address)
+        {
+            return (await Search()).FirstOrDefault(x => x.HardwareAddress == address);
+        }
 
         public BluetoothConnection CreateConnection(BluetoothClassicAccessPoint accessPoint)
         {
@@ -323,16 +273,16 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return new BluetoothConnectionListener(this, port);
         }
 
-        //public async IAsyncCovariantResult<IEnumerable<IBluetoothDevice>> Find()
-        //{
-        //    DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelector());
-        //    List<IBluetoothDevice> result = new List<IBluetoothDevice>();
-        //    foreach (DeviceInformation device in devices)
-        //    {
-        //        result.Add(await _CreateDevice(device.Id));
-        //    }
-        //    return result;
-        //}
+        public async IAsyncCovariantResult<IEnumerable<IBluetoothDevice>> Search()
+        {
+            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelector());
+            List<IBluetoothDevice> result = new List<IBluetoothDevice>();
+            foreach (DeviceInformation device in devices)
+            {
+                result.Add(await _CreateDevice(device.Id));
+            }
+            return result;
+        }
 
         public async Task<bool> StartWatcher()
         {
@@ -360,11 +310,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
             throw new PlatformNotSupportedException();
         }
 
-        public Task<IBluetoothDevice> TryGetFromMAC(MACAddress address)
-        {
-            throw new NotImplementedException();
-        }
-
         Task<bool> IRadio.SetRadioStatus(RadioStatus state)
         {
             throw new NotImplementedException();
@@ -385,7 +330,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
             throw new NotImplementedException();
         }
 
-        IBluetoothConnection IBluetoothConnectionProvider.CreateConnection(BluetoothClassicAccessPoint accessPoint)
+        IBluetoothConnection IBluetoothConnectionProvider.CreateConnection(IBluetoothAccessPoint<BluetoothPort> accessPoint)
         {
             throw new NotImplementedException();
         }

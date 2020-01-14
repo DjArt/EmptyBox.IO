@@ -9,6 +9,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
 {
     public sealed class PWMController : IPWMController
     {
+
         public event DeviceConnectionStatusHandler ConnectionStatusChanged;
 
         public double MaxFrequency => InternalDevice.MaxFrequency;
@@ -38,7 +39,8 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
         {
             await Task.Yield();
             PwmPin pin = InternalDevice.OpenPin((int)number);
-            return new PWMPin(this, pin, number);
+            PWMPin _pin = new PWMPin(this, pin, number);
+            return _pin;
         }
     }
 }

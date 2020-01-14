@@ -1,5 +1,4 @@
-﻿using EmptyBox.Collections.ObjectModel;
-using EmptyBox.IO.Access;
+﻿using EmptyBox.IO.Access;
 using EmptyBox.ScriptRuntime.Results;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmptyBox.IO.Devices
 {
-    public interface IDeviceSearcher<out TDevice> : IObservableTreeNode<TDevice>
+    public interface IDeviceSearcher<out TDevice>
         where TDevice : IDevice
     {
         event DeviceSearcherEventHandler<TDevice> DeviceFound;

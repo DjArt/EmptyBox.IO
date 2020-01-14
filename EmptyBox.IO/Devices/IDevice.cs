@@ -1,11 +1,9 @@
-﻿using EmptyBox.Collections.Generic;
-using EmptyBox.Collections.ObjectModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace EmptyBox.IO.Devices
 {
-    public interface IDevice : ITreeNode<IDevice>, IDisposable
+    public interface IDevice : IDisposable
     {
         event DeviceConnectionStatusHandler ConnectionStatusChanged;
 
