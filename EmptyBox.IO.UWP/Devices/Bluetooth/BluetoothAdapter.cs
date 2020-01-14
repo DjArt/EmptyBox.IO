@@ -11,6 +11,7 @@ using EmptyBox.IO.Devices.Enumeration;
 using EmptyBox.IO.Network.Bluetooth.Classic;
 using EmptyBox.ScriptRuntime.Results;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace EmptyBox.IO.Devices.Bluetooth
 {
@@ -44,15 +45,13 @@ namespace EmptyBox.IO.Devices.Bluetooth
         public bool IsStarted { get; private set; }
         public BluetoothClass DeviceClass => throw new NotImplementedException();
         public BluetoothMode Mode { get; }
+        public BluetoothLowEnergyFeatures LowEnergyFeatures { get; }
         public DevicePairStatus PairStatus => throw new NotSupportedException();
-        public IDevice Parent => throw new NotImplementedException();
         public MACAddress HardwareAddress { get; }
-
         IBluetoothDevice IPointedConnectionProvider<IBluetoothDevice>.Address => this;
-
         public bool SearcherIsActive => throw new NotImplementedException();
-
         IBluetoothAdapter IBluetoothDevice.Parent => throw new NotImplementedException();
+
 
         #endregion
 
@@ -60,11 +59,15 @@ namespace EmptyBox.IO.Devices.Bluetooth
         internal BluetoothAdapter(Windows.Devices.Bluetooth.BluetoothAdapter adapter)
         {
             InternalAdapter = adapter;
-            Task<Windows.Devices.Radios.Radio> initRadio = InternalAdapter.GetRadioAsync().AsTask();
+            ConfiguredTaskAwaitable<Windows.Devices.Radios.Radio> initRadio = InternalAdapter.GetRadioAsync().AsTask().ConfigureAwait(false);
             _Devices = new List<BluetoothDevice>();
             HardwareAddress = new MACAddress(InternalAdapter.BluetoothAddress);
             Mode |= InternalAdapter.IsClassicSupported ? BluetoothMode.Classic : BluetoothMode.Unknown;
             Mode |= InternalAdapter.IsLowEnergySupported ? BluetoothMode.LowEnergy : BluetoothMode.Unknown;
+            LowEnergyFeatures |= InternalAdapter.IsAdvertisementOffloadSupported ? BluetoothLowEnergyFeatures.AdvertisementOffloadSupport : BluetoothLowEnergyFeatures.None;
+            LowEnergyFeatures |= InternalAdapter.IsCentralRoleSupported ? BluetoothLowEnergyFeatures.CentralRoleSupport : BluetoothLowEnergyFeatures.None;
+            LowEnergyFeatures |= InternalAdapter.IsPeripheralRoleSupported ? BluetoothLowEnergyFeatures.PeripheralRoleSupport : BluetoothLowEnergyFeatures.None;
+            //LowEnergyFeatures |= InternalAdapter.AreLowEnergySecureConnectionsSupported ? BluetoothLowEnergyFeatures.LowEnergySecureConnectionsSupport : BluetoothLowEnergyFeatures.None;
             _Watcher = DeviceInformation.CreateWatcher(query);
             _Watcher.Added += _Watcher_Added;
             _Watcher.EnumerationCompleted += _Watcher_EnumerationCompleted;
@@ -72,11 +75,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
             _Watcher.Stopped += _Watcher_Stopped;
             _Watcher.Updated += _Watcher_Updated;
             DeviceEnumerator.ConnectionStatusChangedByID += DeviceEnumerator_ConnectionStatusChangedByID;
-            initRadio.Wait();
-            if (!initRadio.IsFaulted)
-            {
-                InternalRadio = initRadio.Result;
-            }
+            InternalRadio = initRadio.GetAwaiter().GetResult();
         }
 
         private void DeviceEnumerator_ConnectionStatusChangedByID(string sender, ConnectionStatus args)
@@ -210,21 +209,9 @@ namespace EmptyBox.IO.Devices.Bluetooth
             }
         }
 
-        IPointedConnection<IBluetoothDevice> IPointedConnectionProvider<IBluetoothDevice>.CreateConnection(IAddress address)
-        {
-            throw new NotSupportedException();
-        }
-
-        IPointedConnectionListener<IBluetoothDevice> IPointedConnectionProvider<IBluetoothDevice>.CreateConnectionListener()
-        {
-            throw new NotSupportedException();
-        }
-
-        IConnection<BluetoothPort> IConnectionProvider<BluetoothPort>.CreateConnection(IPort port)
-        {
-            throw new NotSupportedException();
-        }
-
+        IPointedConnection<IBluetoothDevice> IPointedConnectionProvider<IBluetoothDevice>.CreateConnection(IAddress address) => throw new NotSupportedException();
+        IPointedConnectionListener<IBluetoothDevice> IPointedConnectionProvider<IBluetoothDevice>.CreateConnectionListener() => throw new NotSupportedException();
+        IConnection<BluetoothPort> IConnectionProvider<BluetoothPort>.CreateConnection(IPort port) => throw new NotSupportedException();
         IConnectionListener<BluetoothPort> IConnectionProvider<BluetoothPort>.CreateConnectionListener(IPort port)
         {
             if (port is BluetoothPort _port)
@@ -237,15 +224,8 @@ namespace EmptyBox.IO.Devices.Bluetooth
             }
         }
 
-        IConnection IConnectionProvider.CreateConnection()
-        {
-            throw new NotSupportedException();
-        }
-
-        IConnectionListener IConnectionProvider.CreateConnectionListener()
-        {
-            throw new NotSupportedException();
-        }
+        IConnection IConnectionProvider.CreateConnection() => throw new NotSupportedException();
+        IConnectionListener IConnectionProvider.CreateConnectionListener() => throw new NotSupportedException();
 
         #region Public functions
         public void Dispose()
@@ -253,9 +233,9 @@ namespace EmptyBox.IO.Devices.Bluetooth
             Close(false);
         }
 
-        public async Task<AccessStatus> SetRadioStatus(RadioStatus state)
+        public async Task SetRadioStatus(RadioStatus state)
         {
-            return (await InternalRadio.SetStateAsync(state.ToRadioState())).ToAccessStatus();
+            await InternalRadio.SetStateAsync(state.ToRadioState());
         }
 
         public async Task<IBluetoothDevice> TryGetFromMAC(MACAddress address)
@@ -284,22 +264,6 @@ namespace EmptyBox.IO.Devices.Bluetooth
             return result;
         }
 
-        public async Task<bool> StartWatcher()
-        {
-            await Task.Yield();
-            _Watcher.Start();
-            IsStarted = true;
-            return true;
-        }
-
-        public async Task<bool> StopWatcher()
-        {
-            await Task.Yield();
-            _Watcher.Stop();
-            IsStarted = false;
-            return true;
-        }
-
         public Task<IEnumerable<BluetoothClassicAccessPoint>> GetClassicServices(BluetoothSDPCacheMode cacheMode = BluetoothSDPCacheMode.Cached)
         {
             throw new PlatformNotSupportedException();
@@ -310,19 +274,18 @@ namespace EmptyBox.IO.Devices.Bluetooth
             throw new PlatformNotSupportedException();
         }
 
-        Task<bool> IRadio.SetRadioStatus(RadioStatus state)
+        public async Task ActivateSearcher()
         {
-            throw new NotImplementedException();
+            await Task.Yield();
+            _Watcher.Start();
+            IsStarted = true;
         }
 
-        public Task ActivateSearcher()
+        public async Task DeactivateSearcher()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task DeactivateSearcher()
-        {
-            throw new NotImplementedException();
+            await Task.Yield();
+            _Watcher.Stop();
+            IsStarted = false;
         }
 
         public bool Equals(IAddress other)
@@ -332,12 +295,12 @@ namespace EmptyBox.IO.Devices.Bluetooth
 
         IBluetoothConnection IBluetoothConnectionProvider.CreateConnection(IBluetoothAccessPoint<BluetoothPort> accessPoint)
         {
-            throw new NotImplementedException();
+            return CreateConnection(accessPoint as BluetoothClassicAccessPoint);
         }
 
         IBluetoothConnectionListener IBluetoothConnectionProvider.CreateConnectionListener(BluetoothPort port)
         {
-            throw new NotImplementedException();
+            return CreateConnectionListener(port);
         }
         #endregion
     }
