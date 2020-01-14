@@ -6,28 +6,25 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ApplicationIcon />
     <OutputTypeEx>library</OutputTypeEx>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.0.34-alpha</Version>
-    <AssemblyVersion>0.0.0.34</AssemblyVersion>
-    <FileVersion>0.0.0.34</FileVersion>
+    <Version>0.0.0.36-alpha</Version>
     <Authors>EmptyBox Team</Authors>
-    <PackageProjectUrl>https://github.com/DjArt/EmptyBox.IO</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/EmptyBox-Team/EmptyBox.IO</PackageProjectUrl>
     <NeutralLanguage>ru</NeutralLanguage>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/DjArt/EmptyBox.IO</RepositoryUrl>
+    <RepositoryUrl>https://github.com/EmptyBox-Team/EmptyBox.IO</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <Description>Cross-platform IO library</Description>
     <PackageTags>IO, Windows, UWP, Android, iOS, Linux, Tizen</PackageTags>
     <PackageReleaseNotes>🛠Alpha version.
 👀Instructions for use available at project repository</PackageReleaseNotes>
-    <Copyright />
-    <PackageIconUrl>https://raw.githubusercontent.com/DjArt/EmptyBox.IO/master/EmptyBox.IO%20Logo.png</PackageIconUrl>
+    <PackageIconUrl></PackageIconUrl>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
-    <PackageLicenseExpression></PackageLicenseExpression>
     <Company>EmptyBox Team</Company>
+    <PackageIcon>EmptyBox.IO Logo.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -51,8 +48,19 @@
 
   <ItemGroup>
     <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.8-alpha" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\EmptyBox.IO Logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
