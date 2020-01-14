@@ -12,7 +12,7 @@ namespace EmptyBox.IO.Storage
             switch (item)
             {
                 case null:
-                    return null;
+                    throw new ArgumentNullException(nameof(item));
                 case IFileSystem fileSystem:
                     return fileSystem;
                 default:
