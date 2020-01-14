@@ -8,12 +8,12 @@ namespace EmptyBox.IO.Network
     {
         public delegate bool ComputationalPredicate<TIn, TOut>(TIn @in, out TOut @out);
 
-        public static async Task<byte[]> WaitAnswer(this ICommunicationElement com, Func<byte[], bool> check, TimeSpan span)
+        public static async Task<byte[]?> WaitAnswer(this ICommunicationElement com, Func<byte[], bool> check, TimeSpan? span)
         {
             await Task.Yield();
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
-            byte[] result = null;
-            IConnection connection = com as IConnection;
+            byte[]? result = null;
+            IConnection? connection = com as IConnection;
 
             void Handler(ICommunicationElement connection, byte[] message)
             {
@@ -40,7 +40,7 @@ namespace EmptyBox.IO.Network
             }
             else
             {
-                resetEvent.Wait(span);
+                resetEvent.Wait(span.Value);
             }
             com.MessageReceived -= Handler;
             if (connection != null)
@@ -50,13 +50,13 @@ namespace EmptyBox.IO.Network
             return result;
         }
 
-        public static async Task<(T Value, bool Success)> WaitAnswer<T>(this ICommunicationElement com, ComputationalPredicate<byte[], T> check, TimeSpan span)
+        public static async Task<(T Value, bool Success)> WaitAnswer<T>(this ICommunicationElement com, ComputationalPredicate<byte[], T> check, TimeSpan? span)
         {
             await Task.Yield();
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
             T result = default;
             bool success = false;
-            IConnection connection = com as IConnection;
+            IConnection? connection = com as IConnection;
 
             void Handler(ICommunicationElement connection, byte[] message)
             {
@@ -77,7 +77,14 @@ namespace EmptyBox.IO.Network
             {
                 connection.ConnectionInterrupted += Interrupted;
             }
-            resetEvent.Wait(span);
+            if (span == null)
+            {
+                resetEvent.Wait();
+            }
+            else
+            {
+                resetEvent.Wait(span.Value);
+            }
             com.MessageReceived -= Handler;
             if (connection != null)
             {
@@ -86,12 +93,12 @@ namespace EmptyBox.IO.Network
             return (result, success);
         }
 
-        public static async Task<byte[]> WaitAnswer<TPort>(this ISocket<TPort> socket, Func<TPort, bool> checkSender, Func<byte[], bool> checkMessage, TimeSpan span)
+        public static async Task<byte[]?> WaitAnswer<TPort>(this ISocket<TPort> socket, Func<TPort, bool> checkSender, Func<byte[], bool> checkMessage, TimeSpan? span)
             where TPort : IPort
         {
             await Task.Yield();
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
-            byte[] result = null;
+            byte[]? result = null;
 
             void Handler(ISocket<TPort> connection, TPort sender, byte[] message)
             {
@@ -103,17 +110,24 @@ namespace EmptyBox.IO.Network
             }
 
             socket.MessageReceived += Handler;
-            resetEvent.Wait(span);
+            if (span == null)
+            {
+                resetEvent.Wait();
+            }
+            else
+            {
+                resetEvent.Wait(span.Value);
+            }
             socket.MessageReceived -= Handler;
             return result;
         }
 
-        public static async Task<byte[]> WaitAnswer<TAddress>(this IPointedSocket<TAddress> socket, Func<TAddress, bool> checkSender, Func<byte[], bool> checkMessage, TimeSpan span)
+        public static async Task<byte[]?> WaitAnswer<TAddress>(this IPointedSocket<TAddress> socket, Func<TAddress, bool> checkSender, Func<byte[], bool> checkMessage, TimeSpan? span)
             where TAddress : IAddress
         {
             await Task.Yield();
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
-            byte[] result = null;
+            byte[]? result = null;
 
             void Handler(IPointedSocket<TAddress> connection, TAddress sender, byte[] message)
             {
@@ -125,18 +139,25 @@ namespace EmptyBox.IO.Network
             }
 
             socket.MessageReceived += Handler;
-            resetEvent.Wait(span);
+            if (span == null)
+            {
+                resetEvent.Wait();
+            }
+            else
+            {
+                resetEvent.Wait(span.Value);
+            }
             socket.MessageReceived -= Handler;
             return result;
         }
 
-        public static async Task<byte[]> WaitAnswer<TAddress, TPort>(this IPointedSocket<TAddress, TPort> socket, Func<IAccessPoint<TAddress, TPort>, bool> checkSender, Func<byte[], bool> checkMessage, TimeSpan span)
+        public static async Task<byte[]?> WaitAnswer<TAddress, TPort>(this IPointedSocket<TAddress, TPort> socket, Func<IAccessPoint<TAddress, TPort>, bool> checkSender, Func<byte[], bool> checkMessage, TimeSpan? span)
             where TAddress : IAddress
             where TPort : IPort
         {
             await Task.Yield();
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
-            byte[] result = null;
+            byte[]? result = null;
 
             void Handler(IPointedSocket<TAddress, TPort> connection, IAccessPoint<TAddress, TPort> sender, byte[] message)
             {
@@ -148,12 +169,19 @@ namespace EmptyBox.IO.Network
             }
 
             socket.MessageReceived += Handler;
-            resetEvent.Wait(span);
+            if (span == null)
+            {
+                resetEvent.Wait();
+            }
+            else
+            {
+                resetEvent.Wait(span.Value);
+            }
             socket.MessageReceived -= Handler;
             return result;
         }
 
-        public static async Task<(T Value, bool Success)> WaitAnswer<T, TAddress, TPort>(this IPointedSocket<TAddress, TPort> socket, Func<IAccessPoint<TAddress, TPort>, bool> checkSender, ComputationalPredicate<byte[], T> checkMessage, TimeSpan span)
+        public static async Task<(T Value, bool Success)> WaitAnswer<T, TAddress, TPort>(this IPointedSocket<TAddress, TPort> socket, Func<IAccessPoint<TAddress, TPort>, bool> checkSender, ComputationalPredicate<byte[], T> checkMessage, TimeSpan? span)
             where TAddress : IAddress
             where TPort : IPort
         {
@@ -172,7 +200,14 @@ namespace EmptyBox.IO.Network
             }
 
             socket.MessageReceived += Handler;
-            resetEvent.Wait(span);
+            if (span == null)
+            {
+                resetEvent.Wait();
+            }
+            else
+            {
+                resetEvent.Wait(span.Value);
+            }
             socket.MessageReceived -= Handler;
             return (result, success);
         }
