@@ -365,10 +365,5 @@ namespace EmptyBox.IO.Devices.Enumeration
                 throw new NotSupportedException();
             }
         }
-
-        public async Task<IDevice> GetRoot()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
