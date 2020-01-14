@@ -8,6 +8,7 @@ namespace EmptyBox.IO.Devices.Bluetooth
 {
     public interface IBluetoothAdapter : IRadio, IBluetoothConnectionProvider, IDeviceSearcher<IBluetoothDevice>, IBluetoothDevice
     {
+        BluetoothLowEnergyFeatures LowEnergyFeatures { get; }
         Task<IBluetoothDevice> TryGetFromMAC(MACAddress address);
     }
 }
