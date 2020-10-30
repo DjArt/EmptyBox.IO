@@ -84,6 +84,7 @@ namespace EmptyBox.IO.Network.Help
                 GetStreams(out Stream? input, out Stream? output);
                 Input = input;
                 Output = output;
+                IsActive = true;
                 ReceiveLoopTask = Task.Run(ReceiveLoop);
                 return true;
             }
