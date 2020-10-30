@@ -10,8 +10,8 @@ namespace EmptyBox.IO.Network.Help
     {
         IPointedConnectionProvider<TAddress> IPointedConnection<TAddress>.ConnectionProvider => ConnectionProvider;
 
-        public new event MessageReceiveHandler<IPointedConnection<TAddress>> MessageReceived;
-        public new event ConnectionInterruptHandler<IPointedConnection<TAddress>> ConnectionInterrupted;
+        public new event MessageReceiveHandler<IPointedConnection<TAddress>>? MessageReceived;
+        public new event ConnectionInterruptHandler<IPointedConnection<TAddress>>? ConnectionInterrupted;
 
         public TAddress LocalPoint { get; protected set; }
         public TAddress RemotePoint { get; protected set; }
@@ -53,8 +53,8 @@ namespace EmptyBox.IO.Network.Help
         TPort IConnection<TPort>.LocalPoint => LocalPoint.Port;
         TPort IConnection<TPort>.RemotePoint => RemotePoint.Port;
 
-        public new event MessageReceiveHandler<IPointedConnection<TAddress, TPort>> MessageReceived;
-        public new event ConnectionInterruptHandler<IPointedConnection<TAddress, TPort>> ConnectionInterrupted;
+        public new event MessageReceiveHandler<IPointedConnection<TAddress, TPort>>? MessageReceived;
+        public new event ConnectionInterruptHandler<IPointedConnection<TAddress, TPort>>? ConnectionInterrupted;
 
         private IAccessPoint<TAddress, TPort> _LocalPoint;
         private IAccessPoint<TAddress, TPort> _RemotePoint;

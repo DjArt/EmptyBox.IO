@@ -10,7 +10,7 @@ namespace EmptyBox.IO.Network.Help
     {
         ISocketProvider ISocket.SocketProvider => SocketProvider;
 
-        public event MessageReceiveHandler<ICommunicationElement> MessageReceived;
+        public event MessageReceiveHandler<ICommunicationElement>? MessageReceived;
 
         public virtual bool IsActive { get; protected set; }
         public virtual TSocketProvider SocketProvider { get; protected set; }

@@ -48,13 +48,13 @@ namespace EmptyBox.IO.Network
             return address.Address;
         }
 
-        public static MACAddress Parse(string value)
+        public static MACAddress? Parse(string value)
         {
-            TryParse(value, out MACAddress result);
+            TryParse(value, out MACAddress? result);
             return result;
         }
 
-        public static bool TryParse(string value, out MACAddress address)
+        public static bool TryParse(string value, out MACAddress? address)
         {
             //For testing and debbuging easy algorithm. Change after testing
             string cleared = value.Replace("(", "").Replace(")", "").ToUpper();

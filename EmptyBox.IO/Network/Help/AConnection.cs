@@ -16,8 +16,8 @@ namespace EmptyBox.IO.Network.Help
 
         IConnectionProvider IConnection.ConnectionProvider => ConnectionProvider;
 
-        public event ConnectionInterruptHandler<IConnection> ConnectionInterrupted;
-        public event MessageReceiveHandler<IConnection> MessageReceived;
+        public event ConnectionInterruptHandler<IConnection>? ConnectionInterrupted;
+        public event MessageReceiveHandler<IConnection>? MessageReceived;
 
         public virtual TConnectionProvider ConnectionProvider { get; protected set; }
         public virtual bool IsActive { get; protected set; }
@@ -43,8 +43,8 @@ namespace EmptyBox.IO.Network.Help
     {
         IConnectionProvider<TPort> IConnection<TPort>.ConnectionProvider => ConnectionProvider;
 
-        public new event MessageReceiveHandler<IConnection<TPort>> MessageReceived;
-        public new event ConnectionInterruptHandler<IConnection<TPort>> ConnectionInterrupted;
+        public new event MessageReceiveHandler<IConnection<TPort>>? MessageReceived;
+        public new event ConnectionInterruptHandler<IConnection<TPort>>? ConnectionInterrupted;
 
         public TPort LocalPoint { get; protected set; }
         public TPort RemotePoint { get; protected set; }

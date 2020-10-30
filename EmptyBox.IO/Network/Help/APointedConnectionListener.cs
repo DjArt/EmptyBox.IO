@@ -11,7 +11,7 @@ namespace EmptyBox.IO.Network.Help
     {
         IPointedConnectionProvider<TAddress> IPointedConnectionListener<TAddress>.ConnectionProvider => ConnectionProvider;
 
-        public new event PointedConnectionReceiveHandler<TAddress> ConnectionReceived;
+        public new event PointedConnectionReceiveHandler<TAddress>? ConnectionReceived;
 
         public TAddress ListenerPoint { get; protected set; }
 
@@ -39,9 +39,9 @@ namespace EmptyBox.IO.Network.Help
         IConnectionProvider<TPort> IConnectionListener<TPort>.ConnectionProvider => ConnectionProvider;
         TPort IConnectionListener<TPort>.ListenerPoint => ListenerPoint.Port;
 
-        private event ConnectionReceiveHandler<TPort> _ConnectionReceived;
+        private event ConnectionReceiveHandler<TPort>? _ConnectionReceived;
 
-        public new event PointedConnectionReceiveHandler<TAddress, TPort> ConnectionReceived;
+        public new event PointedConnectionReceiveHandler<TAddress, TPort>? ConnectionReceived;
 
         private IAccessPoint<TAddress, TPort> _ListenerPoint;
 

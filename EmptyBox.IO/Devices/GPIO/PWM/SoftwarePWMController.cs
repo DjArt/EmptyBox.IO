@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
 
         //IDevice IDevice.Parent => Parent;
 
-        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
+        public event DeviceConnectionStatusHandler? ConnectionStatusChanged;
 
         public ReadOnlyCollection<SoftwarePWMPin> Items => _Pins.AsReadOnly();
         public double MaxFrequency => 1000;

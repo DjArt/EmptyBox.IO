@@ -19,7 +19,7 @@ namespace EmptyBox.IO.Network
         /// <summary>
         /// Событие, уведомляющее о приёме сообщения.
         /// </summary>
-        new event SocketMessageReceiveHandler<TPort> MessageReceived;
+        new event SocketMessageReceiveHandler<TPort>? MessageReceived;
 
         /// <summary>
         /// Локальная точка обмена данных.

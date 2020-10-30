@@ -11,7 +11,7 @@ namespace EmptyBox.IO.Network.Help
     {
         IPointedSocketProvider<TAddress> IPointedSocket<TAddress>.SocketProvider => SocketProvider;
 
-        public new event PointedSocketMessageReceiveHandler<TAddress> MessageReceived;
+        public new event PointedSocketMessageReceiveHandler<TAddress>? MessageReceived;
 
         public TAddress LocalPoint { get; protected set; }
 
@@ -33,7 +33,7 @@ namespace EmptyBox.IO.Network.Help
         IAccessPoint<TAddress, TPort> IPointedSocket<TAddress, TPort>.LocalPoint => LocalPoint;
         IPointedSocketProvider<TAddress, TPort> IPointedSocket<TAddress, TPort>.SocketProvider => SocketProvider;
 
-        event SocketMessageReceiveHandler<TPort> ISocket<TPort>.MessageReceived
+        event SocketMessageReceiveHandler<TPort>? ISocket<TPort>.MessageReceived
         {
             add => _MessageReceived += value;
             remove => _MessageReceived -= value;
@@ -42,9 +42,9 @@ namespace EmptyBox.IO.Network.Help
         TPort ISocket<TPort>.LocalPoint => LocalPoint.Port;
         ISocketProvider<TPort> ISocket<TPort>.SocketProvider => SocketProvider;
 
-        private event SocketMessageReceiveHandler<TPort> _MessageReceived;
+        private event SocketMessageReceiveHandler<TPort>? _MessageReceived;
 
-        public new event PointedSocketMessageReceiveHandler<TAddress, TPort> MessageReceived;
+        public new event PointedSocketMessageReceiveHandler<TAddress, TPort>? MessageReceived;
 
         private IAccessPoint<TAddress, TPort> _LocalPoint;
 

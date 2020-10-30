@@ -8,8 +8,8 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
     {
         private double _DutyCycle;
 
-        internal event Action PinStatusChanged;
-        internal event Action<SoftwarePWMPin> PinClosed;
+        internal event Action? PinStatusChanged;
+        internal event Action<SoftwarePWMPin>? PinClosed;
         
         internal ulong ActiveCounter { get; set; }
         internal ulong InactiveCounter { get; set; }
@@ -18,7 +18,7 @@ namespace EmptyBox.IO.Devices.GPIO.PWM
 
         IPWMController IPWMPin.Parent => Parent;
 
-        public event DeviceConnectionStatusHandler ConnectionStatusChanged;
+        public event DeviceConnectionStatusHandler? ConnectionStatusChanged;
 
         public double DutyCycle
         {

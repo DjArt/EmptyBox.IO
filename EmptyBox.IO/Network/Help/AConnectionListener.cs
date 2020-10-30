@@ -10,7 +10,7 @@ namespace EmptyBox.IO.Network.Help
     {
         IConnectionProvider IConnectionListener.ConnectionProvider => ConnectionProvider;
 
-        public event ConnectionReceiveHandler ConnectionReceived;
+        public event ConnectionReceiveHandler? ConnectionReceived;
 
         public virtual TConnectionProvider ConnectionProvider { get; protected set; }
         public virtual bool IsActive { get; protected set; }
@@ -30,7 +30,7 @@ namespace EmptyBox.IO.Network.Help
     {
         IConnectionProvider<TPort> IConnectionListener<TPort>.ConnectionProvider => ConnectionProvider;
 
-        public new event ConnectionReceiveHandler<TPort> ConnectionReceived;
+        public new event ConnectionReceiveHandler<TPort>? ConnectionReceived;
 
         public virtual TPort ListenerPoint { get; protected set; }
 
