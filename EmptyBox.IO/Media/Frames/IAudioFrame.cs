@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EmptyBox.IO.Media.Audio
+namespace EmptyBox.IO.Media.Frames
 {
-    public interface IAudioOutput : IDisposable
+    public interface IAudioFrame : IMediaFrame
     {
 
     }
