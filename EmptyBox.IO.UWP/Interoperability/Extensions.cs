@@ -166,18 +166,9 @@ namespace EmptyBox.IO.Interoperability
             }
         }
 
-        public static async Task<string> ToServiceIDString(this IAccessPoint<IBluetoothDevice, BluetoothPort> accesspoint)
+        public static string ToServiceIDString(this IAccessPoint<IBluetoothDevice, BluetoothPort> accesspoint)
         {
-            DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(RfcommDeviceService.GetDeviceSelector(accesspoint.Port.ToRfcommServiceID()));
-            foreach (DeviceInformation device in devices)
-            {
-                RfcommDeviceService rds = await RfcommDeviceService.FromIdAsync(device.Id);
-                if (rds != null && rds.ConnectionHostName.ToMACAddress().Equals(accesspoint.Address))
-                {
-                    return rds.ConnectionServiceName;
-                }
-            }
-            return string.Empty;
+            return $"Bluetooth#Bluetooth{accesspoint.Address.Parent.HardwareAddress}-{accesspoint.Address.HardwareAddress}#RFCOMM:00000000:{{{accesspoint.Port}}}";
         }
 
         public static BluetoothCacheMode ToBluetoothCacheMode(this BluetoothSDPCacheMode mode)
