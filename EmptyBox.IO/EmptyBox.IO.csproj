@@ -7,8 +7,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputTypeEx>library</OutputTypeEx>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.0.36-alpha</Version>
+    <Version>0.0.0.37-alpha</Version>
     <Authors>EmptyBox Team</Authors>
     <PackageProjectUrl>https://github.com/EmptyBox-Team/EmptyBox.IO</PackageProjectUrl>
     <NeutralLanguage>ru</NeutralLanguage>
@@ -20,8 +23,6 @@
     <PackageReleaseNotes>🛠Alpha version.
 👀Instructions for use available at project repository</PackageReleaseNotes>
     <PackageIconUrl></PackageIconUrl>
-    <Nullable>enable</Nullable>
-    <LangVersion>8.0</LangVersion>
     <Company>EmptyBox Team</Company>
     <PackageIcon>EmptyBox.IO Logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -29,7 +30,6 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile></DocumentationFile>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -47,6 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="EmptyBox.Foundation" Version="1.0.0" />
     <PackageReference Include="EmptyBox.ScriptRuntime" Version="0.0.0.8-alpha" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
