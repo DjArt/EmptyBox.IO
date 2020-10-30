@@ -22,7 +22,7 @@ namespace EmptyBox.IO.Interoperability
                 Type type = assembly.ExportedTypes.FirstOrDefault(x => x.FullName == "EmptyBox.IO.Interoperability.Сompatibility");
                 if (type != null)
                 {
-                    return (bool)type.GetTypeInfo().DeclaredMethods.First(x => x.Name == "IsCompatible").Invoke(null, new object[0]);
+                    return (bool?)type.GetTypeInfo().DeclaredMethods.FirstOrDefault(x => x.Name == "IsCompatible")?.Invoke(null, new object[0]) ?? false;
                 }
                 else
                 {
