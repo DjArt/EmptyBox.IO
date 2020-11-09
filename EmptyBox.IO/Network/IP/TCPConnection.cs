@@ -35,7 +35,6 @@ namespace EmptyBox.IO.Network.IP
 
         private async void ReceiveLoop()
         {
-            await Task.Yield();
             byte[] buffer = new byte[4096];
             while (IsActive)
             {
@@ -47,6 +46,10 @@ namespace EmptyBox.IO.Network.IP
                         byte[] newbuffer = new byte[count];
                         Array.Copy(buffer, newbuffer, count);
                         OnMessageReceive(newbuffer);
+                    }
+                    else if (Socket.Poll(1, SelectMode.SelectRead) && Socket.Available == 0)
+                    {
+                        await Close();
                     }
                 }
                 catch (Exception ex)
@@ -93,7 +96,7 @@ namespace EmptyBox.IO.Network.IP
                     LocalPoint = (Socket.LocalEndPoint as IPEndPoint).ToIPAccessPoint();
                 }
                 IsActive = true;
-                _ReceiveLoopTask = Task.Run(ReceiveLoop);
+                _ReceiveLoopTask = Task.Factory.StartNew(ReceiveLoop, TaskCreationOptions.LongRunning | TaskCreationOptions.PreferFairness);
                 return true;
             }
             else
