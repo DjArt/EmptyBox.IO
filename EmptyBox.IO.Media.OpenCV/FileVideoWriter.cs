@@ -57,7 +57,7 @@ namespace EmptyBox.IO.Media.OpenCV
         {
             if (IsDisposed) throw new ObjectDisposedException(string.Empty);
             await Task.Yield();
-            InternalVideoWriter = new VideoWriter(FilePath.AbsoluteUri, FourCC.Default, EncodingProperties.FPS, EncodingProperties.Resolution.ToOcvSize());
+            InternalVideoWriter = new VideoWriter(FilePath.LocalPath, FourCC.Default, EncodingProperties.FPS, EncodingProperties.Resolution.ToOcvSize());
         }
 
         public async Task Stop()
